@@ -37,7 +37,7 @@ if [[ (-z "$2") && (-z "$3") ]]
   else
     hostFolder=$2
     projectName=$3
-    volumeClause="-v $hostFolder:$projectName"
+    volumeClause="-v $hostFolder:/root/$projectName"
     cmdClause="/root/$projectName/build_docker_cmd.sh"
 fi
 echo ">> volumeClause: $volumeClause"
