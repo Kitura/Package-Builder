@@ -24,9 +24,9 @@ set -e
 # Parse input parameters
 if [ -z "$1" ]
   then
-    branch=$1
-  else
     branch="master"
+  else
+    branch=$1
 fi
 echo ">> branch: $branch"
 
