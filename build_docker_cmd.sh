@@ -27,9 +27,8 @@ set -e
 # projectFolder=$1
 
 # Build swift package
-#cd $projectFolder
+cd "$(dirname "$0")"
 swift build -Xcc -fblocks
 
 # Work in progress...
-# cd $projectFolder
 # swift test
