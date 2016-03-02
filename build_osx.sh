@@ -41,7 +41,7 @@ export PATH=/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin:"${PA
 # swiftlint
 
 # Build corresponding Kitura swift package
-swift build -Xcc -fblocks -Xswiftc -I/usr/local/include -Xlinker -L/usr/local/lib
+swift build -Xswiftc -I/usr/local/include -Xlinker -L/usr/local/lib
 
 # Execute test cases in swift package
 # Stopgap for now...
