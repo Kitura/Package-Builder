@@ -45,6 +45,8 @@ echo ">> projectName: $projectName"
 echo
 
 # Install Swift binaries on OS X
+# No need to do this for linux since the docker image already has the
+# swift binaries
 if [ "${osName}" == "os x" ]; then
   # Swift version
   SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-02-25-a
