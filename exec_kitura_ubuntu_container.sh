@@ -16,19 +16,35 @@
 # limitations under the License.
 ##
 
-# This script builds the Kitura sample app on OS X (Travis CI).
-# Homebrew (http://brew.sh/) must be installed on the OS X system for this
-# script to work.
+# This script builds the corresponding Kitura Swift Package in a Docker container (Travis CI).
 
 # If any commands fail, we want the shell script to exit immediately.
 set -e
 
 # Parse input parameters
-# projectFolder=$1
+if [ -z "$1" ]
+  then
+    branch="master"
+  else
+    branch=$1
+fi
+echo ">> branch: $branch"
 
-# Build swift package
-cd "$(dirname "$0")"
-swift build -Xcc -fblocks
+if [[ (-z "$2") && (-z "$3") ]]
+  then
+    volumeClause=""
+    cmdClause=""
+  else
+    hostFolder=$2
+    projectName=$3
+    volumeClause="-v $hostFolder:/root/$projectName"
+    cmdClause="/root/$projectName/build_ubuntu.sh"
+fi
+echo ">> volumeClause: $volumeClause"
+echo ">> cmdClause: $cmdClause"
 
-# Work in progress...
-# swift test
+# Pull down docker image
+docker pull ibmcom/kitura-ubuntu:latest
+
+# Run docker container
+docker run --rm -e KITURA_BRANCH=$branch $volumeClause ibmcom/kitura-ubuntu:latest $cmdClause
