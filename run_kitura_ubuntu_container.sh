@@ -16,20 +16,24 @@
 # limitations under the License.
 ##
 
-# This script builds the corresponding Kitura Swift Package in a Docker container (Travis CI).
+# This script builds the corresponding Kitura Swift Package in a
+# Docker ubuntu container (Travis CI).
 
 # If any commands fail, we want the shell script to exit immediately.
 set -e
 
 # Parse input parameters
+# Determnine branch to build
 if [ -z "$1" ]
   then
-    branch="master"
+    branch="develop"
   else
     branch=$1
 fi
 echo ">> branch: $branch"
 
+# Determine volume to mount from host to docker container
+# Determine command clause (project path)
 if [[ (-z "$2") && (-z "$3") ]]
   then
     volumeClause=""
@@ -38,7 +42,7 @@ if [[ (-z "$2") && (-z "$3") ]]
     hostFolder=$2
     projectName=$3
     volumeClause="-v $hostFolder:/root/$projectName"
-    cmdClause="/root/$projectName/build_ubuntu.sh"
+    cmdClause="/root/$projectName/build_kitura_package.sh"
 fi
 echo ">> volumeClause: $volumeClause"
 echo ">> cmdClause: $cmdClause"
@@ -47,4 +51,7 @@ echo ">> cmdClause: $cmdClause"
 docker pull ibmcom/kitura-ubuntu:latest
 
 # Run docker container
+# Please note that when a volume from the host is mounted on the container,
+# if the same folder already exists in the container, then it is replaced
+# with the contents from the host.
 docker run --rm -e KITURA_BRANCH=$branch $volumeClause ibmcom/kitura-ubuntu:latest $cmdClause

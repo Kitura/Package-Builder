@@ -16,25 +16,24 @@
 # limitations under the License.
 ##
 
-# This script builds the Kitura sample app on OS X (Travis CI).
-# Homebrew (http://brew.sh/) must be installed on the OS X system for this
-# script to work.
+# This script builds the Kitura sample app on Travis CI.
+# If running on the OS X platform, homebrew (http://brew.sh/) must be installed
+# for this script to work.
 
 # If any commands fail, we want the shell script to exit immediately.
 set -e
 
 # Determine platform/OS
-echo "os: $(uname)"
+echo "uname: $(uname)"
 if [ "$(uname)" == "Darwin" ]; then
-    # Do something under Mac OS X platform
-    echo "os x"
+  osName="os x"
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-    # Do something under GNU/Linux platform
-    echo "linux"
+  osName="linux"
 else
-    echo "Unsupported platform!"
-    exit 1
+  echo "Unsupported platform!"
+  exit 1
 fi
+echo "osName: $osName"
 
 # Make the working directory the folder from which the script was sourced
 cd "$(dirname "$0")"
@@ -44,9 +43,33 @@ currentDir=`pwd`
 projectName="$(basename $currentDir)"
 echo "projectName: $projectName"
 
+# Install Swift binaries on OS X
+if [ "${osName}" == "os x" ]; then
+  # Swift version
+  SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-02-25-a
+
+  # Install system level dependencies for Kitura
+  brew update
+  brew install http-parser pcre2 curl hiredis swiftlint
+  brew install wget || brew outdated wget || brew upgrade wget
+
+  # Install Swift binaries
+  # See http://apple.stackexchange.com/questions/72226/installing-pkg-with-terminal
+  wget https://swift.org/builds/development/xcode/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-osx.pkg
+  sudo installer -pkg $SWIFT_SNAPSHOT-osx.pkg -target /
+  export PATH=/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin:"${PATH}"
+fi
+
+# Run SwiftLint to ensure Swift style and conventions
+# swiftlint
+
 # Build swift package
-swift build -Xcc -fblocks
-#swift build -Xcc -fblocks -Xcc -fmodule-map-file=Packages/Kitura-HttpParserHelper-0.3.1/module.modulemap -Xcc -fmodule-map-file=Packages/Kitura-CurlHelpers-0.3.0/module.modulemap -Xcc -fmodule-map-file=Packages/Kitura-Pcre2-0.2.0/module.modulemap
+if [ "${osName}" == "os x" ]; then
+  swift build -Xswiftc -I/usr/local/include -Xlinker -L/usr/local/lib
+else
+  swift build -Xcc -fblocks
+  # swift build -Xcc -fblocks -Xcc -fmodule-map-file=Packages/Kitura-HttpParserHelper-0.3.1/module.modulemap -Xcc -fmodule-map-file=Packages/Kitura-CurlHelpers-0.3.0/module.modulemap -Xcc -fmodule-map-file=Packages/Kitura-Pcre2-0.2.0/module.modulemap
+fi
 
 # Copy test credentials for project if available
 if [ -e "Kitura-TestingCredentials/${projectName}" ]; then
@@ -58,4 +81,4 @@ else
 fi
 
 # Execute test cases
-# swift test
+swift test || true
