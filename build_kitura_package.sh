@@ -24,16 +24,16 @@
 set -e
 
 # Determine platform/OS
-echo "uname: $(uname)"
+echo ">> uname: $(uname)"
 if [ "$(uname)" == "Darwin" ]; then
   osName="os x"
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
   osName="linux"
 else
-  echo "Unsupported platform!"
+  echo ">> Unsupported platform!"
   exit 1
 fi
-echo "osName: $osName"
+echo ">> osName: $osName"
 
 # Make the working directory the folder from which the script was sourced
 cd "$(dirname "$0")"
@@ -41,7 +41,7 @@ cd "$(dirname "$0")"
 # Get project name from project folder
 currentDir=`pwd`
 projectName="$(basename $currentDir)"
-echo "projectName: $projectName"
+echo ">> projectName: $projectName"
 
 # Install Swift binaries on OS X
 if [ "${osName}" == "os x" ]; then
@@ -64,21 +64,25 @@ fi
 # swiftlint
 
 # Build swift package
+echo ">> Building Kitura package..."
 if [ "${osName}" == "os x" ]; then
   swift build -Xswiftc -I/usr/local/include -Xlinker -L/usr/local/lib
 else
   swift build -Xcc -fblocks
   # swift build -Xcc -fblocks -Xcc -fmodule-map-file=Packages/Kitura-HttpParserHelper-0.3.1/module.modulemap -Xcc -fmodule-map-file=Packages/Kitura-CurlHelpers-0.3.0/module.modulemap -Xcc -fmodule-map-file=Packages/Kitura-Pcre2-0.2.0/module.modulemap
 fi
+echo ">> Finished building Kitura package."
 
 # Copy test credentials for project if available
 if [ -e "Kitura-TestingCredentials/${projectName}" ]; then
-	echo "Found folder with test credentials for ${projectName}."
+	echo ">> Found folder with test credentials for ${projectName}."
   # Copy tests using gradle script
   ./DevOps/gradle_wrapper/gradlew copyProperties -b copy-project-properties.gradle -PappOpenSourceFolder=${currentDir}/Kitura-TestingCredentials/${projectName} -PappRootFolder=$currentDir
 else
-  echo "No folder found with test credentials for ${projectName}."
+  echo ">> No folder found with test credentials for ${projectName}."
 fi
 
 # Execute test cases
+echo ">> Testing Kitura package..."
 swift test || true
+echo ">> Finished testing Kitura package."
