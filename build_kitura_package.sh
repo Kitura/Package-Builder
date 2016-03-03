@@ -35,12 +35,12 @@ else
 fi
 echo ">> osName: $osName"
 
-# Make the working directory the folder from which the script was sourced
-cd "$(dirname "$0")"
+# Make the working directory the parent folder of this script
+cd "$(dirname "$0")"/..
 
 # Get project name from project folder
-currentDir=`pwd`
-projectName="$(basename $currentDir)"
+projectFolder=`pwd`
+projectName="$(basename $projectFolder)"
 echo ">> projectName: $projectName"
 echo
 
@@ -78,10 +78,10 @@ echo ">> Finished building Kitura package."
 echo
 
 # Copy test credentials for project if available
-if [ -e "Kitura-TestingCredentials/${projectName}" ]; then
+if [ -e "${projectFolder}/Kitura-TestingCredentials/${projectName}" ]; then
 	echo ">> Found folder with test credentials for ${projectName}."
-  # Copy tests using gradle script
-  ./DevOps/gradle_wrapper/gradlew copyProperties -b copy-project-properties.gradle -PappOpenSourceFolder=${currentDir}/Kitura-TestingCredentials/${projectName} -PappRootFolder=$currentDir
+  # Copy tests using gradle script (note that we are using the convenient gradle wrapper...)
+  ./DevOps/gradle_wrapper/gradlew copyProperties -b copy-project-properties.gradle -PappOpenSourceFolder=${projectFolder}/Kitura-TestingCredentials/${projectName} -PappRootFolder=${projectFolder}
 else
   echo ">> No folder found with test credentials for ${projectName}."
 fi
