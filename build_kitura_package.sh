@@ -42,6 +42,7 @@ cd "$(dirname "$0")"
 currentDir=`pwd`
 projectName="$(basename $currentDir)"
 echo ">> projectName: $projectName"
+echo
 
 # Install Swift binaries on OS X
 if [ "${osName}" == "os x" ]; then
@@ -72,6 +73,7 @@ else
   # swift build -Xcc -fblocks -Xcc -fmodule-map-file=Packages/Kitura-HttpParserHelper-0.3.1/module.modulemap -Xcc -fmodule-map-file=Packages/Kitura-CurlHelpers-0.3.0/module.modulemap -Xcc -fmodule-map-file=Packages/Kitura-Pcre2-0.2.0/module.modulemap
 fi
 echo ">> Finished building Kitura package."
+echo
 
 # Copy test credentials for project if available
 if [ -e "Kitura-TestingCredentials/${projectName}" ]; then
@@ -86,3 +88,4 @@ fi
 echo ">> Testing Kitura package..."
 swift test || true
 echo ">> Finished testing Kitura package."
+echo
