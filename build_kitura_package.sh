@@ -70,7 +70,7 @@ if [ "${osName}" == "os x" ]; then
   swift build -Xswiftc -I/usr/local/include -Xlinker -L/usr/local/lib
 else
   swift build -Xcc -fblocks
-  # swift build -Xcc -fblocks -Xcc -fmodule-map-file=Packages/Kitura-HttpParserHelper-0.3.1/module.modulemap -Xcc -fmodule-map-file=Packages/Kitura-CurlHelpers-0.3.0/module.modulemap -Xcc -fmodule-map-file=Packages/Kitura-Pcre2-0.2.0/module.modulemap
+  # swift build -Xcc -fblocks -Xcc -fmodule-map-file=Packages/Kitura-HttpParserHelper-0.3.1/module.modulemap -Xcc -fmodule-map-file=Packages/Kitura-CurlHelpers-0.3.0/module.modulemap
 fi
 echo ">> Finished building Kitura package."
 echo
