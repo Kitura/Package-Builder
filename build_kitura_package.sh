@@ -26,7 +26,7 @@ set -e
 # Determine platform/OS
 echo ">> uname: $(uname)"
 if [ "$(uname)" == "Darwin" ]; then
-  osName="os x"
+  osName="osx"
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
   osName="linux"
 else
@@ -47,7 +47,7 @@ echo
 # Install Swift binaries on OS X
 # No need to do this for linux since the docker image already has the
 # swift binaries
-if [ "${osName}" == "os x" ]; then
+if [ "${osName}" == "osx" ]; then
   # Swift version
   SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-02-25-a
 
@@ -55,11 +55,7 @@ if [ "${osName}" == "os x" ]; then
   brew update
   brew install http-parser pcre2 curl hiredis swiftlint
   brew install wget || brew outdated wget || brew upgrade wget
-  # Ideally, the following should only be installed dependencing on then
-  # Swift Package getting built...
   brew install gradle || brew outdated gradle || brew upgrade gradle
-  # Ideally, we should use the redis service on bluemix and test against it...
-  brew install redis || brew outdated redis || brew upgrade redis
 
   # Install Swift binaries
   # See http://apple.stackexchange.com/questions/72226/installing-pkg-with-terminal
@@ -73,7 +69,7 @@ fi
 
 # Build swift package
 echo ">> Building Kitura package..."
-if [ "${osName}" == "os x" ]; then
+if [ "${osName}" == "osx" ]; then
   swift build -Xswiftc -I/usr/local/include -Xlinker -L/usr/local/lib
 else
   swift build -Xcc -fblocks
@@ -91,15 +87,25 @@ else
   echo ">> No folder found with test credentials for ${projectName}."
 fi
 
+# Execute pre-test steps
+if [ -e "${projectFolder}/Kitura-CI/${projectName}/${osName}/before_tests.sh" ]; then
+	"${projectFolder}/Kitura-CI/${projectName}/${osName}/before_tests.sh"
+  echo ">> Completed pre-tests steps."
+fi
+
 # Execute test cases
 echo ">> Testing Kitura package..."
-if [ "${osName}" == "os x" ]; then
+if [ "${osName}" == "osx" ]; then
   # Ideally, redis server should only be started when testing Kitura-redis...
-  redis-server &
   swift test
-  redis-cli shutdown || true
 else
   swift test || true
 fi
 echo ">> Finished testing Kitura package."
 echo
+
+# Execute post-test steps
+if [ -e "${projectFolder}/Kitura-CI/${projectName}/${osName}/after_tests.sh" ]; then
+	"${projectFolder}/Kitura-CI/${projectName}/${osName}/after_tests.sh"
+  echo ">> Completed port-tests steps."
+fi
