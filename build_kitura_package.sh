@@ -77,6 +77,9 @@ fi
 echo ">> Finished building Kitura package."
 echo
 
+# Suppressing execution of test cases for now...
+exit 0
+
 # Copy test credentials for project if available
 if [ -e "${projectFolder}/Kitura-TestingCredentials/${projectName}" ]; then
 	echo ">> Found folder with test credentials for ${projectName}."
