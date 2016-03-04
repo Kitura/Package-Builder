@@ -88,6 +88,10 @@ fi
 
 # Execute test cases
 echo ">> Testing Kitura package..."
-swift test || true
+if [ "${osName}" == "os x" ]; then
+  swift test
+else
+  swift test || true
+fi
 echo ">> Finished testing Kitura package."
 echo
