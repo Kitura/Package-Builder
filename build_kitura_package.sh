@@ -55,6 +55,7 @@ if [ "${osName}" == "os x" ]; then
   brew update
   brew install http-parser pcre2 curl hiredis swiftlint
   brew install wget || brew outdated wget || brew upgrade wget
+  brew install gradle || brew outdated gradle || brew upgrade gradle
 
   # Install Swift binaries
   # See http://apple.stackexchange.com/questions/72226/installing-pkg-with-terminal
@@ -77,14 +78,11 @@ fi
 echo ">> Finished building Kitura package."
 echo
 
-# Suppressing execution of test cases for now...
-exit 0
-
 # Copy test credentials for project if available
 if [ -e "${projectFolder}/Kitura-TestingCredentials/${projectName}" ]; then
 	echo ">> Found folder with test credentials for ${projectName}."
   # Copy tests using gradle script (note that we are using the convenient gradle wrapper...)
-  ./DevOps/gradle_wrapper/gradlew copyProperties -b copy-project-properties.gradle -PappOpenSourceFolder=${projectFolder}/Kitura-TestingCredentials/${projectName} -PappRootFolder=${projectFolder}
+  ./DevOps/gradle_wrapper/gradlew copyProperties -b ./DevOps/scripts_assets/gradle_assets/build-deploy-assets/copy-project-properties.gradle -PappOpenSourceFolder=${projectFolder}/Kitura-TestingCredentials/${projectName} -PappRootFolder=${projectFolder}
 else
   echo ">> No folder found with test credentials for ${projectName}."
 fi
