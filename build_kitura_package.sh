@@ -55,7 +55,11 @@ if [ "${osName}" == "os x" ]; then
   brew update
   brew install http-parser pcre2 curl hiredis swiftlint
   brew install wget || brew outdated wget || brew upgrade wget
+  # Ideally, the following should only be installed dependencing on then
+  # Swift Package getting built...
   brew install gradle || brew outdated gradle || brew upgrade gradle
+  # Ideally, we should use the redis service on bluemix and test against it...
+  brew install redis || brew outdated redis || brew upgrade redis
 
   # Install Swift binaries
   # See http://apple.stackexchange.com/questions/72226/installing-pkg-with-terminal
