@@ -94,7 +94,10 @@ fi
 # Execute test cases
 echo ">> Testing Kitura package..."
 if [ "${osName}" == "os x" ]; then
+  # Ideally, redis server should only be started when testing Kitura-redis...
+  redis-server &
   swift test
+  redis-cli shutdown || true
 else
   swift test || true
 fi
