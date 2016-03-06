@@ -62,7 +62,7 @@ if [ "${osName}" == "osx" ]; then
   sudo installer -pkg $SWIFT_SNAPSHOT-osx.pkg -target /
   export PATH=/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin:"${PATH}"
 else
-  source ${projectFolder}/install_swift_binaries.sh
+  source ${projectFolder}/Kitura-CI/install_swift_binaries.sh
 fi
 
 # Run SwiftLint to ensure Swift style and conventions
