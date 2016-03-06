@@ -23,6 +23,10 @@
 # If any commands fail, we want the shell script to exit immediately.
 set -e
 
+# Swift version for build
+export SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-03-01-a
+echo ">> SWIFT_SNAPSHOT: $SWIFT_SNAPSHOT"
+
 # Determine platform/OS
 echo ">> uname: $(uname)"
 if [ "$(uname)" == "Darwin" ]; then
@@ -44,13 +48,8 @@ projectName="$(basename $projectFolder)"
 echo ">> projectName: $projectName"
 echo
 
-# Install Swift binaries on OS X
-# No need to do this for linux since the docker image already has the
-# swift binaries
+# Install Swift
 if [ "${osName}" == "osx" ]; then
-  # Swift version
-  SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-03-01-a
-
   # Install system level dependencies for Kitura
   brew update
   brew install http-parser pcre2 curl hiredis swiftlint
@@ -62,6 +61,8 @@ if [ "${osName}" == "osx" ]; then
   wget https://swift.org/builds/development/xcode/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-osx.pkg
   sudo installer -pkg $SWIFT_SNAPSHOT-osx.pkg -target /
   export PATH=/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin:"${PATH}"
+else
+  source ${projectFolder}/install_swift_binaries.sh
 fi
 
 # Run SwiftLint to ensure Swift style and conventions
