@@ -49,7 +49,7 @@ echo
 # swift binaries
 if [ "${osName}" == "osx" ]; then
   # Swift version
-  SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-02-25-a
+  SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-03-01-a
 
   # Install system level dependencies for Kitura
   brew update
