@@ -45,7 +45,11 @@ test: build
 run: build
 	./.build/debug/KituraSample
 
+refetch:
+	rm -rf Packages
+	swift build --fetch
+
 clean:
-	rm -rf .build Packages
+	swift build --clean
 
 .PHONY: clean build
