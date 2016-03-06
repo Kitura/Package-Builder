@@ -14,6 +14,10 @@
 
 # Makefile
 
+ifndef KITURA_CI_BUILD_SCRIPTS_DIR
+KITURA_CI_BUILD_SCRIPTS_DIR = .
+endif
+
 UNAME = ${shell uname}
 
 CC_FLAGS = -Xcc -fblocks
@@ -27,9 +31,10 @@ all: build
 
 build:
 	@echo Performing build on $(UNAME)
+	@echo build scripts directory: ${KITURA_CI_BUILD_SCRIPTS_DIR}
 ifeq ($(UNAME), Linux)
 	swift build --fetch
-	swift build $(CC_FLAGS) $(SWIFTC_FLAGS) $(LINKER_FLAGS) `bash Kitura-CI/build//make_ccflags_for_module_maps`
+	swift build $(CC_FLAGS) $(SWIFTC_FLAGS) $(LINKER_FLAGS) `bash ${KITURA_CI_BUILD_SCRIPTS_DIR}/make_ccflags_for_module_maps`
 else
 	swift build $(CC_FLAGS) $(SWIFTC_FLAGS) $(LINKER_FLAGS)
 endif
