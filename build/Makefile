@@ -52,4 +52,4 @@ refetch:
 clean:
 	swift build --clean
 
-.PHONY: clean build
+.PHONY: clean build refetch run test
