@@ -26,8 +26,15 @@ set -e
 # Swift version for build
 export SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-03-01-a
 echo ">> SWIFT_SNAPSHOT: $SWIFT_SNAPSHOT"
-
 export WORK_DIR=/root
+
+# Utility functions
+function sourceScript () {
+  if [ -e "$1" ]; then
+  	source "$1"
+    echo "$2"
+  fi
+}
 
 # Determine platform/OS
 echo ">> uname: $(uname)"
@@ -86,16 +93,18 @@ else
 fi
 
 # Execute OS specific pre-test steps
-if [ -e "${projectFolder}/Kitura-CI/${projectName}/${osName}/before_tests.sh" ]; then
-	source "${projectFolder}/Kitura-CI/${projectName}/${osName}/before_tests.sh"
-  echo ">> Completed ${osName} pre-tests steps."
-fi
+sourceScript "${projectFolder}/Kitura-CI/${projectName}/${osName}/before_tests.sh" ">> Completed ${osName} pre-tests steps."
+#if [ -e "${projectFolder}/Kitura-CI/${projectName}/${osName}/before_tests.sh" ]; then
+#	source "${projectFolder}/Kitura-CI/${projectName}/${osName}/before_tests.sh"
+#  echo ">> Completed ${osName} pre-tests steps."
+#fi
 
 # Execute common pre-test steps
-if [ -e "${projectFolder}/Kitura-CI/${projectName}/common/before_tests.sh" ]; then
-	source "${projectFolder}/Kitura-CI/${projectName}/common/before_tests.sh"
-  echo ">> Completed common pre-tests steps."
-fi
+sourceScript "${projectFolder}/Kitura-CI/${projectName}/common/before_tests.sh" ">> Completed common pre-tests steps."
+#if [ -e "${projectFolder}/Kitura-CI/${projectName}/common/before_tests.sh" ]; then
+#	source "${projectFolder}/Kitura-CI/${projectName}/common/before_tests.sh"
+#  echo ">> Completed common pre-tests steps."
+#fi
 
 # Execute test cases
 echo ">> Testing Kitura package..."
@@ -104,13 +113,15 @@ echo ">> Finished testing Kitura package."
 echo
 
 # Execute common post-test steps
-if [ -e "${projectFolder}/Kitura-CI/${projectName}/common/after_tests.sh" ]; then
-	source "${projectFolder}/Kitura-CI/${projectName}/common/after_tests.sh"
-  echo ">> Completed common post-tests steps."
-fi
+sourceScript "${projectFolder}/Kitura-CI/${projectName}/common/after_tests.sh" ">> Completed common post-tests steps."
+#if [ -e "${projectFolder}/Kitura-CI/${projectName}/common/after_tests.sh" ]; then
+#	source "${projectFolder}/Kitura-CI/${projectName}/common/after_tests.sh"
+#  echo ">> Completed common post-tests steps."
+#fi
 
 # Execute OS specific post-test steps
-if [ -e "${projectFolder}/Kitura-CI/${projectName}/${osName}/after_tests.sh" ]; then
-	source "${projectFolder}/Kitura-CI/${projectName}/${osName}/after_tests.sh"
-  echo ">> Completed ${osName} post-tests steps."
-fi
+sourceScript "${projectFolder}/Kitura-CI/${projectName}/${osName}/after_tests.sh" ">> Completed ${osName} post-tests steps."
+#if [ -e "${projectFolder}/Kitura-CI/${projectName}/${osName}/after_tests.sh" ]; then
+#	source "${projectFolder}/Kitura-CI/${projectName}/${osName}/after_tests.sh"
+#  echo ">> Completed ${osName} post-tests steps."
+#fi
