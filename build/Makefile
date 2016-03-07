@@ -30,12 +30,12 @@ endif
 all: build
 
 build:
-	@echo --- Running on $(UNAME)
+	@echo --- Running build on $(UNAME)
 	@echo --- Build scripts directory: ${KITURA_CI_BUILD_SCRIPTS_DIR}
 	@echo --- Checking swift version
 	swift --version
 ifeq ($(UNAME), Linux)
-	@echo --- Verifying Linux release
+	@echo --- Checking Linux release
 	-lsb_release -d
 	@echo --- Fetching dependencies
 	swift build --fetch
@@ -47,16 +47,21 @@ else
 endif
 
 test: build
+	@echo --- Invoking swift test
 	swift test
 
 run: build
+	@echo --- Invoking KituraSample executable
 	./.build/debug/KituraSample
 
 refetch:
+	@echo --- Removing Packages directory
 	rm -rf Packages
+	@echo --- Fetching dependencies
 	swift build --fetch
 
 clean:
+	@echo --- Invoking swift build --clean
 	swift build --clean
 
 .PHONY: clean build refetch run test
