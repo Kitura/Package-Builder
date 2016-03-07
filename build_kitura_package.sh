@@ -24,7 +24,8 @@
 set -e
 
 # Swift version for build
-export SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-03-01-a
+#export SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-03-01-a
+export SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-02-25-a
 echo ">> SWIFT_SNAPSHOT: $SWIFT_SNAPSHOT"
 
 # Determine platform/OS
@@ -64,6 +65,9 @@ if [ "${osName}" == "osx" ]; then
 else
   source ${projectFolder}/Kitura-CI/install_swift_binaries.sh
 fi
+
+# Show path
+echo ">> PATH: $PATH"
 
 # Run SwiftLint to ensure Swift style and conventions
 # swiftlint
