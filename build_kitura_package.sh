@@ -62,6 +62,9 @@ if [ "${osName}" == "osx" ]; then
   sudo installer -pkg $SWIFT_SNAPSHOT-osx.pkg -target /
   export PATH=/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin:"${PATH}"
 else
+  export UBUNTU_VERSION=ubuntu15.10
+  export UBUNTU_VERSION_NO_DOTS=ubuntu1510
+  export WORK_DIR=/root
   source ${projectFolder}/Kitura-CI/install_swift_binaries.sh
 fi
 
