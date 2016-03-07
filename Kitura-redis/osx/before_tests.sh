@@ -21,3 +21,6 @@ set -e
 
 # Install redis
 brew install redis || brew outdated redis || brew upgrade redis
+
+
+cat /usr/local/etc/redis.conf

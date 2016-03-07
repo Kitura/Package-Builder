@@ -27,7 +27,10 @@ make
 
 # Install redis
 make install
-rm -rf redis-stable
+#rm -rf redis-stable
+
+ls -la /root/Kitura-redis/redis-stable
+cat /root/Kitura-redis/redis-stable/redis.conf
 
 # Go back to previous folder
 cd -
