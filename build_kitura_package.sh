@@ -43,7 +43,7 @@ echo ">> osName: $osName"
 cd "$(dirname "$0")"/..
 
 # Get project name from project folder
-projectFolder=`pwd`
+export projectFolder=`pwd`
 projectName="$(basename $projectFolder)"
 echo ">> projectName: $projectName"
 echo
