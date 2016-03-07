@@ -28,9 +28,9 @@ echo "redis password: $password"
 # Start redis server
 redis-server &
 
-ls -la /etc
+cat /usr/local/etc/redis.conf
 
-ls -la /usr/local/etc/redis.conf
+echo "HEREEEEEEEE!!!!!"
 
 echo "contents of redis.conf before"
 cat /etc/redis/redis.conf
