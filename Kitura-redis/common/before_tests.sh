@@ -19,19 +19,14 @@
 # If any commands fail, we want the shell script to exit immediately.
 set -e
 
-echo "projectFolder: ${projectFolder}"
-
 # Set authentication password for redis server
 password=$(head -n 1 "${projectFolder}/Tests/SwiftRedisAuth/password.txt")
-echo "redis password: $password"
-
-echo "About to cat contents of redis.conf file 11"
-cat $REDIS_CONF_FILE
+echo ">> redis password: $password"
 
 # Update redis password
 perl -pi -e "s/# requirepass foobared/requirepass ${password}/g" $REDIS_CONF_FILE
 
-echo "About to cat contents of redis.conf file 22"
+echo ">> Contents of ${REDIS_CONF_FILE} next:"
 cat $REDIS_CONF_FILE
 
 # Start redis server
