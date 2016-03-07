@@ -21,6 +21,3 @@ set -e
 
 # Install redis
 brew install redis || brew outdated redis || brew upgrade redis
-
-# Start redis server
-redis-server &

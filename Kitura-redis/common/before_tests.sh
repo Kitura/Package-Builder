@@ -19,5 +19,18 @@
 # If any commands fail, we want the shell script to exit immediately.
 set -e
 
-# Stop redis server
-redis-cli shutdown
+# Set authentication password for redis server
+password=$(head -n 1 ${projectFolder}/Tests/SwiftRedisAuth/password.txt)
+echo "redis password: $password"
+
+echo "contents of redis.conf before"
+cat /etc/redis/redis.conf
+
+# Update redis password
+perl -pi -e 's/# requirepass foobared/# requirepass $password/g' /etc/redis/redis.conf
+
+echo "contents of redis.conf after"
+cat /etc/redis/redis.conf
+
+# Start redis server
+redis-server &

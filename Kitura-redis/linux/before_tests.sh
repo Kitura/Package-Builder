@@ -29,8 +29,5 @@ make
 make install
 rm -rf redis-stable
 
-# Start redis server
-redis-server &
-
 # Go back to previous folder
 cd -
