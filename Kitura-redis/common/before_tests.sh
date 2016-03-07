@@ -27,13 +27,11 @@ echo "redis password: $password"
 
 # Start redis server
 redis-server &
-redis-cli shutdown
 
-
-ls -la /etc/redis/
 echo "contents of redis.conf before"
 cat /etc/redis/redis.conf
 
+redis-cli shutdown
 # Update redis password
 perl -pi -e 's/# requirepass foobared/# requirepass $password/g' /etc/redis/redis.conf
 
