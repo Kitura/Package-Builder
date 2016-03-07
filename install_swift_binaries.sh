@@ -35,11 +35,14 @@ else
   do
     export PATH=${PATH#${INSTALL_DIR}}
   done
+  echo ">> PATH 1: $PATH"
   # Remove any older versions of the Swift binaries from the file system
   find $WORK_DIR -name 'swift-DEVELOPMENT-SNAPSHOT-*' | xargs rm -rf
   # Install Swift compiler
   wget https://swift.org/builds/development/$UBUNTU_VERSION_NO_DOTS/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
   tar xzvf $SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
   export PATH=$WORK_DIR/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin:$PATH
+  # Show path
+  echo ">> PATH 2: $PATH"
   swiftc -h
 fi
