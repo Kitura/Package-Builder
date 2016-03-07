@@ -30,6 +30,8 @@ redis-server &
 
 ls -la /etc
 
+ls -la /usr/local/etc/redis.conf
+
 echo "contents of redis.conf before"
 cat /etc/redis/redis.conf
 
