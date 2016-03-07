@@ -29,7 +29,7 @@ echo "About to cat contents of redis.conf file 1"
 cat $REDIS_CONF_FILE
 
 # Update redis password
-perl -pi -e 's/# requirepass foobared/# requirepass $password/g' $REDIS_CONF_FILE
+perl -pi -e "s/# requirepass foobared/requirepass ${password}/g" $REDIS_CONF_FILE
 
 echo "About to cat contents of redis.conf file 2"
 cat $REDIS_CONF_FILE
