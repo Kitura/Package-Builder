@@ -27,6 +27,8 @@ set -e
 export SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-03-01-a
 echo ">> SWIFT_SNAPSHOT: $SWIFT_SNAPSHOT"
 
+export WORK_DIR=/root
+
 # Determine platform/OS
 echo ">> uname: $(uname)"
 if [ "$(uname)" == "Darwin" ]; then
@@ -48,25 +50,8 @@ projectName="$(basename $projectFolder)"
 echo ">> projectName: $projectName"
 echo
 
-# Install Swift
-if [ "${osName}" == "osx" ]; then
-  # Install OS X system level dependencies for Kitura
-  brew update
-  brew install http-parser pcre2 curl hiredis swiftlint
-  brew install wget || brew outdated wget || brew upgrade wget
-  brew install gradle || brew outdated gradle || brew upgrade gradle
-
-  # Install Swift binaries
-  # See http://apple.stackexchange.com/questions/72226/installing-pkg-with-terminal
-  wget https://swift.org/builds/development/xcode/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-osx.pkg
-  sudo installer -pkg $SWIFT_SNAPSHOT-osx.pkg -target /
-  export PATH=/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin:"${PATH}"
-else
-  export UBUNTU_VERSION=ubuntu15.10
-  export UBUNTU_VERSION_NO_DOTS=ubuntu1510
-  export WORK_DIR=/root
-  source ${projectFolder}/Kitura-CI/install_swift_binaries.sh
-fi
+# Install Swift binaries
+source ${projectFolder}/Kitura-CI/${osName}/install_swift_binaries.sh
 
 # Show path
 echo ">> PATH: $PATH"
@@ -118,14 +103,14 @@ swift test
 echo ">> Finished testing Kitura package."
 echo
 
-# Execute OS specific post-test steps
-if [ -e "${projectFolder}/Kitura-CI/${projectName}/${osName}/after_tests.sh" ]; then
-	"${projectFolder}/Kitura-CI/${projectName}/${osName}/after_tests.sh"
-  echo ">> Completed ${osName} post-tests steps."
-fi
-
 # Execute common post-test steps
 if [ -e "${projectFolder}/Kitura-CI/${projectName}/common/after_tests.sh" ]; then
 	"${projectFolder}/Kitura-CI/${projectName}/common/after_tests.sh"
   echo ">> Completed common post-tests steps."
+fi
+
+# Execute OS specific post-test steps
+if [ -e "${projectFolder}/Kitura-CI/${projectName}/${osName}/after_tests.sh" ]; then
+	"${projectFolder}/Kitura-CI/${projectName}/${osName}/after_tests.sh"
+  echo ">> Completed ${osName} post-tests steps."
 fi

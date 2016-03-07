@@ -16,11 +16,19 @@
 # limitations under the License.
 ##
 
+# This script installs the Swift binaries on OS X.
+
 # If any commands fail, we want the shell script to exit immediately.
 set -e
 
-# Install redis
-brew install redis || brew outdated redis || brew upgrade redis
+# Install OS X system level dependencies for Kitura
+brew update
+brew install http-parser pcre2 curl hiredis swiftlint
+brew install wget || brew outdated wget || brew upgrade wget
+brew install gradle || brew outdated gradle || brew upgrade gradle
 
-echo "<< About to cat redis conf file"
-cat /usr/local/etc/redis.conf
+# Install Swift binaries
+# See http://apple.stackexchange.com/questions/72226/installing-pkg-with-terminal
+wget https://swift.org/builds/development/xcode/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-osx.pkg
+sudo installer -pkg $SWIFT_SNAPSHOT-osx.pkg -target /
+export PATH=/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin:"${PATH}"
