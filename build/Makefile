@@ -30,12 +30,19 @@ endif
 all: build
 
 build:
-	@echo Performing build on $(UNAME)
-	@echo build scripts directory: ${KITURA_CI_BUILD_SCRIPTS_DIR}
+	@echo --- Running on $(UNAME)
+	@echo --- Build scripts directory: ${KITURA_CI_BUILD_SCRIPTS_DIR}
+	@echo --- Checking swift version
+	swift --version
 ifeq ($(UNAME), Linux)
+	@echo --- Verifying Linux release
+	-lsb_release -d
+	@echo --- Fetching dependencies
 	swift build --fetch
+	@echo --- Invoking swift build
 	swift build $(CC_FLAGS) $(SWIFTC_FLAGS) $(LINKER_FLAGS) `bash ${KITURA_CI_BUILD_SCRIPTS_DIR}/make_ccflags_for_module_maps`
 else
+	@echo --- Invoking swift build
 	swift build $(CC_FLAGS) $(SWIFTC_FLAGS) $(LINKER_FLAGS)
 endif
 
