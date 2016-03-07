@@ -24,8 +24,7 @@
 set -e
 
 # Swift version for build
-#export SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-03-01-a
-export SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-02-25-a
+export SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-03-01-a
 echo ">> SWIFT_SNAPSHOT: $SWIFT_SNAPSHOT"
 
 # Determine platform/OS

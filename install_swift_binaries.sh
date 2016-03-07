@@ -29,14 +29,12 @@ set -e
 if [ -d "${WORK_DIR}/${SWIFT_SNAPSHOT}-${UBUNTU_VERSION}" ]; then
   echo ">> Swift binaries '${SWIFT_SNAPSHOT}' are already installed."
 else
-  echo ">> PATH 1: $PATH"
   echo ">> Installing '${SWIFT_SNAPSHOT}'..."
   # Remove from PATH any references to previous versions of the Swift binaries
   for INSTALL_DIR in `find $WORK_DIR -type d -iname 'swift-DEVELOPMENT-SNAPSHOT-*'`;
   do
     export PATH=${PATH#${INSTALL_DIR}}
   done
-  echo ">> PATH 2: $PATH"
   # Remove any older versions of the Swift binaries from the file system
   find $WORK_DIR -name 'swift-DEVELOPMENT-SNAPSHOT-*' | xargs rm -rf
   # Install Swift compiler
@@ -44,8 +42,6 @@ else
   wget https://swift.org/builds/development/$UBUNTU_VERSION_NO_DOTS/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
   tar xzvf $SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
   export PATH=$WORK_DIR/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin:$PATH
-  # Show path
-  echo ">> PATH 3: $PATH"
   swiftc -h
   cd -
 fi
