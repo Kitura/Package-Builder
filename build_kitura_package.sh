@@ -87,13 +87,13 @@ fi
 
 # Execute OS specific pre-test steps
 if [ -e "${projectFolder}/Kitura-CI/${projectName}/${osName}/before_tests.sh" ]; then
-	"${projectFolder}/Kitura-CI/${projectName}/${osName}/before_tests.sh"
+	source "${projectFolder}/Kitura-CI/${projectName}/${osName}/before_tests.sh"
   echo ">> Completed ${osName} pre-tests steps."
 fi
 
 # Execute common pre-test steps
 if [ -e "${projectFolder}/Kitura-CI/${projectName}/common/before_tests.sh" ]; then
-	"${projectFolder}/Kitura-CI/${projectName}/common/before_tests.sh"
+	source "${projectFolder}/Kitura-CI/${projectName}/common/before_tests.sh"
   echo ">> Completed common pre-tests steps."
 fi
 
@@ -105,12 +105,12 @@ echo
 
 # Execute common post-test steps
 if [ -e "${projectFolder}/Kitura-CI/${projectName}/common/after_tests.sh" ]; then
-	"${projectFolder}/Kitura-CI/${projectName}/common/after_tests.sh"
+	source "${projectFolder}/Kitura-CI/${projectName}/common/after_tests.sh"
   echo ">> Completed common post-tests steps."
 fi
 
 # Execute OS specific post-test steps
 if [ -e "${projectFolder}/Kitura-CI/${projectName}/${osName}/after_tests.sh" ]; then
-	"${projectFolder}/Kitura-CI/${projectName}/${osName}/after_tests.sh"
+	source "${projectFolder}/Kitura-CI/${projectName}/${osName}/after_tests.sh"
   echo ">> Completed ${osName} post-tests steps."
 fi

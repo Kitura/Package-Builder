@@ -25,13 +25,14 @@ echo "projectFolder: ${projectFolder}"
 password=$(head -n 1 "${projectFolder}/Tests/SwiftRedisAuth/password.txt")
 echo "redis password: $password"
 
-echo "RICK WAS HERE!"
+echo "About to cat contents of redis.conf file 1"
+cat $REDIS_CONF_FILE
 
 # Update redis password
-perl -pi -e 's/# requirepass foobared/# requirepass $password/g' /etc/redis/redis.conf
+perl -pi -e 's/# requirepass foobared/# requirepass $password/g' $REDIS_CONF_FILE
 
-echo "contents of redis.conf after"
-cat /etc/redis/redis.conf
+echo "About to cat contents of redis.conf file 2"
+cat $REDIS_CONF_FILE
 
 # Start redis server
 redis-server &

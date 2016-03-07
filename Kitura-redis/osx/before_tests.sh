@@ -22,5 +22,5 @@ set -e
 # Install redis
 brew install redis || brew outdated redis || brew upgrade redis
 
-echo "<< About to cat redis conf file"
-cat /usr/local/etc/redis.conf
+# Set environment variable that points to conf file
+export REDIS_CONF_FILE=/usr/local/etc/redis.conf

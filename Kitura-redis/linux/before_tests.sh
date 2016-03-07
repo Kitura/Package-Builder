@@ -19,25 +19,10 @@
 # If any commands fail, we want the shell script to exit immediately.
 set -e
 
+# Install redis
 apt-get update
 apt-get upgrade
 apt-get install -y redis-server
 
-# Download, compile, and install redis
-#wget http://download.redis.io/redis-stable.tar.gz
-#tar xvzf redis-stable.tar.gz
-#cd redis-stable
-#make
-
-# Install redis
-#make install
-#rm -rf redis-stable
-
-echo "<< About to cat redis conf file"
-cat /etc/redis/redis.conf
-
-#ls -la /root/Kitura-redis/redis-stable
-#cat /root/Kitura-redis/redis-stable/redis.conf
-
-# Go back to previous folder
-#cd -
+# Set environment variable that points to conf file
+export REDIS_CONF_FILE=/etc/redis/redis.conf
