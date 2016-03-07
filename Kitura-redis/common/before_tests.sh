@@ -25,6 +25,10 @@ echo "projectFolder: ${projectFolder}"
 password=$(head -n 1 "${projectFolder}/Tests/SwiftRedisAuth/password.txt")
 echo "redis password: $password"
 
+# Start redis server
+redis-server &
+redis-cli shutdown
+
 
 ls -la /etc/redis/
 echo "contents of redis.conf before"
