@@ -32,5 +32,7 @@ echo ">> redis password: $password"
 # Start redis server
 redis-server &
 
+sleep 25
+
 # Set redis password
 redis-cli CONFIG SET requirepass "$password"
