@@ -20,7 +20,7 @@
 set -e
 
 # Set authentication password for redis server
-password=$(head -n 1 "${projectFolder}/Tests/SwiftRedisAuth/password.txt")
+password=$(head -n 1 "${projectFolder}/Tests/SwiftRedis/password.txt")
 echo ">> redis password: $password"
 
 # Update redis password
