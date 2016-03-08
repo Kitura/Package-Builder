@@ -24,15 +24,15 @@ password=$(head -n 1 "${projectFolder}/Tests/SwiftRedisAuth/password.txt")
 echo ">> redis password: $password"
 
 # Update redis password
-#perl -pi -e "s/# requirepass foobared/requirepass ${password}/g" $REDIS_CONF_FILE
+perl -pi -e "s/# requirepass foobared/requirepass ${password}/g" $REDIS_CONF_FILE
 
-#echo ">> Contents of ${REDIS_CONF_FILE} next:"
-#cat $REDIS_CONF_FILE
+echo ">> Contents of ${REDIS_CONF_FILE} next:"
+cat $REDIS_CONF_FILE
 
 # Start redis server
 redis-server &
+sleep 10
 
-sleep 25
-
+#sleep 25
 # Set redis password
-redis-cli CONFIG SET requirepass "$password"
+#redis-cli CONFIG SET requirepass "$password"
