@@ -30,9 +30,5 @@ echo ">> Contents of ${REDIS_CONF_FILE} next:"
 cat $REDIS_CONF_FILE
 
 # Start redis server
-redis-server &
+redis-server $REDIS_CONF_FILE &
 sleep 10
-
-#sleep 25
-# Set redis password
-#redis-cli CONFIG SET requirepass "$password"
