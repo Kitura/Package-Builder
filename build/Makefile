@@ -49,7 +49,13 @@ else
 	swift build $(CC_FLAGS) $(SWIFTC_FLAGS) $(LINKER_FLAGS)
 endif
 
-test: build
+Tests/LinuxMain.swift:
+ifeq ($(UNAME), Linux)
+	@echo --- Generating $@
+	bash ${KITURA_CI_BUILD_SCRIPTS_DIR}/generate_linux_main.sh
+endif
+
+test: build Tests/LinuxMain.swift
 	@echo --- Invoking swift test
 	swift test
 
