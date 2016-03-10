@@ -50,10 +50,6 @@ test: build
 	@echo --- Invoking swift test
 	swift test
 
-run: build
-	@echo --- Invoking KituraSample executable
-	./.build/debug/KituraSample
-
 refetch:
 	@echo --- Removing Packages directory
 	rm -rf Packages
