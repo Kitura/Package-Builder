@@ -60,4 +60,4 @@ clean:
 	@echo --- Invoking swift build --clean
 	swift build --clean
 
-.PHONY: clean build refetch run test
+.PHONY: clean build refetch test
