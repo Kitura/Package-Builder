@@ -20,8 +20,8 @@
 set -e
 
 # Install redis
-apt-get update
-apt-get upgrade
+apt-get update -y
+apt-get upgrade -y
 apt-get install -y redis-server
 
 # Set environment variable that points to conf file
