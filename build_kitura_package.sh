@@ -58,7 +58,7 @@ echo ">> projectName: $projectName"
 echo
 
 # Install Swift binaries
-source ${projectFolder}/Kitura-CI/${osName}/install_swift_binaries.sh
+source ${projectFolder}/Kitura-Build/${osName}/install_swift_binaries.sh
 
 # Show path
 echo ">> PATH: $PATH"
@@ -81,10 +81,10 @@ else
 fi
 
 # Execute OS specific pre-test steps
-sourceScript "${projectFolder}/Kitura-CI/${projectName}/${osName}/before_tests.sh" ">> Completed ${osName} pre-tests steps."
+sourceScript "${projectFolder}/Kitura-Build/${projectName}/${osName}/before_tests.sh" ">> Completed ${osName} pre-tests steps."
 
 # Execute common pre-test steps
-sourceScript "${projectFolder}/Kitura-CI/${projectName}/common/before_tests.sh" ">> Completed common pre-tests steps."
+sourceScript "${projectFolder}/Kitura-Build/${projectName}/common/before_tests.sh" ">> Completed common pre-tests steps."
 
 # Execute test cases
 echo ">> Testing Kitura package..."
@@ -93,7 +93,7 @@ echo ">> Finished testing Kitura package."
 echo
 
 # Execute common post-test steps
-sourceScript "${projectFolder}/Kitura-CI/${projectName}/common/after_tests.sh" ">> Completed common post-tests steps."
+sourceScript "${projectFolder}/Kitura-Build/${projectName}/common/after_tests.sh" ">> Completed common post-tests steps."
 
 # Execute OS specific post-test steps
-sourceScript "${projectFolder}/Kitura-CI/${projectName}/${osName}/after_tests.sh" ">> Completed ${osName} post-tests steps."
+sourceScript "${projectFolder}/Kitura-Build/${projectName}/${osName}/after_tests.sh" ">> Completed ${osName} post-tests steps."
