@@ -66,22 +66,10 @@ echo ">> PATH: $PATH"
 # Run SwiftLint to ensure Swift style and conventions
 # swiftlint
 
-# Build swift package
-echo ">> Building Kitura package..."
-if [ "${osName}" == "osx" ]; then
-  swift build -Xswiftc -I/usr/local/include -Xlinker -L/usr/local/lib
-else
-  swift build --fetch
-  CC_FLAGS="-Xcc -fblocks"
-  for MODULE_MAP in `find ${projectFolder}/Packages -name module.modulemap`;
-  do
-    CC_FLAGS+=" -Xcc -fmodule-map-file=$MODULE_MAP"
-  done
-  echo ">> CC_FLAGS: $CC_FLAGS"
-  swift build $CC_FLAGS
-fi
-echo ">> Finished building Kitura package."
-echo
+# Build swift package from makefile
+echo ">> Running makefile..."
+cd ${projectFolder} && make
+echo ">> Finished running makefile"
 
 # Copy test credentials for project if available
 if [ -e "${projectFolder}/Kitura-TestingCredentials/${projectName}" ]; then
