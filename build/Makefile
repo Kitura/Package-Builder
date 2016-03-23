@@ -29,7 +29,7 @@ endif
 
 all: build
 
-build:
+build: custombuild
 	@echo --- Running build on $(UNAME)
 	@echo --- Build scripts directory: ${KITURA_CI_BUILD_SCRIPTS_DIR}
 	@echo --- Checking swift version
@@ -69,4 +69,6 @@ clean:
 	@echo --- Invoking swift build --clean
 	swift build --clean
 
-.PHONY: clean build refetch test
+custombuild: # do nothing - for the calling build to override
+
+.PHONY: clean build refetch run test custombuild
