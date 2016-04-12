@@ -40,14 +40,9 @@ build: custombuild
 ifeq ($(UNAME), Linux)
 	@echo --- Checking Linux release
 	-lsb_release -d
-	@echo --- Fetching dependencies
-	swift build --fetch
-	@echo --- Invoking swift build
-	swift build $(CC_FLAGS) $(SWIFTC_FLAGS) $(LINKER_FLAGS) `bash ${KITURA_CI_BUILD_SCRIPTS_DIR}/make_ccflags_for_module_maps`
-else
+endif
 	@echo --- Invoking swift build
 	swift build $(CC_FLAGS) $(SWIFTC_FLAGS) $(LINKER_FLAGS)
-endif
 
 Tests/LinuxMain.swift:
 ifeq ($(UNAME), Linux)
