@@ -34,6 +34,8 @@ build: custombuild
 	@echo --- Build scripts directory: ${KITURA_CI_BUILD_SCRIPTS_DIR}
 	@echo --- Checking swift version
 	swift --version
+	@echo --- Checking swiftc version
+	swiftc --version
 	@echo --- Checking git revision and branch
 	-git rev-parse HEAD
 	-git rev-parse --abbrev-ref HEAD
