@@ -20,11 +20,15 @@ endif
 
 UNAME = ${shell uname}
 
-CC_FLAGS = -Xcc -fblocks
 
 ifeq ($(UNAME), Darwin)
-SWIFTC_FLAGS =  -Xswiftc -I/usr/local/include
+SWIFTC_FLAGS = -Xswiftc -I/usr/local/include
 LINKER_FLAGS = -Xlinker -L/usr/local/lib
+endif
+
+ifeq ($(UNAME), Linux)
+SWIFTC_FLAGS = -Xcc -fblocks
+LINKER_FLAGS = -Xlinker -rpath -Xlinker .build/debug -Xlinker -L/usr/local/lib
 endif
 
 all: build
@@ -44,7 +48,7 @@ ifeq ($(UNAME), Linux)
 	-lsb_release -d
 endif
 	@echo --- Invoking swift build
-	swift build $(CC_FLAGS) $(SWIFTC_FLAGS) $(LINKER_FLAGS)
+	swift build $(SWIFTC_FLAGS) $(LINKER_FLAGS)
 
 Tests/LinuxMain.swift:
 ifeq ($(UNAME), Linux)
