@@ -66,6 +66,13 @@ echo ">> PATH: $PATH"
 # Run SwiftLint to ensure Swift style and conventions
 # swiftlint
 
+# Delete dependent tests (WORKAROUND FOR 3/24 BINARY, DELETE WHEN MOVING OFF!!!!!)
+for p in ${projectFolder}/Packages/*; do
+    if [ -e "${p}/Tests" ]; then
+        rm -rf ${p}/Tests
+    fi
+done
+
 # Build swift package from makefile
 echo ">> Running makefile..."
 cd ${projectFolder} && make
