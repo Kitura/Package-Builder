@@ -24,7 +24,7 @@
 set -e
 
 # Swift version for build
-export SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-03-24-a
+export SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-04-25-a
 echo ">> SWIFT_SNAPSHOT: $SWIFT_SNAPSHOT"
 export WORK_DIR=/root
 
@@ -65,14 +65,6 @@ echo ">> PATH: $PATH"
 
 # Run SwiftLint to ensure Swift style and conventions
 # swiftlint
-
-# Delete dependent tests (WORKAROUND FOR 3/24 BINARY, DELETE WHEN MOVING OFF!!!!!)
-cd ${projectFolder} && swift build --fetch
-for p in ${projectFolder}/Packages/*; do
-    if [ -e "${p}/Tests" ]; then
-    rm -rf ${p}/Tests
-    fi
-done
 
 # Build swift package from makefile
 echo ">> Running makefile..."
