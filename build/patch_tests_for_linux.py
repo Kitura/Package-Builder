@@ -1,6 +1,6 @@
 import os
 
-debugFile = open('../../.build/debug.yaml', 'r+')
+debugFile = open('.build/debug.yaml', 'r+')
 debugContent = debugFile.read()
 newDebugContent = debugContent.replace(".xctest", "Test.xctest")
 debugFile.seek(0)
