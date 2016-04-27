@@ -47,5 +47,12 @@ else
   tar xzvf $SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
   export PATH=$WORK_DIR/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin:$PATH
   swiftc -h
+  # Clone and install swift-corelibs-libdispatch
+  echo ">> Installing swift-corelibs-libdispatch..."
+  # Remove any older versions of the Swift binaries from the file system
+  find $WORK_DIR -name 'swift-corelibs-libdispatch' | xargs rm -rf
+  git clone -b experimental/foundation https://github.com/apple/swift-corelibs-libdispatch.git
+  cd swift-corelibs-libdispatch && git submodule init && git submodule update && sh ./autogen.sh && ./configure --with-swift-toolchain=$WORK_DIR/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr --prefix=$WORK_DIR/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr && make && make install
+  # Return to previous directory
   cd -
 fi
