@@ -88,10 +88,15 @@ sourceScript "${projectFolder}/Kitura-Build/${projectName}/${osName}/before_test
 sourceScript "${projectFolder}/Kitura-Build/${projectName}/common/before_tests.sh" ">> Completed common pre-tests steps."
 
 # Execute test cases
-echo ">> Testing Kitura package..."
-swift test
-echo ">> Finished testing Kitura package."
-echo
+if [ -e "${projectFolder}/Tests" ]; then
+    echo ">> Testing Kitura package..."
+    swift test
+    echo ">> Finished testing Kitura package."
+    echo
+else
+    echo ">> No testcases exist..."
+fi
+
 
 # Execute common post-test steps
 sourceScript "${projectFolder}/Kitura-Build/${projectName}/common/after_tests.sh" ">> Completed common post-tests steps."
