@@ -22,13 +22,13 @@ UNAME = ${shell uname}
 
 
 ifeq ($(UNAME), Darwin)
-SWIFTC_FLAGS = -Xswiftc -I/usr/local/include
-LINKER_FLAGS = -Xlinker -L/usr/local/lib
+SWIFTC_FLAGS = 
+LINKER_FLAGS = 
 endif
 
 ifeq ($(UNAME), Linux)
 SWIFTC_FLAGS = -Xcc -fblocks
-LINKER_FLAGS = -Xlinker -rpath -Xlinker .build/debug -Xlinker -L/usr/local/lib
+LINKER_FLAGS = -Xlinker -rpath -Xlinker .build/debug 
 endif
 
 all: build
