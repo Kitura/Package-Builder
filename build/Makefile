@@ -49,10 +49,6 @@ ifeq ($(UNAME), Linux)
 endif
 	@echo --- Invoking swift build
 	swift build $(SWIFTC_FLAGS) $(LINKER_FLAGS)
-ifeq ($(UNAME), Linux)
-	@echo --- Patching debug.yaml
-	python ${KITURA_CI_BUILD_SCRIPTS_DIR}/patch_tests_for_linux.py
-endif
 
 Tests/LinuxMain.swift:
 ifeq ($(UNAME), Linux)

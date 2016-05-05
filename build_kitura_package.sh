@@ -24,7 +24,7 @@
 set -e
 
 # Swift version for build
-export SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-04-25-a
+export SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-05-02-a
 echo ">> SWIFT_SNAPSHOT: $SWIFT_SNAPSHOT"
 export WORK_DIR=/root
 
