@@ -68,7 +68,8 @@ refetch:
 
 clean:
 	@echo --- Invoking swift build --clean
-	swift build --clean
+	rm -rf .build
+	-swift build --clean
 
 custombuild: # do nothing - for the calling build to override
 
