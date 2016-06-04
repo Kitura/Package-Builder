@@ -71,14 +71,18 @@ clean:
 	-swift build --clean
 	rm -rf .build
 
-openXcode:
+generateXcode:
 	swift build -X
+
+fixXcode: generateXcode customFixXcode
 	bash ${KITURA_CI_BUILD_SCRIPTS_DIR}/check_xcodeproj_gem.sh
 	-ruby ${KITURA_CI_BUILD_SCRIPTS_DIR}/fix_xcode_project.rb \
-		${shell bash ${KITURA_CI_BUILD_SCRIPTS_DIR}/get_latest_xcodeproj.sh} 2>/dev/null
+		${shell bash ${KITURA_CI_BUILD_SCRIPTS_DIR}/get_latest_xcodeproj.sh} &>/dev/null
+
+openXcode: fixXcode
 	open ${shell bash ${KITURA_CI_BUILD_SCRIPTS_DIR}/get_latest_xcodeproj.sh}.xcodeproj
 
 custombuild: # do nothing - for the calling Makefile to override
-customFixXcodeProject: # do nothing - for the calling Makefile to override
+customFixXcode: # do nothing - for the calling Makefile to override
 
-.PHONY: clean build refetch run test custombuild customFixXcodeProject openXcode
+.PHONY: clean build refetch run test custombuild customFixXcode openXcode generateXcode fixXcode
