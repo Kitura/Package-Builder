@@ -22,13 +22,13 @@ UNAME = ${shell uname}
 
 
 ifeq ($(UNAME), Darwin)
-SWIFTC_FLAGS = 
-LINKER_FLAGS = 
+SWIFTC_FLAGS =
+LINKER_FLAGS =
 endif
 
 ifeq ($(UNAME), Linux)
 SWIFTC_FLAGS = -Xcc -fblocks
-LINKER_FLAGS = -Xlinker -rpath -Xlinker .build/debug 
+LINKER_FLAGS = -Xlinker -rpath -Xlinker .build/debug
 endif
 
 all: build
@@ -71,7 +71,14 @@ clean:
 	-swift build --clean
 	rm -rf .build
 
+openXcode:
+	swift build -X
+	bash ${KITURA_CI_BUILD_SCRIPTS_DIR}/check_xcodeproj_gem.sh
+	-ruby ${KITURA_CI_BUILD_SCRIPTS_DIR}/fix_xcode_project.rb \
+		${shell bash ${KITURA_CI_BUILD_SCRIPTS_DIR}/get_latest_xcodeproj.sh} 2>/dev/null
+	open ${shell bash ${KITURA_CI_BUILD_SCRIPTS_DIR}/get_latest_xcodeproj.sh}.xcodeproj
 
-custombuild: # do nothing - for the calling build to override
+custombuild: # do nothing - for the calling Makefile to override
+customFixXcodeProject: # do nothing - for the calling Makefile to override
 
-.PHONY: clean build refetch run test custombuild
+.PHONY: clean build refetch run test custombuild customFixXcodeProject openXcode
