@@ -71,7 +71,7 @@ clean:
 	-swift build --clean
 	rm -rf .build
 
-generateXcode:
+generateXcode: build
 	swift build -X
 
 fixXcode: generateXcode customFixXcode
