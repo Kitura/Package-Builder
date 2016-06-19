@@ -40,6 +40,8 @@ build: custombuild
 	swift --version
 	@echo --- Checking swiftc version
 	swiftc --version
+	@echo --- Checking git version
+	git --version
 	@echo --- Checking git revision and branch
 	-git rev-parse HEAD
 	-git rev-parse --abbrev-ref HEAD
