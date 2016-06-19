@@ -23,7 +23,7 @@ set -e
 
 # Install OS X system level dependencies for Kitura
 brew update
-brew install http-parser curl hiredis swiftlint
+brew install http-parser curl
 brew install wget || brew outdated wget || brew upgrade wget
 brew install gradle || brew outdated gradle || brew upgrade gradle
 
