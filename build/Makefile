@@ -66,7 +66,7 @@ refetch:
 	@echo --- Removing Packages directory
 	rm -rf Packages
 	@echo --- Fetching dependencies
-	swift build --fetch
+	swift package fetch
 
 clean:
 	@echo --- Invoking swift build --clean
@@ -74,7 +74,7 @@ clean:
 	rm -rf .build
 
 generateXcode: build
-	swift build -X
+	swift package generate-xcodeproj
 
 fixXcode: generateXcode customFixXcode
 	bash ${KITURA_CI_BUILD_SCRIPTS_DIR}/check_xcodeproj_gem.sh
