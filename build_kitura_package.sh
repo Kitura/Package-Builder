@@ -24,7 +24,7 @@
 set -e
 
 # Swift version for build
-if [ -f .swift-version ]; then
+if [ -f ".swift-version" ]; then
    export SWIFT_SNAPSHOT=$(cat .swift-version)
 else
    export SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-06-06-a
