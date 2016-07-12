@@ -26,7 +26,7 @@ set -e
 # Swift version for build
 if [ -f ".swift-version" ]; then
    string = $(cat .swift-version)
-   if [[ $sting == *"swift-"* ]] then
+   if [[ $sting == *"swift-"* ]]; then
       echo ">> using SWIFT_VERSION from file"
       export SWIFT_SNAPSHOT=string
    else
