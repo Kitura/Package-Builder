@@ -24,7 +24,12 @@
 set -e
 
 # Swift version for build
-export SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-06-06-a
+if [ -f .swift-version ]; then
+   export SWIFT_SNAPSHOT=$(cat .swift-version)
+else
+   export SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-06-06-a
+fi
+
 echo ">> SWIFT_SNAPSHOT: $SWIFT_SNAPSHOT"
 export WORK_DIR=/root
 
