@@ -25,10 +25,10 @@ set -e
 
 # Swift version for build
 if [ -f ".swift-version" ]; then
-   string = $(cat .swift-version)
-   if [[ $sting == *"swift-"* ]]; then
+   string="$(cat .swift-version)";
+   if [[ $string == *"swift-"* ]]; then
       echo ">> using SWIFT_VERSION from file"
-      export SWIFT_SNAPSHOT=string
+      export SWIFT_SNAPSHOT=$string
    else
       echo ">> normalizing SWIFT_VERSION from file"
       add="swift-"
