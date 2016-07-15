@@ -24,6 +24,7 @@
 set -e
 
 # Swift version for build
+ls
 if [ -f ".swift-version" ]; then
    string="$(cat .swift-version)";
    if [[ $string == *"swift-"* ]]; then
