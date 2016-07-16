@@ -27,8 +27,8 @@
 set -e
 
 # Environment vars
-export UBUNTU_VERSION=ubuntu15.10
-export UBUNTU_VERSION_NO_DOTS=ubuntu1510
+export UBUNTU_VERSION=ubuntu14.04
+export UBUNTU_VERSION_NO_DOTS=ubuntu1404
 
 if [ -d "${WORK_DIR}/${SWIFT_SNAPSHOT}-${UBUNTU_VERSION}" ]; then
   echo ">> Swift binaries '${SWIFT_SNAPSHOT}' are already installed."
