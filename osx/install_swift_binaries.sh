@@ -23,7 +23,11 @@ set -e
 
 # Install OS X system level dependencies for Kitura
 brew update
-brew install http-parser curl
+
+# Install git CLI using hoebrew until Travis-CI gets off of git CLI 2.9.0 which has problems with Swift.
+brew install git
+
+brew install curl
 brew install wget || brew outdated wget || brew upgrade wget
 brew install gradle || brew outdated gradle || brew upgrade gradle
 
