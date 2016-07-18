@@ -25,6 +25,7 @@ set -e
 brew update
 
 # Install git CLI using hoebrew until Travis-CI gets off of git CLI 2.9.0 which has problems with Swift.
+brew unlink git
 brew install git
 
 brew install curl
