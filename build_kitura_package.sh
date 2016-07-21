@@ -89,7 +89,7 @@ echo ">> Finished running makefile"
 # Copy test credentials for project if available
 if [ -e "${projectFolder}/Kitura-TestingCredentials/${projectName}" ]; then
 	echo ">> Found folder with test credentials for ${projectName}."
-  # Copy tests using gradle script (note that we are using the convenient gradle wrapper...)
+  # Copy test credentials over 
   cp -RP ${projectFolder}/Kitura-TestingCredentials/${projectName} ${projectFolder}
 else
   echo ">> No folder found with test credentials for ${projectName}."
