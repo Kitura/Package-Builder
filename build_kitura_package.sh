@@ -90,7 +90,7 @@ echo ">> Finished running makefile"
 if [ -e "${projectFolder}/Kitura-TestingCredentials/${projectName}" ]; then
 	echo ">> Found folder with test credentials for ${projectName}."
   # Copy tests using gradle script (note that we are using the convenient gradle wrapper...)
-  ./DevOps/gradle_wrapper/gradlew copyProperties -b ./DevOps/scripts_assets/gradle_assets/build-deploy-assets/copy-project-properties.gradle -PappOpenSourceFolder=${projectFolder}/Kitura-TestingCredentials/${projectName} -PappRootFolder=${projectFolder}
+  cp -RP ${projectFolder}/Kitura-TestingCredentials/${projectName} ${projectFolder}
 else
   echo ">> No folder found with test credentials for ${projectName}."
 fi
