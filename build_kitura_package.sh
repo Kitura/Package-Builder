@@ -91,7 +91,8 @@ echo ">> Finished running makefile"
 if [ -e "${projectFolder}/Kitura-TestingCredentials/${projectName}" ]; then
 	echo ">> Found folder with test credentials for ${projectName}."
   # Copy test credentials over 
-  cp -RP ${projectFolder}/Kitura-TestingCredentials/${projectName} ${projectFolder}
+  echo ">> copying ${projectFolder}/Kitura-TestingCredentials/${projectName} to ${projectFolder}"
+  cp -RP ${projectFolder}/Kitura-TestingCredentials/${projectName}/* ${projectFolder}
 else
   echo ">> No folder found with test credentials for ${projectName}."
 fi
