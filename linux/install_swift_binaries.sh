@@ -27,8 +27,8 @@
 set -e
 
 # Environment vars
-export UBUNTU_VERSION=ubuntu14.04
-export UBUNTU_VERSION_NO_DOTS=ubuntu1404
+export UBUNTU_VERSION=`lsb_release -a | grep Description | awk '{print tolower($2) $3}' | awk -F. '{print $1"."$2}'`
+export UBUNTU_VERSION_NO_DOTS=`lsb_release -a | grep Description | awk '{print tolower($2) $3}' | awk -F. '{print $1$2}'`
 
 if [ -d "${WORK_DIR}/${SWIFT_SNAPSHOT}-${UBUNTU_VERSION}" ]; then
   echo ">> Swift binaries '${SWIFT_SNAPSHOT}' are already installed."
