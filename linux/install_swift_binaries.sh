@@ -27,7 +27,7 @@
 set -e
 
 # Environment vars
-version = `lsb_release -a | grep Description | awk '{print tolower($2) $3`
+version = `lsb_release -d | awk '{print tolower($2) $3}`
 export UBUNTU_VERSION=`echo $version | awk -F. '{print $1"."$2}'`
 export UBUNTU_VERSION_NO_DOTS=`echo $version | awk -F. '{print $1$2}'`
 
