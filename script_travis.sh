@@ -16,9 +16,8 @@
 # limitations under the License.
 ##
 
-## References for triggering builds using Travis CI API
-# https://docs.travis-ci.com/user/triggering-builds
-# https://api.travis-ci.org/repos/IBM-Swift/Kitura.json
+# Script used to issue the compile commands for the Kitura-Build repo from
+# the parent repo's.
 
 # If any commands fail, we want the shell script to exit immediately.
 set -e
@@ -38,12 +37,10 @@ project=$4
 echo ">> Let's build and test the '$branch' branch for $project."
 if [ $os == "linux" ];
 then 
-   echo ">> Running run_kitura_ubuntu_container.sh $branch $build_dir $project"
    ./Kitura-Build/run_kitura_ubuntu_container.sh $branch $build_dir $project 
 fi
 if [ $os == "osx" ];
 then 
-   echo ">> Running build_kitura_package.sh" 
    ./Kitura-Build/build_kitura_package.sh
 fi
 echo ">> Build and tests completed. See above for status."
