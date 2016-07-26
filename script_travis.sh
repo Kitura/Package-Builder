@@ -24,7 +24,7 @@
 set -e
 
 # Verify input params
-if [ "$#" -ne 2 ]; then
+if [ "$#" -ne 4 ]; then
   echo "Usage: script_travis [TRAVIS_OS_NAME] [TRAVIS_BRANCH] [TRAVIS_BUILD_DIR] [PROJECT]"
   exit 1
 fi
