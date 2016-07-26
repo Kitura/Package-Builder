@@ -39,12 +39,12 @@ echo ">> Let's build and test the '$branch' branch for $project."
 if [ $os == "linux" ];
 then 
    echo ">> Running run_kitura_ubuntu_container.sh $branch $build_dir $project"
-   ./run_kitura_ubuntu_container.sh $branch $build_dir $project 
+   ./Kitura-Build/run_kitura_ubuntu_container.sh $branch $build_dir $project 
 fi
 if [ $os == "osx" ];
 then 
    echo ">> Running build_kitura_package.sh" 
-   ./build_kitura_package.sh
+   ./Kitura-Build/build_kitura_package.sh
 fi
 echo ">> Build and tests completed. See above for status."
 
