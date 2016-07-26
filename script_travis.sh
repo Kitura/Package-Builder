@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 ##
 # Copyright IBM Corporation 2016
@@ -36,7 +36,15 @@ build_dir=$3
 project=$4
 
 echo ">> Let's build and test the '$branch' branch for $project."
-if [[ "$OS" == "linux" ]]; then ./run_kitura_ubuntu_container.sh $branch $build_dir $project ; fi
-if [[ "$OS" == "osx" ]]; then ./build_kitura_package.sh ; fi
+if [ $os == "linux" ];
+then 
+   echo ">> Running run_kitura_ubuntu_container.sh $branch $build_dir $project"
+   ./run_kitura_ubuntu_container.sh $branch $build_dir $project 
+fi
+if [ $os == "osx" ];
+then 
+   echo ">> Running build_kitura_package.sh" 
+   ./build_kitura_package.sh
+fi
 echo ">> Build and tests completed. See above for status."
 
