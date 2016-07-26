@@ -30,7 +30,6 @@ brew install git
 
 brew install curl
 brew install wget || brew outdated wget || brew upgrade wget
-brew install gradle || brew outdated gradle || brew upgrade gradle
 
 # Install Swift binaries
 # See http://apple.stackexchange.com/questions/72226/installing-pkg-with-terminal
