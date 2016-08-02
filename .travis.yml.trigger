@@ -9,9 +9,7 @@ branches:
     - develop
 
 before_install:
-  - git submodule init
-  - git submodule update
-  - cd Kitura-Build && git checkout $TRAVIS_BRANCH && cd $TRAVIS_BUILD_DIR
+  - git submodule update --init --remote --merge --recursive
 
 script:
   - echo "About to trigger build for the Kitura repository..."
