@@ -1,0 +1,20 @@
+{
+    "esversion": 6,
+    "maxlen": 100,
+    "curly": true,
+    "strict": true,
+    "maxstatements": 15,
+    "nocomma": true,
+    "nonbsp": true,
+    "unused": true,
+    "maxdepth": 2,
+    "maxcomplexity": 4,
+    "nonew": true,
+    "noarg": true,
+    "maxparams": 6,
+    "latedef": true,
+    "freeze": true,
+    "bitwise": true,
+    "eqeqeq": true,
+    "forin": true
+}
