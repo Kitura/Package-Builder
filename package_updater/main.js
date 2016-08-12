@@ -162,8 +162,14 @@ function filterByTagExistance(repositories, callback) {
 function filterByNotChangedAfterMaster(repositories, callback) {
     'use strict';
 
-    async.filter(repositories, (repository, callback) =>
-                 repository.wasChangedAfterVersion('master', callback), callback);
+    async.filter(repositories, (repository, callback) => {
+        repository.wasChangedAfterVersion('master', (error, wasChanged) => {
+            if (!wasChanged) {
+                console.log(colors.magenta(`repository ${repository.getName()} was not changed`));
+            }
+            callback(error, wasChanged);
+        }, callback);
+    }, callback);
 }
 
 parameters.read(() => {
