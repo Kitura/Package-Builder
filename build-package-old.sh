@@ -73,7 +73,11 @@ fi
 echo ">> SWIFT_SNAPSHOT: $SWIFT_SNAPSHOT"
 
 # Install Swift binaries
-source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries.sh
+if [ $osName == "Linux" ]; then
+	source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries_old.sh
+else
+	source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries.sh
+fi
 
 # Show path
 echo ">> PATH: $PATH"
