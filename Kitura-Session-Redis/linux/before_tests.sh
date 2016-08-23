@@ -20,9 +20,9 @@
 set -e
 
 # Install redis
-apt-get update -y
-apt-get upgrade -y
-apt-get install -y redis-server
+sudo apt-get update -y
+sudo apt-get upgrade -y
+sudo apt-get install -y redis-server
 
 # Set environment variable that points to conf file
 export REDIS_CONF_FILE=/etc/redis/redis.conf
