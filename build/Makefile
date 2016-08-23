@@ -68,7 +68,11 @@ refetch:
 	@echo --- Fetching dependencies
 	swift package fetch
 
-clean:
+update:
+	@echo --- Updating dependencies
+	swift package update
+	
+clean: customClean
 	@echo --- Invoking swift build --clean
 	-swift build --clean
 	rm -rf .build
@@ -86,5 +90,6 @@ openXcode: fixXcode
 
 custombuild: # do nothing - for the calling Makefile to override
 customFixXcode: # do nothing - for the calling Makefile to override
+customClean: # do nothing - for the calling Makefile to override
 
 .PHONY: clean build refetch run test custombuild customFixXcode openXcode generateXcode fixXcode
