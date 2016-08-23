@@ -42,7 +42,7 @@ if [[ (-z "$2") && (-z "$3") ]]
     hostFolder=$2
     projectName=$3
     volumeClause="-v $hostFolder:/root/$projectName"
-    cmdClause="/root/$projectName/Package-Builder/build-package.sh"
+    cmdClause="/root/$projectName/Package-Builder/build-package-old.sh"
 fi
 echo ">> volumeClause: $volumeClause"
 echo ">> cmdClause: $cmdClause"
