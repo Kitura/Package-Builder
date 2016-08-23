@@ -26,6 +26,9 @@
 # If any commands fail, we want the shell script to exit immediately.
 set -e
 
+# Echo commands before executing them.
+set -o verbose
+
 # Environment vars
 version=`lsb_release -d | awk '{print tolower($2) $3}'`
 export UBUNTU_VERSION=`echo $version | awk -F. '{print $1"."$2}'`
