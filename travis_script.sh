@@ -35,13 +35,8 @@ build_dir=$3
 project=$4
 
 echo ">> Let's build and test the '$branch' branch for $project."
-if [ $os == "linux" ];
-then 
-   ./Package-Builder/run-kitura-ubuntu-container.sh $branch $build_dir $project 
-fi
-if [ $os == "osx" ];
-then 
-   ./Package-Builder/build-package-old.sh
-fi
+
+./Package-Builder/build-package.sh $branch $build_dir 
+
 echo ">> Build and tests completed. See above for status."
 
