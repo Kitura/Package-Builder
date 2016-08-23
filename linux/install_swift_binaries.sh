@@ -26,6 +26,9 @@
 # If any commands fail, we want the shell script to exit immediately.
 set -e
 
+# Echo commands before executing them.
+set -o verbose
+
 sudo apt-get update
 sudo apt-get -y install clang-3.8 lldb-3.8 libicu-dev libkqueue-dev libtool libcurl4-openssl-dev libbsd-dev libblocksruntime-dev build-essential libssl-dev
 

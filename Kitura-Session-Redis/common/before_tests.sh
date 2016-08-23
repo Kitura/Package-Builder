@@ -19,8 +19,13 @@
 # If any commands fail, we want the shell script to exit immediately.
 set -e
 
+testDirectory="${projectFolder}/Tests/KituraSessionRedis"
+if [ ! -d "${testDirectory}" ]; then
+  testDirectory="${projectFolder}/Tests/KituraSessionRedisTests"
+fi
+
 # Set authentication password for redis server
-password=$(head -n 1 "${projectFolder}/Tests/KituraSessionRedis/password.txt")
+password=$(head -n 1 "${testDirectory}/password.txt")
 echo ">> redis password: $password"
 
 # Update redis password
