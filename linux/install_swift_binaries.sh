@@ -42,7 +42,7 @@ sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-3.8 100
 WORK_DIR=$1
 
 THRESHOLD_DATE="20160801"
-THREAHOLD_0807="20160807"
+THRESHOLD_0807="20160807"
 THRESHOLD_0818="20160818"
 DATE=`echo ${SWIFT_SNAPSHOT} | awk -F- '{print $4$5$6}'`
 
