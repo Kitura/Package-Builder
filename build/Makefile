@@ -68,6 +68,10 @@ refetch:
 	@echo --- Fetching dependencies
 	swift package fetch
 
+update:
+	@echo --- Updating dependencies
+	swift package update
+	
 clean: customClean
 	@echo --- Invoking swift build --clean
 	-swift build --clean
