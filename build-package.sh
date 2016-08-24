@@ -59,15 +59,15 @@ echo
 if [ -f "$projectFolder/.swift-version" ]; then
 string="$(cat $projectFolder/.swift-version)";
 if [[ $string == *"swift-"* ]]; then
-echo ">> using SWIFT_VERSION from file"
+echo ">> Using SWIFT_VERSION from file"
 export SWIFT_SNAPSHOT=$string
 else
-echo ">> normalizing SWIFT_VERSION from file"
+echo ">> Normalizing SWIFT_VERSION from file"
 add="swift-"
 export SWIFT_SNAPSHOT=$add$string
 fi
 else
-echo ">> no swift-version file using default value"
+echo ">> No .swift-version file using default value"
 export SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-06-06-a
 fi
 
@@ -87,11 +87,10 @@ echo ">> Running makefile..."
 cd ${projectFolder} && make
 echo ">> Finished running makefile"
 
-
 # Copy test credentials for project if available
 if [ -e "${projectFolder}/Kitura-TestingCredentials/${projectName}" ]; then
 	echo ">> Found folder with test credentials for ${projectName}."
-  # Copy test credentials over 
+  # Copy test credentials over
   echo ">> copying ${projectFolder}/Kitura-TestingCredentials/${projectName} to ${projectFolder}"
   cp -RP ${projectFolder}/Kitura-TestingCredentials/${projectName}/* ${projectFolder}
 else
@@ -107,17 +106,15 @@ sourceScript "${projectFolder}/Package-Builder/${projectName}/common/before_test
 # Execute test cases
 if [ -e "${projectFolder}/Tests" ]; then
     echo ">> Testing Kitura package..."
-    swift test
+    swift test -Xcc -fblocks
     echo ">> Finished testing Kitura package."
     echo
 else
     echo ">> No testcases exist..."
 fi
 
-
 # Execute common post-test steps
 sourceScript "${projectFolder}/Package-Builder/${projectName}/common/after_tests.sh" ">> Completed common post-tests steps."
 
 # Execute OS specific post-test steps
 sourceScript "${projectFolder}/Package-Builder/${projectName}/${osName}/after_tests.sh" ">> Completed ${osName} post-tests steps."
-
