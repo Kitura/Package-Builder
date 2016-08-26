@@ -30,7 +30,7 @@ set -e
 set -o verbose
 
 sudo apt-get update
-sudo apt-get -y install clang-3.8 lldb-3.8 libicu-dev libkqueue-dev libtool libcurl4-openssl-dev libbsd-dev libblocksruntime-dev build-essential libssl-dev
+sudo apt-get -y install clang-3.8 lldb-3.8 libicu-dev libkqueue-dev libtool libcurl4-openssl-dev libbsd-dev libblocksruntime-dev build-essential libssl-dev uuid-dev
 
 # Remove default version of clang from PATH
 export PATH=`echo ${PATH} | awk -v RS=: -v ORS=: '/clang/ {next} {print}'`
@@ -44,6 +44,7 @@ WORK_DIR=$1
 THRESHOLD_DATE="20160801"
 THRESHOLD_0807="20160807"
 THRESHOLD_0818="20160818"
+THRESHOLD_0823="20160823"
 DATE=`echo ${SWIFT_SNAPSHOT} | awk -F- '{print $4$5$6}'`
 
 echo "Threshold date =$THRESHOLD_DATE"
@@ -84,14 +85,18 @@ elif [ $DATE -eq $THRESHOLD_0818 ]; then
 	cd swift-corelibs-libdispatch
 	git checkout 1a7ff3f3e1073eb3352a56ab121ccfa712c42cef
 	cd ..
+elif [ $DATE -ge $THRESHOLD_0823 ]; then
+	echo "No need to get libdispatch.  It is part of the swift vesions starting with 08-23"
 else
 	echo "Get the ${LIBDISPATCH_BRANCH} branch"
 	git clone -b ${LIBDISPATCH_BRANCH}  https://github.com/apple/swift-corelibs-libdispatch.git
 fi
 
-echo "Compiling libdispatch"
-cd swift-corelibs-libdispatch && git submodule init && git submodule update && sh ./autogen.sh && ./configure --with-swift-toolchain=$WORK_DIR/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr --prefix=$WORK_DIR/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr && make
-make install
-echo "Finished building libdispatch"
-# Return to previous directory
-cd -
+if [ $DATE -lt $THRESHOLD_0823 ]; then
+	echo "Compiling libdispatch"
+	cd swift-corelibs-libdispatch && git submodule init && git submodule update && sh ./autogen.sh && ./configure --with-swift-toolchain=$WORK_DIR/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr --prefix=$WORK_DIR/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr && make
+	make install
+	echo "Finished building libdispatch"
+	# Return to previous directory
+	cd -
+fi
