@@ -29,11 +29,15 @@ password=$(head -n 1 "${testDirectory}/password.txt")
 echo ">> redis password: $password"
 
 # Update redis password
-perl -pi -e "s/# requirepass foobared/requirepass ${password}/g" $REDIS_CONF_FILE
+sudo perl -pi -e "s/# requirepass foobared/requirepass ${password}/g" $REDIS_CONF_FILE
 
 echo ">> Contents of ${REDIS_CONF_FILE} next:"
 cat $REDIS_CONF_FILE
 
 # Start redis server
-redis-server $REDIS_CONF_FILE &
+if [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+	sudo service redis-server restart
+else
+	redis-server $REDIS_CONF_FILE &
+fi
 sleep 10
