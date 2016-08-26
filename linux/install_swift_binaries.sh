@@ -30,7 +30,7 @@ set -e
 set -o verbose
 
 sudo apt-get update
-sudo apt-get -y install clang-3.8 lldb-3.8 libicu-dev libkqueue-dev libtool libcurl4-openssl-dev libbsd-dev libblocksruntime-dev build-essential libssl-dev
+sudo apt-get -y install clang-3.8 lldb-3.8 libicu-dev libkqueue-dev libtool libcurl4-openssl-dev libbsd-dev libblocksruntime-dev build-essential libssl-dev uuid-dev
 
 # Remove default version of clang from PATH
 export PATH=`echo ${PATH} | awk -v RS=: -v ORS=: '/clang/ {next} {print}'`
