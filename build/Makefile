@@ -31,7 +31,13 @@ C_FLAGS = -Xcc -fblocks
 LINKER_FLAGS = -Xlinker -rpath -Xlinker .build/debug
 endif
 
-all: build
+all: buildDebug
+
+buildDebug:
+	make SWIFT_BUILD_FLAGS="-c debug" SWIFTC_FLAGS="-Xswiftc -DDEBUG" build
+
+buildRelease:
+	make SWIFT_BUILD_FLAGS="-c release" build
 
 build: custombuild
 	@echo --- Running build on $(UNAME)
@@ -50,7 +56,7 @@ ifeq ($(UNAME), Linux)
 	-lsb_release -d
 endif
 	@echo --- Invoking swift build
-	swift build $(C_FLAGS) $(LINKER_FLAGS)
+	swift build $(SWIFT_BUILD_FLAGS) $(SWIFTC_FLAGS) $(C_FLAGS) $(LINKER_FLAGS)
 
 Tests/LinuxMain.swift:
 ifeq ($(UNAME), Linux)
