@@ -22,12 +22,12 @@ UNAME = ${shell uname}
 
 
 ifeq ($(UNAME), Darwin)
-SWIFTC_FLAGS =
+C_FLAGS =
 LINKER_FLAGS =
 endif
 
 ifeq ($(UNAME), Linux)
-SWIFTC_FLAGS = -Xcc -fblocks
+C_FLAGS = -Xcc -fblocks
 LINKER_FLAGS = -Xlinker -rpath -Xlinker .build/debug
 endif
 
@@ -50,7 +50,7 @@ ifeq ($(UNAME), Linux)
 	-lsb_release -d
 endif
 	@echo --- Invoking swift build
-	swift build $(SWIFTC_FLAGS) $(LINKER_FLAGS)
+	swift build $(C_FLAGS) $(LINKER_FLAGS)
 
 Tests/LinuxMain.swift:
 ifeq ($(UNAME), Linux)
@@ -71,7 +71,7 @@ refetch:
 update:
 	@echo --- Updating dependencies
 	swift package update
-	
+
 clean: customClean
 	@echo --- Invoking swift build --clean
 	-swift build --clean
