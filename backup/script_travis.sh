@@ -41,7 +41,7 @@ then
 fi
 if [ $os == "osx" ];
 then 
-   ./Package-Builder/build-package.sh
+   ./Package-Builder/build-package-old.sh
 fi
 echo ">> Build and tests completed. See above for status."
 
