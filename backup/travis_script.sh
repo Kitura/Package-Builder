@@ -16,7 +16,7 @@
 # limitations under the License.
 ##
 
-# Script used to issue the compile commands for the Kitura-Build repo from
+# Script used to issue the compile commands for the Package-Builder repo from
 # the parent repo's.
 
 # If any commands fail, we want the shell script to exit immediately.
@@ -36,7 +36,6 @@ project=$4
 
 echo ">> Let's build and test the '$branch' branch for $project."
 
-./Package-Builder/build-package.sh $branch $build_dir 
+./Package-Builder/build-package.sh $branch $build_dir
 
 echo ">> Build and tests completed. See above for status."
-

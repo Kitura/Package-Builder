@@ -1,3 +1,3 @@
-# Kitura-Build
+# Package-Builder
 
-This repository contains the makefile used to build Kitura as well as the build and utility scripts used for the automation of continuous integration builds on the Travis CI environment. Full details on the project can be found in the [main repo](https://github.com/IBM-Swift/Kitura).
+This repository contains build and utility scripts used for continuous integration builds on the Travis CI environment. It also contains a very useful Makefile for building Swift packages that our team develops.
