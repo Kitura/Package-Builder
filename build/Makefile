@@ -34,10 +34,10 @@ endif
 all: buildDebug
 
 buildDebug:
-	make SWIFT_BUILD_FLAGS="-c debug" SWIFTC_FLAGS="-Xswiftc -DDEBUG" build
+	make SWIFT_BUILD_CONFIGURATION="debug" SWIFTC_FLAGS="-Xswiftc -DDEBUG" build
 
 buildRelease:
-	make SWIFT_BUILD_FLAGS="-c release" build
+	make SWIFT_BUILD_CONFIGURATION="release" build
 
 build: custombuild
 	@echo --- Running build on $(UNAME)
@@ -56,7 +56,7 @@ ifeq ($(UNAME), Linux)
 	-lsb_release -d
 endif
 	@echo --- Invoking swift build
-	swift build $(SWIFT_BUILD_FLAGS) $(SWIFTC_FLAGS) $(C_FLAGS) $(LINKER_FLAGS)
+	swift build -c ${SWIFT_BUILD_CONFIGURATION} $(SWIFTC_FLAGS) $(C_FLAGS) $(LINKER_FLAGS)
 
 Tests/LinuxMain.swift:
 ifeq ($(UNAME), Linux)
