@@ -21,7 +21,7 @@
 # If any commands fail, we want the shell script to exit immediately.
 set -e
 
-# Install OS X system level dependencies for Kitura
+# Install OS X system level dependencies
 brew update
 
 # Install git CLI using hoebrew until Travis-CI gets off of git CLI 2.9.0 which has problems with Swift.

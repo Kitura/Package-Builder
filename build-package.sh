@@ -16,7 +16,7 @@
 # limitations under the License.
 ##
 
-# This script builds the Kitura sample app on Travis CI.
+# This script builds the Swift package on Travis CI.
 # If running on the OS X platform, homebrew (http://brew.sh/) must be installed
 # for this script to work.
 
@@ -91,7 +91,7 @@ echo ">> Finished running makefile"
 # Copy test credentials for project if available
 if [ -e "${projectFolder}/Kitura-TestingCredentials/${projectName}" ]; then
 	echo ">> Found folder with test credentials for ${projectName}."
-  # Copy test credentials over 
+  # Copy test credentials over
   echo ">> copying ${projectFolder}/Kitura-TestingCredentials/${projectName} to ${projectFolder}"
   cp -RP ${projectFolder}/Kitura-TestingCredentials/${projectName}/* ${projectFolder}
 else
@@ -106,13 +106,13 @@ sourceScript "${projectFolder}/Package-Builder/${projectName}/common/before_test
 
 # Execute test cases
 if [ -e "${projectFolder}/Tests" ]; then
-    echo ">> Testing Kitura package..."
+    echo ">> Testing Swift package..."
     if [[ $SWIFT_SNAPSHOT == *"08-07"* ]]; then
        swift test -Xcc -fblocks
     else
        swift test
     fi
-    echo ">> Finished testing Kitura package."
+    echo ">> Finished testing Swift package."
     echo
 else
     echo ">> No testcases exist..."
@@ -124,4 +124,3 @@ sourceScript "${projectFolder}/Package-Builder/${projectName}/common/after_tests
 
 # Execute OS specific post-test steps
 sourceScript "${projectFolder}/Package-Builder/${projectName}/${osName}/after_tests.sh" ">> Completed ${osName} post-tests steps."
-
