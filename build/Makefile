@@ -34,12 +34,14 @@ endif
 all: buildDebug
 
 buildDebug:
-	make SWIFT_BUILD_CONFIGURATION="debug" SWIFTC_FLAGS="-Xswiftc -DDEBUG" build
+	make SWIFT_BUILD_CONFIGURATION="debug" SWIFTC_FLAGS="-Xswiftc -DDEBUG" buildInternal
 
 buildRelease:
-	make SWIFT_BUILD_CONFIGURATION="release" build
+	make SWIFT_BUILD_CONFIGURATION="release" buildInternal
 
-build: custombuild
+build: buildDebug
+
+buildInternal: custombuild
 	@echo --- Running build on $(UNAME)
 	@echo --- Build scripts directory: ${KITURA_CI_BUILD_SCRIPTS_DIR}
 	@echo --- Checking swift version
