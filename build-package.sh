@@ -68,7 +68,7 @@ export SWIFT_SNAPSHOT=$add$string
 fi
 else
 echo ">> no swift-version file using default value"
-export SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-06-06-a
+export SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2016-08-23-a
 fi
 
 echo ">> SWIFT_SNAPSHOT: $SWIFT_SNAPSHOT"
