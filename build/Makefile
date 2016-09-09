@@ -18,6 +18,10 @@ ifndef KITURA_CI_BUILD_SCRIPTS_DIR
 KITURA_CI_BUILD_SCRIPTS_DIR = .
 endif
 
+ifndef BUILDER_SCRIPTS_DIR
+BUILDER_SCRIPTS_DIR = ${KITURA_CI_BUILD_SCRIPTS_DIR}
+endif
+
 UNAME = ${shell uname}
 
 
@@ -43,7 +47,7 @@ build: buildDebug
 
 _build: custombuild
 	@echo --- Running build on $(UNAME)
-	@echo --- Build scripts directory: ${KITURA_CI_BUILD_SCRIPTS_DIR}
+	@echo --- Build scripts directory: ${BUILDER_SCRIPTS_DIR}
 	@echo --- Checking swift version
 	swift --version
 	@echo --- Checking swiftc version
@@ -63,7 +67,7 @@ endif
 Tests/LinuxMain.swift:
 ifeq ($(UNAME), Linux)
 	@echo --- Generating $@
-	bash ${KITURA_CI_BUILD_SCRIPTS_DIR}/generate_linux_main.sh
+	bash ${BUILDER_SCRIPTS_DIR}/generate_linux_main.sh
 endif
 
 test: build Tests/LinuxMain.swift
@@ -89,12 +93,12 @@ generateXcode: build
 	swift package generate-xcodeproj
 
 fixXcode: generateXcode customFixXcode
-	bash ${KITURA_CI_BUILD_SCRIPTS_DIR}/check_xcodeproj_gem.sh
-	-ruby ${KITURA_CI_BUILD_SCRIPTS_DIR}/fix_xcode_project.rb \
-		${shell bash ${KITURA_CI_BUILD_SCRIPTS_DIR}/get_latest_xcodeproj.sh} &>/dev/null
+	bash ${BUILDER_SCRIPTS_DIR}/check_xcodeproj_gem.sh
+	-ruby ${BUILDER_SCRIPTS_DIR}/fix_xcode_project.rb \
+		${shell bash ${BUILDER_SCRIPTS_DIR}/get_latest_xcodeproj.sh} &>/dev/null
 
 openXcode: fixXcode
-	open ${shell bash ${KITURA_CI_BUILD_SCRIPTS_DIR}/get_latest_xcodeproj.sh}.xcodeproj
+	open ${shell bash ${BUILDER_SCRIPTS_DIR}/get_latest_xcodeproj.sh}.xcodeproj
 
 custombuild: # do nothing - for the calling Makefile to override
 customFixXcode: # do nothing - for the calling Makefile to override
