@@ -43,8 +43,11 @@ WORK_DIR=$1
 
 if [[ ${SWIFT_SNAPSHOT} =~ ^.*RELEASE.*$ ]]; then
 	SNAPSHOT_TYPE=$(echo "$SWIFT_SNAPSHOT" | tr '[:upper:]' '[:lower:]')
-else
+elif [[ ${SWIFT_SNAPSHOT} =~ ^.*DEVELOPMENT.*$ ]]; then
 	SNAPSHOT_TYPE=development
+else
+	SNAPSHOT_TYPE="$(echo "$SWIFT_SNAPSHOT" | tr '[:upper:]' '[:lower:]')-release"
+        SWIFT_SNAPSHOT="${SWIFT_SNAPSHOT}-RELEASE"
 fi
 
 if [ $SNAPSHOT_TYPE == "development" ]; then
