@@ -31,8 +31,14 @@ brew install git
 brew install curl
 brew install wget || brew outdated wget || brew upgrade wget
 
+if [[ ${SWIFT_SNAPSHOT} =~ ^.*RELEASE.*$ ]]; then
+	SNAPSHOT_TYPE=$(echo "$SWIFT_SNAPSHOT" | tr '[:upper:]' '[:lower:]')
+else
+	SNAPSHOT_TYPE=development
+fi
+
 # Install Swift binaries
 # See http://apple.stackexchange.com/questions/72226/installing-pkg-with-terminal
-wget https://swift.org/builds/development/xcode/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-osx.pkg
+wget https://swift.org/builds/$SNAPSHOT_TYPE/xcode/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-osx.pkg
 sudo installer -pkg $SWIFT_SNAPSHOT-osx.pkg -target /
 export PATH=/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin:"${PATH}"
