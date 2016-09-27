@@ -47,26 +47,6 @@ else
 	SNAPSHOT_TYPE=development
 fi
 
-if [ $SNAPSHOT_TYPE == "development" ]; then
-	THRESHOLD_DATE="20160801"
-	THRESHOLD_0807="20160807"
-	THRESHOLD_0818="20160818"
-	THRESHOLD_0823="20160823"
-	DATE=`echo ${SWIFT_SNAPSHOT} | awk -F- '{print $4$5$6}'`
-
-	echo "Threshold date =$THRESHOLD_DATE"
-	echo "Date=$DATE"
-
-	if [ $DATE -ge $THRESHOLD_DATE ]; then
-		echo "Setting branch for libdispatch to master"
-		export LIBDISPATCH_BRANCH="master"
-	else
-		echo "Setting branch for libdispatch to experimental/foundation"
-		export LIBDISPATCH_BRANCH="experimental/foundation"
-		export CFLAGS="-fuse-ld=gold"
-	fi
-fi
-
 # Environment vars
 version=`lsb_release -d | awk '{print tolower($2) $3}'`
 export UBUNTU_VERSION=`echo $version | awk -F. '{print $1"."$2}'`
@@ -79,35 +59,3 @@ wget https://swift.org/builds/$SNAPSHOT_TYPE/$UBUNTU_VERSION_NO_DOTS/$SWIFT_SNAP
 tar xzvf $SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
 export PATH=$WORK_DIR/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin:$PATH
 swiftc -h
-
-if [ $SNAPSHOT_TYPE == "development" ]; then
-	# Clone and install swift-corelibs-libdispatch
-	echo ">> Installing swift-corelibs-libdispatch..."
-	if [ $DATE -eq $THRESHOLD_0807 ]; then
-		echo "Get the 55261225184e49c6a42c38bbedb144c2610def4a commit"
-		git clone -n https://github.com/apple/swift-corelibs-libdispatch.git
-		cd swift-corelibs-libdispatch
-		git checkout 55261225184e49c6a42c38bbedb144c2610def4a
-		cd ..
-	elif [ $DATE -eq $THRESHOLD_0818 ]; then
-		echo "Get the 1a7ff3f3e1073eb3352a56ab121ccfa712c42cef commit"
-		git clone -n https://github.com/apple/swift-corelibs-libdispatch.git
-		cd swift-corelibs-libdispatch
-		git checkout 1a7ff3f3e1073eb3352a56ab121ccfa712c42cef
-		cd ..
-	elif [ $DATE -ge $THRESHOLD_0823 ]; then
-		echo "No need to get libdispatch.  It is part of the swift vesions starting with 08-23"
-	else
-		echo "Get the ${LIBDISPATCH_BRANCH} branch"
-		git clone -b ${LIBDISPATCH_BRANCH}  https://github.com/apple/swift-corelibs-libdispatch.git
-	fi
-
-	if [ $DATE -lt $THRESHOLD_0823 ]; then
-		echo "Compiling libdispatch"
-		cd swift-corelibs-libdispatch && git submodule init && git submodule update && sh ./autogen.sh && ./configure --with-swift-toolchain=$WORK_DIR/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr --prefix=$WORK_DIR/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr && make
-		make install
-		echo "Finished building libdispatch"
-		# Return to previous directory
-		cd -
-	fi
-fi
