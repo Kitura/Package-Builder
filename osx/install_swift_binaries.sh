@@ -29,6 +29,7 @@ brew unlink git
 brew install git
 
 brew install curl
+brew install openssl
 brew install wget || brew outdated wget || brew upgrade wget
 
 if [[ ${SWIFT_SNAPSHOT} =~ ^.*RELEASE.*$ ]]; then
