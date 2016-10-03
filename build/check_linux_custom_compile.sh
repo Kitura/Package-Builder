@@ -15,9 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ##
-output=1
-if [[ -e .swift-build-macOS ]] && [[ -s .swift-build-macOS ]] && [[ "$(uname)" == "Darwin" ]]; then
-	output=0
+output=0
+if [[ -s .swift-build-linux ]] && [[ "$(uname)" == "Linux" ]]; then
+	output=1
 fi
 
 echo $output

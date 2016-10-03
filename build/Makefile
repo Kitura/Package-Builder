@@ -63,11 +63,11 @@ ifeq ($(UNAME), Linux)
 endif
 	@echo --- Invoking swift build
 
-ifeq ($(shell ${BUILDER_SCRIPTS_DIR}/test_mac_special_compile.sh), 0)
-	bash -c $(CURDIR)/.swift-build-macOS
+ifeq ($(shell ${BUILDER_SCRIPTS_DIR}/check_mac_custom_compile.sh), 1)
+	bash $(CURDIR)/.swift-build-macOS
 else
-ifeq ($(shell ${BUILDER_SCRIPTS_DIR}/test_linux_special_compile.sh), 0)
-	bash -c $(CURDIR)/.swift-build-linux
+ifeq ($(shell ${BUILDER_SCRIPTS_DIR}/check_linux_custom_compile.sh), 1)
+	bash $(CURDIR)/.swift-build-linux
 else
 	swift build -c ${SWIFT_BUILD_CONFIGURATION} $(SWIFTC_FLAGS) $(C_FLAGS) $(LINKER_FLAGS)
 endif

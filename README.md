@@ -4,7 +4,6 @@ This repository contains build and utility scripts used for continuous integrati
 
 Features of this repository:
 
-1.  If you need a specific verison of Swift to be used.  Place that version in a .swift-version file in the root level of our repository
-2.  If you need a special swift compile line, other than the normal swift build.  Need to place a .swift-build-linux or .swift-build-macOS in the root
-level of your repository with the exact compile line for the OS needed.  Please make these files executable so they can be executed.
+1.  If you need a specific verison of Swift to be used, place that version in a .swift-version file in the root level of your repository
+2.  If you need a special swift compile line, place a .swift-build-linux or .swift-build-macOS file in the root level of your repository with the exact compile line for the OS needed.
 
