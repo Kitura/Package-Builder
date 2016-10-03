@@ -62,7 +62,16 @@ ifeq ($(UNAME), Linux)
 	-lsb_release -d
 endif
 	@echo --- Invoking swift build
+
+ifeq ($(shell ${BUILDER_SCRIPTS_DIR}/test_mac_special_compile.sh), 0)
+	bash -c $(CURDIR)/.swift-build-macOS
+else
+ifeq ($(shell ${BUILDER_SCRIPTS_DIR}/test_linux_special_compile.sh), 0)
+	bash -c $(CURDIR)/.swift-build-linux
+else
 	swift build -c ${SWIFT_BUILD_CONFIGURATION} $(SWIFTC_FLAGS) $(C_FLAGS) $(LINKER_FLAGS)
+endif
+endif
 
 Tests/LinuxMain.swift:
 ifeq ($(UNAME), Linux)
