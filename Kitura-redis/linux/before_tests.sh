@@ -21,7 +21,6 @@ set -e
 
 # Install redis
 sudo apt-get update -y
-sudo apt-get -o Dpkg::Options::="--force-confnew" upgrade -y --force-yes
 sudo apt-get install -y redis-server
 
 # Set environment variable that points to conf file
