@@ -25,7 +25,7 @@ set -e
 
 branch=$1
 build_dir=$2
-credentials=$3
+credentials_repo=$3
 
 # Utility functions
 function sourceScript () {
@@ -90,11 +90,11 @@ echo ">> Finished running makefile"
 
 
 # Copy test credentials for project if available
-if [ -e "${projectFolder}/${credentials}/${projectName}" ]; then
+if [ -e "${projectFolder}/${credentials_repo}/${projectName}" ]; then
 	echo ">> Found folder with test credentials for ${projectName}."
   # Copy test credentials over
-  echo ">> copying ${projectFolder}/${credentials}/${projectName} to ${projectFolder}"
-  cp -RP ${projectFolder}/${credentials}/${projectName}/* ${projectFolder}
+  echo ">> copying ${projectFolder}/${credentials_repo}/${projectName} to ${projectFolder}"
+  cp -RP ${projectFolder}/${credentials_repo}/${projectName}/* ${projectFolder}
 else
   echo ">> No folder found with test credentials for ${projectName}."
 fi
