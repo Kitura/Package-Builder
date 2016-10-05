@@ -23,10 +23,10 @@ BUILDER_SCRIPTS_DIR = ${KITURA_CI_BUILD_SCRIPTS_DIR}
 endif
 
 UNAME := ${shell uname}
-SPECIAL_MAC_FILE_EXISTS := $(shell [ -e $(CURDIR)/.swift-build-macOS ] && echo 0 || echo 1 )
-OS_IS_MAC := $(shell [ "$(UNAME)" = "Darwin" ] && echo 0 || echo 1 )
-SPECIAL_LINUX_FILE_EXISTS := $(shell [ -e $(CURDIR)/.swift-build-linux ] && echo 0 || echo 1 )
-OS_IS_LINUX := $(shell [ "$(UNAME)" = "Linux" ] && echo 0 || echo 1 )
+SPECIAL_MAC_FILE_EXISTS := $(shell [ -e $(CURDIR)/.swift-build-macOS ] && echo 1 || echo 0 )
+OS_IS_MAC := $(shell [ "$(UNAME)" = "Darwin" ] && echo 1 || echo 0 )
+SPECIAL_LINUX_FILE_EXISTS := $(shell [ -e $(CURDIR)/.swift-build-linux ] && echo 1 || echo 0 )
+OS_IS_LINUX := $(shell [ "$(UNAME)" = "Linux" ] && echo 1 || echo 0 )
 
 
 ifeq ($(UNAME), Darwin)
@@ -67,10 +67,10 @@ ifeq ($(UNAME), Linux)
 endif
 	@echo --- Invoking swift build
 
-ifeq ($(SPECIAL_MAC_FILE_EXISTS)$(OS_IS_MAC), 00)
+ifeq ($(SPECIAL_MAC_FILE_EXISTS)$(OS_IS_MAC), 11)
 	bash $(CURDIR)/.swift-build-macOS
 else
-ifeq ($(SPECIAL_LINUX_FILE_EXISTS)$(OS_IS_LINUX), 00)
+ifeq ($(SPECIAL_LINUX_FILE_EXISTS)$(OS_IS_LINUX), 11)
 	bash $(CURDIR)/.swift-build-linux
 else
  	swift build -c ${SWIFT_BUILD_CONFIGURATION} $(SWIFTC_FLAGS) $(C_FLAGS) $(LINKER_FLAGS)
