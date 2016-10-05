@@ -29,15 +29,8 @@ SPECIAL_LINUX_FILE_EXISTS := $(shell [ -e $(CURDIR)/.swift-build-linux ] && echo
 OS_IS_LINUX := $(shell [ "$(UNAME)" = "Linux" ] && echo 1 || echo 0 )
 
 
-ifeq ($(UNAME), Darwin)
 C_FLAGS =
 LINKER_FLAGS =
-endif
-
-ifeq ($(UNAME), Linux)
-C_FLAGS = -Xcc -fblocks
-LINKER_FLAGS = -Xlinker -rpath -Xlinker .build/debug
-endif
 
 all: buildDebug
 
