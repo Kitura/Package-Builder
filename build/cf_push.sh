@@ -19,4 +19,4 @@
 APP_NAME=$(basename `pwd`)
 MAIN_MODULE_NAME=$(basename `find Sources -name "main.swift" -exec dirname {} \;`)
 echo --- Pushing ${APP_NAME}, command to run: ${MAIN_MODULE_NAME}
-echo cf push ${APP_NAME} --no-manifest -b swift_buildpack -m 256M -i 1 --random-route -k 1024M -c ${MAIN_MODULE_NAME}
+cf push ${APP_NAME} --no-manifest -b swift_buildpack -m 256M -i 1 --random-route -k 1024M -c ${MAIN_MODULE_NAME}
