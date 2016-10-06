@@ -101,7 +101,7 @@ openXcode: fixXcode
 	open ${shell bash ${BUILDER_SCRIPTS_DIR}/get_latest_xcodeproj.sh}.xcodeproj
 
 cfPush:
-	bash ${BUILDER_SCRIPTS_DIR}/cfPush.sh
+	bash ${BUILDER_SCRIPTS_DIR}/cf_push.sh
 
 custombuild: # do nothing - for the calling Makefile to override
 customFixXcode: # do nothing - for the calling Makefile to override
