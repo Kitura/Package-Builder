@@ -25,15 +25,8 @@ endif
 UNAME = ${shell uname}
 
 
-ifeq ($(UNAME), Darwin)
 C_FLAGS =
 LINKER_FLAGS =
-endif
-
-ifeq ($(UNAME), Linux)
-C_FLAGS = -Xcc -fblocks
-LINKER_FLAGS = -Xlinker -rpath -Xlinker .build/debug
-endif
 
 all: buildDebug
 
