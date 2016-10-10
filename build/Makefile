@@ -24,10 +24,6 @@ endif
 
 UNAME = ${shell uname}
 
-
-C_FLAGS =
-LINKER_FLAGS =
-
 all: buildDebug
 
 buildDebug:
@@ -55,7 +51,7 @@ ifeq ($(UNAME), Linux)
 	-lsb_release -d
 endif
 	@echo --- Invoking swift build
-	swift build -c ${SWIFT_BUILD_CONFIGURATION} $(SWIFTC_FLAGS) $(C_FLAGS) $(LINKER_FLAGS)
+	swift build -c ${SWIFT_BUILD_CONFIGURATION} $(SWIFTC_FLAGS)
 
 Tests/LinuxMain.swift:
 ifeq ($(UNAME), Linux)
