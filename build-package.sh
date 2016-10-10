@@ -121,3 +121,6 @@ sourceScript "${projectFolder}/Package-Builder/${projectName}/common/after_tests
 
 # Execute OS specific post-test steps
 sourceScript "${projectFolder}/Package-Builder/${projectName}/${osName}/after_tests.sh" ">> Completed ${osName} post-tests steps."
+
+# Generate test code coverage report
+sourceScript "${projectFolder}/Package-Builder/codecov.sh"
