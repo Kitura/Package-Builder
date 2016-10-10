@@ -26,6 +26,8 @@ set -e
 branch=$1
 build_dir=$2
 credentials_repo=$3
+alternate_project_folder=$4
+alternate_copy_location=$5
 
 # Utility functions
 function sourceScript () {
@@ -88,15 +90,29 @@ echo ">> Running makefile..."
 cd ${projectFolder} && make
 echo ">> Finished running makefile"
 
+# Do we have an alternate testing project folder name
+if [ -z "${alternate_project_folder}" ]; then
+  folder=$projectName  
+else
+  folder=$alternate_project_folder
+fi
+
+# Do we have an alternate location to copy credential files to
+if [ -e "${alternate_copy_location}" ]; then
+  location=$alternate_copy_location
+else
+  location=$projectFolder
+fi
 
 # Copy test credentials for project if available
-if [ -e "${projectFolder}/${credentials_repo}/${projectName}" ]; then
-	echo ">> Found folder with test credentials for ${projectName}."
+if [ -e "${projectFolder}/${credentials_repo}/${folder}" ]; then
+	echo ">> Found folder with test credentials for ${folder}."
+  
   # Copy test credentials over
-  echo ">> copying ${projectFolder}/${credentials_repo}/${projectName} to ${projectFolder}"
-  cp -RP ${projectFolder}/${credentials_repo}/${projectName}/* ${projectFolder}
+  echo ">> copying ${projectFolder}/${credentials_repo}/${folder} to ${location}"
+  cp -RP ${projectFolder}/${credentials_repo}/${folder}/* ${locaiton}
 else
-  echo ">> No folder found with test credentials for ${projectName}."
+  echo ">> No folder found with test credentials for ${folder}."
 fi
 
 # Execute OS specific pre-test steps
@@ -114,7 +130,6 @@ if [ -e "${projectFolder}/Tests" ]; then
 else
     echo ">> No testcases exist..."
 fi
-
 
 # Execute common post-test steps
 sourceScript "${projectFolder}/Package-Builder/${projectName}/common/after_tests.sh" ">> Completed common post-tests steps."
