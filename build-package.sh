@@ -108,11 +108,7 @@ sourceScript "${projectFolder}/Package-Builder/${projectName}/common/before_test
 # Execute test cases
 if [ -e "${projectFolder}/Tests" ]; then
     echo ">> Testing Swift package..."
-    if [[ $SWIFT_SNAPSHOT == *"08-07"* ]]; then
-       swift test -Xcc -fblocks
-    else
-       swift test
-    fi
+    swift test
     echo ">> Finished testing Swift package."
     echo
 else
