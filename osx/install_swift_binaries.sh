@@ -30,6 +30,7 @@ brew install git
 
 brew install curl
 brew install wget || brew outdated wget || brew upgrade wget
+brew unlink swiftlint
 brew install swiftlint
 
 if [[ ${SWIFT_SNAPSHOT} =~ ^.*RELEASE.*$ ]]; then
