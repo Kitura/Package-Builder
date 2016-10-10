@@ -81,8 +81,9 @@ source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries.sh $bui
 echo ">> PATH: $PATH"
 
 # Run SwiftLint to ensure Swift style and conventions
-swiftlint
-
+if [ "$(uname)" == "Darwin" ]; then
+  swiftlint
+fi
 # Build swift package from makefile
 echo ">> Running makefile..."
 cd ${projectFolder} && make
