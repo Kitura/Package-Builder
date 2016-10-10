@@ -82,7 +82,7 @@ echo ">> PATH: $PATH"
 
 # Run SwiftLint to ensure Swift style and conventions
 if [ "$(uname)" == "Darwin" ]; then
-  swiftlint --config ${projectFolder}/Package-Builder/.swiftlint.yml
+  swiftlint lint --config ${projectFolder}/Package-Builder/.swiftlint.yml
 fi
 # Build swift package from makefile
 echo ">> Running makefile..."
