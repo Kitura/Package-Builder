@@ -110,7 +110,7 @@ if [ -e "${projectFolder}/${credentials_repo}/${folder}" ]; then
   
   # Copy test credentials over
   echo ">> copying ${projectFolder}/${credentials_repo}/${folder} to ${location}"
-  cp -RP ${projectFolder}/${credentials_repo}/${folder}/* ${locaiton}
+  cp -RP ${projectFolder}/${credentials_repo}/${folder}/* ${location}
 else
   echo ">> No folder found with test credentials for ${folder}."
 fi
