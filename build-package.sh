@@ -26,8 +26,6 @@ set -e
 branch=$1
 build_dir=$2
 credentials_repo=$3
-alternate_project_folder=$4
-alternate_copy_location=$5
 
 # Utility functions
 function sourceScript () {
@@ -60,24 +58,24 @@ echo
 
 # Swift version for build
 if [ -f "$projectFolder/.swift-version" ]; then
-string="$(cat $projectFolder/.swift-version)";
-if [[ $string == *"swift-"* ]]; then
-echo ">> using SWIFT_VERSION from file"
-export SWIFT_SNAPSHOT=$string
+  string="$(cat $projectFolder/.swift-version)";
+  if [[ $string == *"swift-"* ]]; then
+    echo ">> using SWIFT_VERSION from file"
+    export SWIFT_SNAPSHOT=$string
+  else
+    echo ">> normalizing SWIFT_VERSION from file"
+    add="swift-"
+    export SWIFT_SNAPSHOT=$add$string
+  fi
 else
-echo ">> normalizing SWIFT_VERSION from file"
-add="swift-"
-export SWIFT_SNAPSHOT=$add$string
-fi
-else
-echo ">> no swift-version file using default value"
-export SWIFT_SNAPSHOT=swift-3.0-RELEASE
+  echo ">> no swift-version file using default value"
+  export SWIFT_SNAPSHOT=swift-3.0-RELEASE
 fi
 
 echo ">> SWIFT_SNAPSHOT: $SWIFT_SNAPSHOT"
 
 # Install Swift binaries
-source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries.sh $build_dir
+source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries.sh $projectFolder
 
 # Show path
 echo ">> PATH: $PATH"
@@ -90,29 +88,15 @@ echo ">> Running makefile..."
 cd ${projectFolder} && make
 echo ">> Finished running makefile"
 
-# Do we have an alternate testing project folder name
-if [ -z "${alternate_project_folder}" ]; then
-  folder=$projectName  
-else
-  folder=$alternate_project_folder
-fi
-
-# Do we have an alternate location to copy credential files to
-if [ -e "${alternate_copy_location}" ]; then
-  location=$alternate_copy_location
-else
-  location=$projectFolder
-fi
-
 # Copy test credentials for project if available
-if [ -e "${projectFolder}/${credentials_repo}/${folder}" ]; then
-	echo ">> Found folder with test credentials for ${folder}."
+if [ -e "${credentials_repo}" ]; then
+	echo ">> Found folder with test credentials."
   
   # Copy test credentials over
-  echo ">> copying ${projectFolder}/${credentials_repo}/${folder} to ${location}"
-  cp -RP ${projectFolder}/${credentials_repo}/${folder}/* ${location}
+  echo ">> copying ${credentials_repo} to ${build_dir}"
+  cp -RP ${credentials_repo}/* ${build_dir}
 else
-  echo ">> No folder found with test credentials for ${folder}."
+  echo ">> No folder found with test credentials."
 fi
 
 # Execute OS specific pre-test steps
