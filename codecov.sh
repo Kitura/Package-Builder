@@ -39,7 +39,14 @@ if [[ $? != 0 ]]; then
     exit 1
 fi
 
-bash <(curl -s https://codecov.io/bash) -J "^${SCHEME}\$"
+BASH_CMD="bash <(curl -s https://codecov.io/bash)"
+for pkg in $(ls -F Sources/ 2>/dev/null | grep '/$'); do   # get only directories in "Sources/"
+    pkg=${pkg%/}                                           # remove trailing slash
+    BASH_CMD+=" -J '^${pkg}\$'"
+done
+
+echo "Running $BASH_CMD"
+eval "$BASH_CMD"
 if [[ $? != 0 ]]; then
     echo "Error running codecov.io bash script"
     exit 1
