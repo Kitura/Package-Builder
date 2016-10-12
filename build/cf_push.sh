@@ -63,6 +63,7 @@ function check_procfile {
 
 exit_if_file_does_not_exit "Package.swift"
 warn_if_file_does_not_exit ".swift-version"
+warn_if_file_does_not_exit ".cfignore"
 
 if [ -f $MANIFEST ]; then
     echo --- Perform Push by $MANIFEST
