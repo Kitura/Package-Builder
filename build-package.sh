@@ -24,8 +24,8 @@
 set -e
 
 branch=$1
-build_dir=$2
-credentials_repo=$3
+projectBuildDir=$2
+credentialsDir=$3
 
 # Utility functions
 function sourceScript () {
@@ -58,24 +58,24 @@ echo
 
 # Swift version for build
 if [ -f "$projectFolder/.swift-version" ]; then
-string="$(cat $projectFolder/.swift-version)";
-if [[ $string == *"swift-"* ]]; then
-echo ">> using SWIFT_VERSION from file"
-export SWIFT_SNAPSHOT=$string
+  string="$(cat $projectFolder/.swift-version)";
+  if [[ $string == *"swift-"* ]]; then
+    echo ">> using SWIFT_VERSION from file"
+    export SWIFT_SNAPSHOT=$string
+  else
+    echo ">> normalizing SWIFT_VERSION from file"
+    add="swift-"
+    export SWIFT_SNAPSHOT=$add$string
+  fi
 else
-echo ">> normalizing SWIFT_VERSION from file"
-add="swift-"
-export SWIFT_SNAPSHOT=$add$string
-fi
-else
-echo ">> no swift-version file using default value"
-export SWIFT_SNAPSHOT=swift-3.0-RELEASE
+  echo ">> no swift-version file using default value"
+  export SWIFT_SNAPSHOT=swift-3.0-RELEASE
 fi
 
 echo ">> SWIFT_SNAPSHOT: $SWIFT_SNAPSHOT"
 
 # Install Swift binaries
-source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries.sh $build_dir
+source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries.sh $projectFolder
 
 # Show path
 echo ">> PATH: $PATH"
@@ -88,15 +88,15 @@ echo ">> Running makefile..."
 cd ${projectFolder} && make
 echo ">> Finished running makefile"
 
-
 # Copy test credentials for project if available
-if [ -e "${projectFolder}/${credentials_repo}/${projectName}" ]; then
-	echo ">> Found folder with test credentials for ${projectName}."
+if [ -e "${credentialsDir}" ]; then
+	echo ">> Found folder with test credentials."
+  
   # Copy test credentials over
-  echo ">> copying ${projectFolder}/${credentials_repo}/${projectName} to ${projectFolder}"
-  cp -RP ${projectFolder}/${credentials_repo}/${projectName}/* ${projectFolder}
+  echo ">> copying ${credentialsDir} to ${projectBuildDir}"
+  cp -RP ${credentialsDir}/* ${projectBuildDir}
 else
-  echo ">> No folder found with test credentials for ${projectName}."
+  echo ">> No folder found with test credentials."
 fi
 
 # Execute OS specific pre-test steps
@@ -114,7 +114,6 @@ if [ -e "${projectFolder}/Tests" ]; then
 else
     echo ">> No testcases exist..."
 fi
-
 
 # Execute common post-test steps
 sourceScript "${projectFolder}/Package-Builder/${projectName}/common/after_tests.sh" ">> Completed common post-tests steps."
