@@ -26,7 +26,7 @@ function warn_if_file_does_not_exit {
 
 function exit_if_file_does_not_exit {
     if [ ! -f $1 ]; then
-        error_and_exit $1 does not exist
+        error_and_exit "$1 does not exist"
     fi
 }
 
