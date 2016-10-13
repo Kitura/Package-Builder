@@ -17,7 +17,6 @@
 #**/
 
 MANIFEST=manifest.yml
-MAIN_MODULE_NAME=$(basename `find Sources Source srcs src -name "main.swift" -exec dirname {} \; 2> /dev/null`)
 
 function warn_if_file_does_not_exit {
     if [ ! -f $1 ]; then
@@ -41,7 +40,7 @@ function check_procfile {
 
     if [  -f Procfile ]; then
         TYPE=$(cut -d: -f1 -s Procfile)
-        COMMAND=$(cut -d: -f2 -s Procfile)
+        PROCFILE_COMMAND=$(cut -d: -f2 -s Procfile | tr -d '[[:space:]]')
 
         if [ -z "$TYPE" ]; then
             error_and_exit "empty type in Procfile"
@@ -51,12 +50,13 @@ function check_procfile {
             error_and_exit "invalid type in Procfile: $TYPE"
         fi
 
-        if [ -z "$COMMAND" ]; then
+        if [ -z "$PROCFILE_COMMAND" ]; then
             error_and_exit "empty command in Procfile"
         fi
 
-        if [ $COMMAND != $MAIN_MODULE_NAME ]; then
-            error_and_exit "The command in Procfile ($COMMAND) does not match the executable module name ($MAIN_MODULE_NAME)"
+        if [ ! -f "Sources/$PROCFILE_COMMAND/main.swift" ] && [ ! -f "Source/$PROCFILE_COMMAND/main.swift" ] && [ ! -f "src/$PROCFILE_COMMAND/main.swift" ] && [ ! -f "srcs/$PROCFILE_COMMAND/main.swift" ]; then
+            echo "WARNING The command in Procfile ($PROCFILE_COMMAND) does not match an executable module"
+            echo "No main.swift found in <Sources Directory>/${PROCFILE_COMMAND}/main.swift"
         fi
     fi
 }
