@@ -36,9 +36,14 @@ function error_and_exit {
 }
 
 function check_procfile {
-    warn_if_file_does_not_exit Procfile
-
-    if [  -f Procfile ]; then
+    if [ ! -f Procfile ]; then
+        COMMAND_LINE_IN_MANIFEST=$(grep "command:" manifest.yml)
+        if [ -z "${COMMAND_LINE_IN_MANIFEST}" ]; then
+           echo "ERROR No Procfile exists and no command attribute appears in manifest.yml"
+           echo "Please add Procfile or add command attribute to manifest.yml"
+           exit 1
+        fi
+    else
         TYPE=$(cut -d: -f1 -s Procfile)
         PROCFILE_COMMAND=$(cut -d: -f2 -s Procfile | tr -d '[[:space:]]')
 
