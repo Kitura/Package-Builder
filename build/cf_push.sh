@@ -36,16 +36,18 @@ function error_and_exit {
 }
 
 function check_procfile {
+
     if [ ! -f Procfile ]; then
-        COMMAND_LINE_IN_MANIFEST=$(grep "command:" manifest.yml)
-        if [ -z "${COMMAND_LINE_IN_MANIFEST}" ]; then
+        COMMAND_LINE=$(grep "command:" manifest.yml)
+        if [ -z "${COMMAND_LINE}" ]; then
            echo "ERROR No Procfile exists and no command attribute appears in manifest.yml"
            echo "Please add Procfile or add command attribute to manifest.yml"
            exit 1
         fi
     else
+        COMMAND_LINE=$(head -1 Procfile)
         TYPE=$(cut -d: -f1 -s Procfile)
-        PROCFILE_COMMAND=$(cut -d: -f2 -s Procfile | tr -d '[[:space:]]')
+
 
         if [ -z "$TYPE" ]; then
             error_and_exit "empty type in Procfile"
@@ -55,14 +57,17 @@ function check_procfile {
             error_and_exit "invalid type in Procfile: $TYPE"
         fi
 
-        if [ -z "$PROCFILE_COMMAND" ]; then
-            error_and_exit "empty command in Procfile"
-        fi
+    fi
 
-        if [ ! -f "Sources/$PROCFILE_COMMAND/main.swift" ] && [ ! -f "Source/$PROCFILE_COMMAND/main.swift" ] && [ ! -f "src/$PROCFILE_COMMAND/main.swift" ] && [ ! -f "srcs/$PROCFILE_COMMAND/main.swift" ]; then
-            echo "WARNING The command in Procfile ($PROCFILE_COMMAND) does not match an executable module"
-            echo "No main.swift found in <Sources Directory>/${PROCFILE_COMMAND}/main.swift"
-        fi
+    SPECIFIED_COMMAND=$(echo ${COMMAND_LINE} | cut -d: -f2 -s | sed -e 's/^[[:space:]]*//' | cut -d' ' -f1 -s)
+
+    if [ -z "$SPECIFIED_COMMAND" ]; then
+        error_and_exit "empty command in Procfile/manifest.yml"
+    fi
+
+    if [ ! -f "Sources/$SPECIFIED_COMMAND/main.swift" ] && [ ! -f "Source/$SPECIFIED_COMMAND/main.swift" ] && [ ! -f "src/$SPECIFIED_COMMAND/main.swift" ] && [ ! -f "srcs/$SPECIFIED_COMMAND/main.swift" ]; then
+        echo "WARNING The command ($SPECIFIED_COMMAND) in Procfile/manifest.yml does not match an executable module"
+        echo "No main.swift found in <Sources Directory>/${SPECIFIED_COMMAND}/main.swift"
     fi
 }
 
