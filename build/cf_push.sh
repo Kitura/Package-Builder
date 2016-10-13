@@ -73,7 +73,16 @@ else
     echo --- No manifest.yaml found, pushing with default parameters
     echo --- To specify cf push parameters, create $MANIFEST and Procfile in this directory
     APP_NAME=$(basename `pwd`)
-    PUSH_COMMAND="cf push ${APP_NAME} --no-manifest -b swift_buildpack -m 256M -i 1 --random-route -k 1024M -c ${MAIN_MODULE_NAME}"
+    if [ -z "${COMMAND}" ]; then
+        if [ `find . -name "main.swift" | wc -l` -gt 1 ]; then
+            echo "ERROR there are multiple main.swift files in the current package."
+            echo "Either specify COMMAND in the make command line, e.g. make cfPush COMMAND=Foo"
+            echo "or provide manifest.yaml with Procfile"
+            exit 1
+        fi
+        COMMAND=$(basename `find . -name "main.swift" -exec dirname {} \;`)
+    fi
+    PUSH_COMMAND="cf push ${APP_NAME} --no-manifest -b swift_buildpack -m 256M -i 1 --random-route -k 1024M -c ${COMMAND}"
     echo --- Pushing ${APP_NAME}
     echo --- ${PUSH_COMMAND}
     ${PUSH_COMMAND}
