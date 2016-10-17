@@ -89,6 +89,9 @@ fixXcode: generateXcode customFixXcode
 openXcode: fixXcode
 	open ${shell bash ${BUILDER_SCRIPTS_DIR}/get_latest_xcodeproj.sh}.xcodeproj
 
+cfPush:
+	bash ${BUILDER_SCRIPTS_DIR}/cf_push.sh
+
 custombuild: # do nothing - for the calling Makefile to override
 customFixXcode: # do nothing - for the calling Makefile to override
 customClean: # do nothing - for the calling Makefile to override
