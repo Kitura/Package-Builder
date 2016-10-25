@@ -24,3 +24,6 @@ brew install redis || brew outdated redis || brew upgrade redis
 
 # Set environment variable that points to conf file
 export REDIS_CONF_FILE=/usr/local/etc/redis.conf
+
+# Update Redis conf file to point to the correct directory for the database
+sudo perl -pi -e "s/@@HOMEBREW_PREFIX@@/\\/usr\\/local/g" $REDIS_CONF_FILE
