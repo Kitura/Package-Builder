@@ -35,6 +35,11 @@ function sourceScript () {
   fi
 }
 
+if [ "$TRAVIS_BRANCH" == "$branch" ]; then
+  projectBuildDir=$1
+  credentialsDir=$2
+fi
+
 # Determine platform/OS
 echo ">> uname: $(uname)"
 if [ "$(uname)" == "Darwin" ]; then
