@@ -35,7 +35,7 @@ function sourceScript () {
   fi
 }
 
-if [ "$TRAVIS_BRANCH" == "$branch" ]; then
+if [ "$TRAVIS_BRANCH" != "$branch" ]; then
   projectBuildDir=$1
   credentialsDir=$2
 fi
