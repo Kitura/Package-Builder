@@ -23,9 +23,8 @@
 # If any commands fail, we want the shell script to exit immediately.
 set -e
 
-branch=$1
-projectBuildDir=$2
-credentialsDir=$3
+projectBuildDir=$1
+credentialsDir=$2
 
 # Utility functions
 function sourceScript () {
@@ -34,11 +33,6 @@ function sourceScript () {
     echo "$2"
   fi
 }
-
-if [ "$TRAVIS_BRANCH" != "$branch" ]; then
-  projectBuildDir=$1
-  credentialsDir=$2
-fi
 
 # Determine platform/OS
 echo ">> uname: $(uname)"
