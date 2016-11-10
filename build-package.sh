@@ -99,10 +99,10 @@ else
 fi
 
 # Execute OS specific pre-test steps
-sourceScript "${projectFolder}/Kitura-CI/${projectName}/${osName}/before_tests.sh" ">> Completed ${osName} pre-tests steps."
+sourceScript "`find ${projectFolder} -path "*/${projectName}/${osName}/before_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed ${osName} pre-tests steps."
 
 # Execute common pre-test steps
-sourceScript "${projectFolder}/Kitura-CI/${projectName}/common/before_tests.sh" ">> Completed common pre-tests steps."
+sourceScript "`find ${projectFolder} -path "*/${projectName}/common/before_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed common pre-tests steps."
 
 # Execute test cases
 if [ -e "${projectFolder}/Tests" ]; then
@@ -115,10 +115,10 @@ else
 fi
 
 # Execute common post-test steps
-sourceScript "${projectFolder}/Kitura-CI/${projectName}/common/after_tests.sh" ">> Completed common post-tests steps."
+sourceScript "`find ${projectFolder} -path "*/${projectName}/common/after_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed common post-tests steps."
 
 # Execute OS specific post-test steps
-sourceScript "${projectFolder}/Kitura-CI/${projectName}/${osName}/after_tests.sh" ">> Completed ${osName} post-tests steps."
+sourceScript "`find ${projectFolder} -path "*/${projectName}/${osName}/after_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed ${osName} post-tests steps."
 
 # Generate test code coverage report
 sourceScript "${projectFolder}/Package-Builder/codecov.sh"
