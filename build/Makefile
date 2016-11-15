@@ -57,10 +57,10 @@ endif
 	@echo --- Invoking swift build
 
 ifeq ($(SPECIAL_MAC_FILE_EXISTS)$(OS_IS_MAC), 11)
- 	bash $(CURDIR)/.swift-build-macOS
+	bash $(CURDIR)/.swift-build-macOS
 else
 ifeq ($(SPECIAL_LINUX_FILE_EXISTS)$(OS_IS_LINUX), 11)
- 	bash $(CURDIR)/.swift-build-linux
+	bash $(CURDIR)/.swift-build-linux
 else
 	swift build -c ${SWIFT_BUILD_CONFIGURATION} $(SWIFTC_FLAGS)
 endif
