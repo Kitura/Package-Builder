@@ -98,27 +98,28 @@ else
   echo ">> No folder found with test credentials."
 fi
 
-# Execute OS specific pre-test steps
-sourceScript "`find ${projectFolder} -path "*/${projectName}/${osName}/before_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed ${osName} pre-tests steps."
-
-# Execute common pre-test steps
-sourceScript "`find ${projectFolder} -path "*/${projectName}/common/before_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed common pre-tests steps."
-
 # Execute test cases
 if [ -e "${projectFolder}/Tests" ]; then
     echo ">> Testing Swift package..."
+    # Execute OS specific pre-test steps
+    sourceScript "`find ${projectFolder} -path "*/${projectName}/${osName}/before_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed ${osName} pre-tests steps."
+
+    # Execute common pre-test steps
+    sourceScript "`find ${projectFolder} -path "*/${projectName}/common/before_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed common pre-tests steps."
+
     swift test
+
+    # Execute common post-test steps
+    sourceScript "`find ${projectFolder} -path "*/${projectName}/common/after_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed common post-tests steps."
+
+    # Execute OS specific post-test steps
+    sourceScript "`find ${projectFolder} -path "*/${projectName}/${osName}/after_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed ${osName} post-tests steps."
+
     echo ">> Finished testing Swift package."
     echo
 else
     echo ">> No testcases exist..."
 fi
-
-# Execute common post-test steps
-sourceScript "`find ${projectFolder} -path "*/${projectName}/common/after_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed common post-tests steps."
-
-# Execute OS specific post-test steps
-sourceScript "`find ${projectFolder} -path "*/${projectName}/${osName}/after_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed ${osName} post-tests steps."
 
 # Generate test code coverage report
 sourceScript "${projectFolder}/Package-Builder/codecov.sh"
