@@ -89,8 +89,8 @@ clean: customClean
 
 generateXcode: build
 	swift package generate-xcodeproj
-	
-openXcode:
+
+openXcode: generateXcode
 	open ${shell bash ${BUILDER_SCRIPTS_DIR}/get_latest_xcodeproj.sh}.xcodeproj
 
 custombuild: # do nothing - for the calling Makefile to override
