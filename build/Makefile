@@ -94,7 +94,6 @@ openXcode: generateXcode
 	open ${shell bash ${BUILDER_SCRIPTS_DIR}/get_latest_xcodeproj.sh}.xcodeproj
 
 custombuild: # do nothing - for the calling Makefile to override
-customFixXcode: # do nothing - for the calling Makefile to override
 customClean: # do nothing - for the calling Makefile to override
 
-.PHONY: clean build refetch run test custombuild customFixXcode openXcode generateXcode fixXcode
+.PHONY: clean build update refetch run test custombuild openXcode generateXcode
