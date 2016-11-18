@@ -45,3 +45,5 @@ fi
 wget https://swift.org/builds/$SNAPSHOT_TYPE/xcode/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-osx.pkg
 sudo installer -pkg $SWIFT_SNAPSHOT-osx.pkg -target /
 export PATH=/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin:"${PATH}"
+rm $SWIFT_SNAPSHOT-osx.pkg
+
