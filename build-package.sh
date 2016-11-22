@@ -80,8 +80,14 @@ source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries.sh $pro
 echo ">> PATH: $PATH"
 
 # Run SwiftLint to ensure Swift style and conventions
-# swiftlint
-
+if [ "$(uname)" == "Darwin" ]; then
+  # Is the repository overriding the default swiftlint file in pacakge builder?
+  if [ -e "${projectFolder}/.swiftlint.yml" ]; then
+    swiftlint lint --config ${projectFolder}/.swiftlint.yml
+  else
+    swiftlint lint --config ${projectFolder}/Package-Builder/.swiftlint.yml
+  fi
+fi
 # Build swift package from makefile
 echo ">> Running makefile..."
 cd ${projectFolder} && make
