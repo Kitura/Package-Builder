@@ -82,10 +82,10 @@ echo ">> PATH: $PATH"
 # Run SwiftLint to ensure Swift style and conventions
 # swiftlint
 
-# Build swift package from makefile
-echo ">> Running makefile..."
-cd ${projectFolder} && make
-echo ">> Finished running makefile"
+# Build swift package
+echo ">> Building swift package..."
+cd ${projectFolder} && swift build
+echo ">> Finished building swift package"
 
 # Copy test credentials for project if available
 if [ -e "${credentialsDir}" ]; then
