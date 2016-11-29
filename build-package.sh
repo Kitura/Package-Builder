@@ -83,9 +83,9 @@ echo ">> PATH: $PATH"
 # swiftlint
 
 # Build swift package
-echo ">> Building swift package..."
-cd ${projectFolder} && swift build
-echo ">> Finished building swift package"
+echo ">> Running makefile..."
+cd ${projectFolder} && make
+echo ">> Finished running makefile"
 
 # Copy test credentials for project if available
 if [ -e "${credentialsDir}" ]; then
