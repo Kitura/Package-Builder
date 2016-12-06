@@ -21,7 +21,7 @@
 # for this script to work.
 
 # If any commands fail, we want the shell script to exit immediately.
-set -e
+set -ev
 
 function usage {
   echo "Usage:\build-package.sh -projectDir <project dir> [-credentialsDir <credentials dir>]"
@@ -49,17 +49,18 @@ do
 done
 
 if [ -z "$projectBuildDir" ]; then
-  if [[ ! "$temp_projectBuildDir" =~ ^- ]]; then
+  if [ "$temp_projectBuildDir" = -* ]; then
     usage
   else
     projectBuildDir=temp_projectBuildDir
   fi
-  usage
 fi
 
 if [ -z "$credentialsDir" ]; then
-  if [ "$temp_credentialsDir" != "$projectBuildDir" ]; then
-    credentialsDir=temp_credentialsDir
+  if [ -z "$temp_credentialsDir" ]; then
+    if [ "$temp_credentialsDir" != "$projectBuildDir" ]; then
+      credentialsDir=temp_credentialsDir
+    fi
   fi
 fi
 
