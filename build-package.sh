@@ -25,8 +25,8 @@ set -ev
 
 function usage {
   echo "Usage:\build-package.sh -projectDir <project dir> [-credentialsDir <credentials dir>]"
-  echo "\t<project dir>: \tThe directory where the project resides."
-  echo "\t<credentials dir>:\tThe directory where the test credentials reside."
+  echo -e "\t<project dir>: \tThe directory where the project resides."
+  echo -e "\t<credentials dir>:\tThe directory where the test credentials reside."
   exit 1
 }
 
