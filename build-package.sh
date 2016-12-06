@@ -49,17 +49,17 @@ do
 done
 
 if [ -z "$projectBuildDir" ]; then
-  if [ "$temp_projectBuildDir" = -* ]; then
+  if [[ "$temp_projectBuildDir" = -* ]]; then
     usage
   else
-    projectBuildDir=temp_projectBuildDir
+    projectBuildDir=$temp_projectBuildDir
   fi
 fi
 
 if [ -z "$credentialsDir" ]; then
   if [ -z "$temp_credentialsDir" ]; then
     if [ "$temp_credentialsDir" != "$projectBuildDir" ]; then
-      credentialsDir=temp_credentialsDir
+      credentialsDir=$temp_credentialsDir
     fi
   fi
 fi
