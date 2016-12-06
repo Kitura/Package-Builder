@@ -21,12 +21,12 @@
 # for this script to work.
 
 # If any commands fail, we want the shell script to exit immediately.
-set -ev
+set -e
 
 function usage {
-  echo "Usage:\build-package.sh -projectDir <project dir> [-credentialsDir <credentials dir>]"
-  echo -e "\t<project dir>: \tThe directory where the project resides."
-  echo -e "\t<credentials dir>:\tThe directory where the test credentials reside."
+  echo "Usage: build-package.sh -projectDir <project dir> [-credentialsDir <credentials dir>]"
+  echo -e "\t<project dir>: \t\tThe directory where the project resides."
+  echo -e "\t<credentials dir>:\tThe directory where the test credentials reside. (optional)"
   exit 1
 }
 
@@ -57,7 +57,7 @@ if [ -z "$projectBuildDir" ]; then
 fi
 
 if [ -z "$credentialsDir" ]; then
-  if [ -z "$temp_credentialsDir" ]; then
+  if [ -n "$temp_credentialsDir" ]; then
     if [ "$temp_credentialsDir" != "$projectBuildDir" ]; then
       credentialsDir=$temp_credentialsDir
     fi
