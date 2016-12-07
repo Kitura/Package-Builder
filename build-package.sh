@@ -23,8 +23,46 @@
 # If any commands fail, we want the shell script to exit immediately.
 set -e
 
-projectBuildDir=$1
-credentialsDir=$2
+function usage {
+  echo "Usage: build-package.sh -projectDir <project dir> [-credentialsDir <credentials dir>]"
+  echo -e "\t<project dir>: \t\tThe directory where the project resides."
+  echo -e "\t<credentials dir>:\tThe directory where the test credentials reside. (optional)"
+  exit 1
+}
+
+temp_projectBuildDir=$1
+temp_credentialsDir=$2
+
+while [ $# -ne 0 ]
+do
+  case "$1" in
+    -projectDir)
+      shift
+      projectBuildDir=$1
+      ;;
+    -credentialsDir)
+      shift
+      credentialsDir=$1
+      ;;
+  esac
+  shift
+done
+
+if [ -z "$projectBuildDir" ]; then
+  if [[ "$temp_projectBuildDir" = -* ]]; then
+    usage
+  else
+    projectBuildDir=$temp_projectBuildDir
+  fi
+fi
+
+if [ -z "$credentialsDir" ]; then
+  if [ -n "$temp_credentialsDir" ]; then
+    if [ "$temp_credentialsDir" != "$projectBuildDir" ]; then
+      credentialsDir=$temp_credentialsDir
+    fi
+  fi
+fi
 
 # Utility functions
 function sourceScript () {
