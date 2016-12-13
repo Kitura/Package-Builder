@@ -128,7 +128,7 @@ echo ">> PATH: $PATH"
 
 if [ $node = true ]; then
     # Run the npm tests
-    . ./node_tests.sh
+    . ./.node_tests.sh
 else
     # Run SwiftLint to ensure Swift style and conventions
     # swiftlint
