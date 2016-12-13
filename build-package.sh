@@ -127,7 +127,8 @@ source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries.sh $pro
 echo ">> PATH: $PATH"
 
 if [ $node = true ]; then
-    npm test && npm run testint
+    # Run the npm tests
+    . ./node_tests.sh
 else
     # Run SwiftLint to ensure Swift style and conventions
     # swiftlint
