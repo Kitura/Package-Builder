@@ -14,7 +14,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
+##
 
 # This script builds the Swift package on Travis CI.
 # If running on the OS X platform, homebrew (http://brew.sh/) must be installed
@@ -67,8 +67,8 @@ fi
 # Utility functions
 function sourceScript () {
   if [ -e "$1" ]; then
-    source "$1"
-    echo "$2"
+      source "$1"
+      echo "$2"
   fi
 }
 
@@ -80,24 +80,25 @@ source ./Package-Builder/install-swift.sh $projectFolder
 # Show path
 echo ">> PATH: $PATH"
 
-    # Run SwiftLint to ensure Swift style and conventions
-    # swiftlint
+# Run SwiftLint to ensure Swift style and conventions
+# swiftlint
 
-    # Build swift package
-    echo ">> Building swift package..."
-    cd ${projectFolder} && swift build
-    echo ">> Finished building swift package..."
+# Build swift package
+echo ">> Building swift package..."
+cd ${projectFolder} && swift build
+echo ">> Finished building swift package..."
 
-    # Copy test credentials for project if available
-    if [ -e "${credentialsDir}" ]; then
-        echo ">> Found folder with test credentials."
+# Copy test credentials for project if available
+if [ -e "${credentialsDir}" ]; then
+    echo ">> Found folder with test credentials."
 
-      # Copy test credentials over
-      echo ">> copying ${credentialsDir} to ${projectBuildDir}"
-      cp -RP ${credentialsDir}/* ${projectBuildDir}
-    else
-      echo ">> No folder found with test credentials."
-    fi
+  # Copy test credentials over
+  echo ">> copying ${credentialsDir} to ${projectBuildDir}"
+  cp -RP ${credentialsDir}/* ${projectBuildDir}
+else
+  echo ">> No folder found with test credentials."
+fi
+
 # Run SwiftLint to ensure Swift style and conventions
 # swiftlint
 
