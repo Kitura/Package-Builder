@@ -14,7 +14,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-##
+#
 
 # This script builds the Swift package on Travis CI.
 # If running on the OS X platform, homebrew (http://brew.sh/) must be installed
@@ -67,68 +67,48 @@ fi
 # Utility functions
 function sourceScript () {
   if [ -e "$1" ]; then
-  	source "$1"
+    source "$1"
     echo "$2"
   fi
 }
 
-# Determine platform/OS
-echo ">> uname: $(uname)"
-if [ "$(uname)" == "Darwin" ]; then
-  osName="osx"
-elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-  osName="linux"
-else
-  echo ">> Unsupported platform!"
-  exit 1
-fi
-echo ">> osName: $osName"
-
-# Make the working directory the parent folder of this script
+# Install swift binaries based on OS
 cd "$(dirname "$0")"/..
-
-# Get project name from project folder
 export projectFolder=`pwd`
-projectName="$(basename $projectFolder)"
-echo ">> projectName: $projectName"
-echo
-
-# Swift version for build
-if [ -f "$projectFolder/.swift-version" ]; then
-  string="$(cat $projectFolder/.swift-version)";
-  if [[ $string == *"swift-"* ]]; then
-    echo ">> using SWIFT_VERSION from file"
-    export SWIFT_SNAPSHOT=$string
-  else
-    echo ">> normalizing SWIFT_VERSION from file"
-    add="swift-"
-    export SWIFT_SNAPSHOT=$add$string
-  fi
-else
-  echo ">> no swift-version file using default value"
-  export SWIFT_SNAPSHOT=swift-3.0.1-RELEASE
-fi
-
-echo ">> SWIFT_SNAPSHOT: $SWIFT_SNAPSHOT"
-
-# Install Swift binaries
-source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries.sh $projectFolder
+source ./Package-Builder/install-swift.sh $projectFolder 
 
 # Show path
 echo ">> PATH: $PATH"
 
+    # Run SwiftLint to ensure Swift style and conventions
+    # swiftlint
+
+    # Build swift package
+    echo ">> Building swift package..."
+    cd ${projectFolder} && swift build
+    echo ">> Finished building swift package..."
+
+    # Copy test credentials for project if available
+    if [ -e "${credentialsDir}" ]; then
+        echo ">> Found folder with test credentials."
+
+      # Copy test credentials over
+      echo ">> copying ${credentialsDir} to ${projectBuildDir}"
+      cp -RP ${credentialsDir}/* ${projectBuildDir}
+    else
+      echo ">> No folder found with test credentials."
+    fi
 # Run SwiftLint to ensure Swift style and conventions
 # swiftlint
 
-# Build swift package
 echo ">> Building swift package..."
 cd ${projectFolder} && swift build
 echo ">> Finished building swift package..."
 
 # Copy test credentials for project if available
 if [ -e "${credentialsDir}" ]; then
-	echo ">> Found folder with test credentials."
-  
+    echo ">> Found folder with test credentials."
+
   # Copy test credentials over
   echo ">> copying ${credentialsDir} to ${projectBuildDir}"
   cp -RP ${credentialsDir}/* ${projectBuildDir}
