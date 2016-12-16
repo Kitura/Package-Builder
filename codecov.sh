@@ -32,7 +32,7 @@ fi
 PROJECT="${PROJ_OUTPUT##*/}"
 SCHEME="${PROJECT%.xcodeproj}"
 
-TEST_CMD="xcodebuild -project $PROJECT -scheme $SCHEME -sdk $SDK -enableCodeCoverage YES test"
+TEST_CMD="xcodebuild -project $PROJECT -scheme $SCHEME -sdk $SDK -enableCodeCoverage YES -skipUnavailableActions test"
 echo "Running $TEST_CMD"
 eval "$TEST_CMD"
 if [[ $? != 0 ]]; then
@@ -51,5 +51,3 @@ if [[ $? != 0 ]]; then
     echo "Error running codecov.io bash script"
     exit 1
 fi
-
-echo "Successfully generated codecov.io report"
