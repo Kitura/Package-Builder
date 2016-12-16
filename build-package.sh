@@ -32,6 +32,15 @@ function usage {
 
 temp_projectBuildDir=$1
 temp_credentialsDir=$2
+node=false
+
+for opt in $@
+do
+  case $opt in
+    -n) node=true;;
+  esac
+done
+echo $node
 
 while [ $# -ne 0 ]
 do
@@ -67,7 +76,7 @@ fi
 # Utility functions
 function sourceScript () {
   if [ -e "$1" ]; then
-  	source "$1"
+      source "$1"
     echo "$2"
   fi
 }
@@ -117,47 +126,52 @@ source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries.sh $pro
 # Show path
 echo ">> PATH: $PATH"
 
-# Run SwiftLint to ensure Swift style and conventions
-# swiftlint
-
-# Build swift package
-echo ">> Building swift package..."
-cd ${projectFolder} && swift build
-echo ">> Finished building swift package..."
-
-# Copy test credentials for project if available
-if [ -e "${credentialsDir}" ]; then
-	echo ">> Found folder with test credentials."
-  
-  # Copy test credentials over
-  echo ">> copying ${credentialsDir} to ${projectBuildDir}"
-  cp -RP ${credentialsDir}/* ${projectBuildDir}
+if [ $node = true ]; then
+    # Run the npm tests
+    . ./.node_tests.sh
 else
-  echo ">> No folder found with test credentials."
+    # Run SwiftLint to ensure Swift style and conventions
+    # swiftlint
+
+    # Build swift package
+    echo ">> Building swift package..."
+    cd ${projectFolder} && swift build
+    echo ">> Finished building swift package..."
+
+    # Copy test credentials for project if available
+    if [ -e "${credentialsDir}" ]; then
+        echo ">> Found folder with test credentials."
+
+      # Copy test credentials over
+      echo ">> copying ${credentialsDir} to ${projectBuildDir}"
+      cp -RP ${credentialsDir}/* ${projectBuildDir}
+    else
+      echo ">> No folder found with test credentials."
+    fi
+
+    # Execute test cases
+    if [ -e "${projectFolder}/Tests" ]; then
+        echo ">> Testing Swift package..."
+        # Execute OS specific pre-test steps
+        sourceScript "`find ${projectFolder} -path "*/${projectName}/${osName}/before_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed ${osName} pre-tests steps."
+
+        # Execute common pre-test steps
+        sourceScript "`find ${projectFolder} -path "*/${projectName}/common/before_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed common pre-tests steps."
+
+        swift test
+
+        # Execute common post-test steps
+        sourceScript "`find ${projectFolder} -path "*/${projectName}/common/after_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed common post-tests steps."
+
+        # Execute OS specific post-test steps
+        sourceScript "`find ${projectFolder} -path "*/${projectName}/${osName}/after_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed ${osName} post-tests steps."
+
+        echo ">> Finished testing Swift package."
+        echo
+    else
+        echo ">> No testcases exist..."
+    fi
+
+    # Generate test code coverage report
+    sourceScript "${projectFolder}/Package-Builder/codecov.sh"
 fi
-
-# Execute test cases
-if [ -e "${projectFolder}/Tests" ]; then
-    echo ">> Testing Swift package..."
-    # Execute OS specific pre-test steps
-    sourceScript "`find ${projectFolder} -path "*/${projectName}/${osName}/before_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed ${osName} pre-tests steps."
-
-    # Execute common pre-test steps
-    sourceScript "`find ${projectFolder} -path "*/${projectName}/common/before_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed common pre-tests steps."
-
-    swift test
-
-    # Execute common post-test steps
-    sourceScript "`find ${projectFolder} -path "*/${projectName}/common/after_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed common post-tests steps."
-
-    # Execute OS specific post-test steps
-    sourceScript "`find ${projectFolder} -path "*/${projectName}/${osName}/after_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed ${osName} post-tests steps."
-
-    echo ">> Finished testing Swift package."
-    echo
-else
-    echo ">> No testcases exist..."
-fi
-
-# Generate test code coverage report
-sourceScript "${projectFolder}/Package-Builder/codecov.sh"
