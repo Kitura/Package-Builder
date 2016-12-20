@@ -106,17 +106,6 @@ echo ">> Building swift package..."
 cd ${projectFolder} && swift build
 echo ">> Finished building swift package..."
 
-# Copy test credentials for project if available
-if [ -e "${credentialsDir}" ]; then
-    echo ">> Found folder with test credentials."
-
-  # Copy test credentials over
-  echo ">> copying ${credentialsDir} to ${projectBuildDir}"
-  cp -RP ${credentialsDir}/* ${projectBuildDir}
-else
-  echo ">> No folder found with test credentials."
-fi
-
 # Execute test cases
 if [ -e "${projectFolder}/Tests" ]; then
     echo ">> Testing Swift package..."
