@@ -30,9 +30,6 @@ function usage {
   exit 1
 }
 
-temp_projectBuildDir=$1
-temp_credentialsDir=$2
-
 while [ $# -ne 0 ]
 do
   case "$1" in
@@ -49,19 +46,7 @@ do
 done
 
 if [ -z "$projectBuildDir" ]; then
-  if [[ "$temp_projectBuildDir" = -* ]]; then
-    usage
-  else
-    projectBuildDir=$temp_projectBuildDir
-  fi
-fi
-
-if [ -z "$credentialsDir" ]; then
-  if [ -n "$temp_credentialsDir" ]; then
-    if [ "$temp_credentialsDir" != "$projectBuildDir" ]; then
-      credentialsDir=$temp_credentialsDir
-    fi
-  fi
+  usage
 fi
 
 # Utility functions
