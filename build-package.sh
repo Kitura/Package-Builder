@@ -58,7 +58,7 @@ function sourceScript () {
 }
 
 # Determine platform/OS
-echo ">> uname: $(uname)"q
+echo ">> uname: $(uname)"
 if [ "$(uname)" == "Darwin" ]; then
   osName="osx"
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
