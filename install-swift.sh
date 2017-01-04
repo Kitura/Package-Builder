@@ -37,7 +37,6 @@ echo ">> osName: $osName"
 
 # Make the working directory the parent folder of this script
 # Get project name from project folder
-export projectFolder=$1
 
 projectName="$(basename $projectFolder)"
 echo ">> projectName: $projectName"
