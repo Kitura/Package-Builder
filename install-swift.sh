@@ -61,5 +61,5 @@ fi
 
 echo ">> SWIFT_SNAPSHOT: $SWIFT_SNAPSHOT"
 # Install Swift binaries
-source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries.sh $projectFolder
+source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries.sh
 

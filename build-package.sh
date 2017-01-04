@@ -52,15 +52,25 @@ fi
 # Utility functions
 function sourceScript () {
   if [ -e "$1" ]; then
-      source "$1"
-      echo "$2"
+    source "$1"
+    echo "$2"
   fi
 }
 
 # Install swift binaries based on OS
 cd "$(dirname "$0")"/..
 export projectFolder=`pwd`
-source ./Package-Builder/install-swift.sh $projectFolder 
+source ./Package-Builder/install-swift.sh 
+
+SPECIAL_MAC_FILE_EXISTS=`if [ -e ${TRAVIS_BUILD_DIR}/.swift-build-macOS ]; then echo 1; else echo 0; fi`
+OS_IS_MAC=`if [ "${osName}" == "osx" ]; then echo 1; else echo 0; fi`
+SPECIAL_LINUX_FILE_EXISTS=`if [ -e ${TRAVIS_BUILD_DIR}/.swift-build-linux ]; then echo 1; else echo 0; fi`
+OS_IS_LINUX=`if [ "${osName}" == "linux" ]; then echo 1; else echo 0; fi`
+
+echo $SPECIAL_MAC_FILE_EXISTS
+echo $OS_IS_MAC
+echo $SPECIAL_LINUX_FILE_EXISTS
+echo $OS_IS_LINUX
 
 # Show path
 echo ">> PATH: $PATH"
@@ -70,12 +80,24 @@ echo ">> PATH: $PATH"
 
 # Build swift package
 echo ">> Building swift package..."
-cd ${projectFolder} && swift build
+
+cd ${projectFolder}
+
+if [ "${SPECIAL_MAC_FILE_EXISTS}${OS_IS_MAC}" == "11" ]; then
+  echo `cat ${TRAVIS_BUILD_DIR}/.swift-build-macOS`
+  source ${TRAVIS_BUILD_DIR}/.swift-build-macOS
+elif [ "${SPECIAL_LINUX_FILE_EXISTS}${OS_IS_LINUX}" == "11" ]; then
+  echo `cat ${TRAVIS_BUILD_DIR}/.swift-build-linux`
+  source ${TRAVIS_BUILD_DIR}/.swift-build-linux
+else
+  swift build
+fi
+
 echo ">> Finished building swift package..."
 
 # Copy test credentials for project if available
 if [ -e "${credentialsDir}" ]; then
-    echo ">> Found folder with test credentials."
+  echo ">> Found folder with test credentials."
 
   # Copy test credentials over
   echo ">> copying ${credentialsDir} to ${projectBuildDir}"

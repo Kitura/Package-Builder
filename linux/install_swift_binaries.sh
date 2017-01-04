@@ -39,15 +39,13 @@ export PATH=`echo ${PATH} | awk -v RS=: -v ORS=: '/clang/ {next} {print}'`
 sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-3.8 100
 sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-3.8 100
 
-WORK_DIR=$1
-
 if [[ ${SWIFT_SNAPSHOT} =~ ^.*RELEASE.*$ ]]; then
 	SNAPSHOT_TYPE=$(echo "$SWIFT_SNAPSHOT" | tr '[:upper:]' '[:lower:]')
 elif [[ ${SWIFT_SNAPSHOT} =~ ^.*DEVELOPMENT.*$ ]]; then
 	SNAPSHOT_TYPE=development
 else
 	SNAPSHOT_TYPE="$(echo "$SWIFT_SNAPSHOT" | tr '[:upper:]' '[:lower:]')-release"
-        SWIFT_SNAPSHOT="${SWIFT_SNAPSHOT}-RELEASE"
+    SWIFT_SNAPSHOT="${SWIFT_SNAPSHOT}-RELEASE"
 fi
 
 # Environment vars
@@ -57,9 +55,9 @@ export UBUNTU_VERSION_NO_DOTS=`echo $version | awk -F. '{print $1$2}'`
 
 echo ">> Installing '${SWIFT_SNAPSHOT}'..."
 # Install Swift compiler
-cd $WORK_DIR
+cd $projectFolder
 wget https://swift.org/builds/$SNAPSHOT_TYPE/$UBUNTU_VERSION_NO_DOTS/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
 tar xzvf $SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
-export PATH=$WORK_DIR/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin:$PATH
+export PATH=$projectFolder/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin:$PATH
 rm $SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
 swiftc -h
