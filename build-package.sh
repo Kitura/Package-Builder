@@ -67,11 +67,6 @@ OS_IS_MAC=`if [ "${osName}" == "osx" ]; then echo 1; else echo 0; fi`
 SPECIAL_LINUX_FILE_EXISTS=`if [ -e ${TRAVIS_BUILD_DIR}/.swift-build-linux ]; then echo 1; else echo 0; fi`
 OS_IS_LINUX=`if [ "${osName}" == "linux" ]; then echo 1; else echo 0; fi`
 
-echo $SPECIAL_MAC_FILE_EXISTS
-echo $OS_IS_MAC
-echo $SPECIAL_LINUX_FILE_EXISTS
-echo $OS_IS_LINUX
-
 # Show path
 echo ">> PATH: $PATH"
 
