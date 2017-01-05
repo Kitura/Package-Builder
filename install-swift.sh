@@ -37,7 +37,6 @@ echo ">> osName: $osName"
 
 # Make the working directory the parent folder of this script
 # Get project name from project folder
-export projectFolder=$1
 
 projectName="$(basename $projectFolder)"
 echo ">> projectName: $projectName"
@@ -61,5 +60,5 @@ fi
 
 echo ">> SWIFT_SNAPSHOT: $SWIFT_SNAPSHOT"
 # Install Swift binaries
-source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries.sh $projectFolder
+source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries.sh
 

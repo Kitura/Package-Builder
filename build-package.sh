@@ -52,15 +52,15 @@ fi
 # Utility functions
 function sourceScript () {
   if [ -e "$1" ]; then
-      source "$1"
-      echo "$2"
+    source "$1"
+    echo "$2"
   fi
 }
 
 # Install swift binaries based on OS
 cd "$(dirname "$0")"/..
 export projectFolder=`pwd`
-source ./Package-Builder/install-swift.sh $projectFolder 
+source ./Package-Builder/install-swift.sh 
 
 # Show path
 echo ">> PATH: $PATH"
@@ -70,12 +70,24 @@ echo ">> PATH: $PATH"
 
 # Build swift package
 echo ">> Building swift package..."
-cd ${projectFolder} && swift build
+
+cd ${projectFolder}
+
+if [ -e ${TRAVIS_BUILD_DIR}/.swift-build-macOS ] && [ "${osName}" == "osx" ]; then
+  echo `cat ${TRAVIS_BUILD_DIR}/.swift-build-macOS`
+  source ${TRAVIS_BUILD_DIR}/.swift-build-macOS
+elif [ -e ${TRAVIS_BUILD_DIR}/.swift-build-linux ] && [ "${osName}" == "linux" ]; then
+  echo `cat ${TRAVIS_BUILD_DIR}/.swift-build-linux`
+  source ${TRAVIS_BUILD_DIR}/.swift-build-linux
+else
+  swift build
+fi
+
 echo ">> Finished building swift package..."
 
 # Copy test credentials for project if available
 if [ -e "${credentialsDir}" ]; then
-    echo ">> Found folder with test credentials."
+  echo ">> Found folder with test credentials."
 
   # Copy test credentials over
   echo ">> copying ${credentialsDir} to ${projectBuildDir}"
