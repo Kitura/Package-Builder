@@ -1,6 +1,6 @@
 included:
     - Sources
-    - Tests
+
 custom_rules:
   double_space:
     include: "*.swift"
@@ -9,3 +9,7 @@ custom_rules:
     message: "Double space between keywords" 
     match_kinds: keyword 
     severity: warning 
+
+line_length: 
+  warning: 250 
+  error: 500 
