@@ -97,7 +97,14 @@ else
 fi
 
 # Run SwiftLint to ensure Swift style and conventions
-# swiftlint
+if [ "$(uname)" == "Darwin" ]; then
+  # Is the repository overriding the default swiftlint file in pacakge builder?
+  if [ -e "${projectFolder}/.swiftlint.yml" ]; then
+    swiftlint lint --config ${projectFolder}/.swiftlint.yml
+#  else
+#    swiftlint lint --config ${projectFolder}/Package-Builder/.swiftlint.yml
+  fi
+fi
 
 echo ">> Building swift package..."
 cd ${projectFolder} && swift build
