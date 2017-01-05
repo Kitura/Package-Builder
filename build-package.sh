@@ -62,10 +62,8 @@ cd "$(dirname "$0")"/..
 export projectFolder=`pwd`
 source ./Package-Builder/install-swift.sh 
 
-SPECIAL_MAC_FILE_EXISTS=`if [ -e ${TRAVIS_BUILD_DIR}/.swift-build-macOS ]; then echo 1; else echo 0; fi`
-OS_IS_MAC=`if [ "${osName}" == "osx" ]; then echo 1; else echo 0; fi`
-SPECIAL_LINUX_FILE_EXISTS=`if [ -e ${TRAVIS_BUILD_DIR}/.swift-build-linux ]; then echo 1; else echo 0; fi`
-OS_IS_LINUX=`if [ "${osName}" == "linux" ]; then echo 1; else echo 0; fi`
+SPECIAL_MAC_BUILD=`if [ -e ${TRAVIS_BUILD_DIR}/.swift-build-macOS ] && [ "${osName}" == "osx" ]; then echo 1; else echo 0; fi`
+SPECIAL_LINUX_BUILD=`if [ -e ${TRAVIS_BUILD_DIR}/.swift-build-linux ] && [ "${osName}" == "linux" ]; then echo 1; else echo 0; fi`
 
 # Show path
 echo ">> PATH: $PATH"
@@ -78,10 +76,10 @@ echo ">> Building swift package..."
 
 cd ${projectFolder}
 
-if [ "${SPECIAL_MAC_FILE_EXISTS}${OS_IS_MAC}" == "11" ]; then
+if [ "${SPECIAL_MAC_BUILD}" == "1" ]; then
   echo `cat ${TRAVIS_BUILD_DIR}/.swift-build-macOS`
   source ${TRAVIS_BUILD_DIR}/.swift-build-macOS
-elif [ "${SPECIAL_LINUX_FILE_EXISTS}${OS_IS_LINUX}" == "11" ]; then
+elif [ "${SPECIAL_LINUX_BUILD}" == "1" ]; then
   echo `cat ${TRAVIS_BUILD_DIR}/.swift-build-linux`
   source ${TRAVIS_BUILD_DIR}/.swift-build-linux
 else
