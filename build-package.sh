@@ -75,9 +75,7 @@ cd ${projectFolder}
 
 if [ -e ${TRAVIS_BUILD_DIR}/.swift-build-macOS ] && [ "${osName}" == "osx" ]; then
   echo `cat ${TRAVIS_BUILD_DIR}/.swift-build-macOS`
-  #source ${TRAVIS_BUILD_DIR}/.swift-build-macOS
-  echo "TESTING..."
-  swift build -Xlinker -lc++
+  source ${TRAVIS_BUILD_DIR}/.swift-build-macOS
 elif [ -e ${TRAVIS_BUILD_DIR}/.swift-build-linux ] && [ "${osName}" == "linux" ]; then
   echo `cat ${TRAVIS_BUILD_DIR}/.swift-build-linux`
   source ${TRAVIS_BUILD_DIR}/.swift-build-linux
