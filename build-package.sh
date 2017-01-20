@@ -108,10 +108,6 @@ if [ "$(uname)" == "Darwin" ]; then
   fi
 fi
 
-echo ">> Building swift package..."
-cd ${projectFolder} && swift build
-echo ">> Finished building swift package..."
-
 # Execute test cases
 if [ -e "${projectFolder}/Tests" ]; then
     echo ">> Testing Swift package..."
