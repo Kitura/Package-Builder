@@ -60,7 +60,7 @@ function sourceScript () {
 # Install swift binaries based on OS
 cd "$(dirname "$0")"/..
 export projectFolder=`pwd`
-source ./Package-Builder/install-swift.sh 
+source ./Package-Builder/install-swift.sh
 
 # Show path
 echo ">> PATH: $PATH"
@@ -105,10 +105,6 @@ if [ "$(uname)" == "Darwin" ]; then
 #    swiftlint lint --config ${projectFolder}/Package-Builder/.swiftlint.yml
   fi
 fi
-
-echo ">> Building swift package..."
-cd ${projectFolder} && swift build
-echo ">> Finished building swift package..."
 
 # Execute test cases
 if [ -e "${projectFolder}/Tests" ]; then
