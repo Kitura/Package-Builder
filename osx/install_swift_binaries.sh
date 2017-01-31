@@ -33,6 +33,8 @@ brew install wget || brew outdated wget || brew upgrade wget
 
 if [[ ${SWIFT_SNAPSHOT} =~ ^.*RELEASE.*$ ]]; then
 	SNAPSHOT_TYPE=$(echo "$SWIFT_SNAPSHOT" | tr '[:upper:]' '[:lower:]')
+elif [[ ${SWIFT_SNAPSHOT} =~ ^swift-.*-DEVELOPMENT.*$ ]]; then
+    SNAPSHOT_TYPE=${SWIFT_SNAPSHOT%-DEVELOPMENT*}-branch
 elif [[ ${SWIFT_SNAPSHOT} =~ ^.*DEVELOPMENT.*$ ]]; then
 	SNAPSHOT_TYPE=development
 else
