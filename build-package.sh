@@ -115,31 +115,7 @@ if [ -e "${projectFolder}/Tests" ]; then
     # Execute common pre-test steps
     sourceScript "`find ${projectFolder} -path "*/${projectName}/common/before_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed common pre-tests steps."
 
-    set +e                   # do not exit immediately temporarily so we can generate a backtrace for any crash
-    ulimit -c unlimited      # enable core file generation
-    swift test
-    TEST_EXIT_CODE=$?
-    if [[ $TEST_EXIT_CODE != 0 ]]; then
-        if [ "$osName" == "osx" ]; then
-            executable=`ls .build/debug/*PackageTests.xctest/Contents/MacOS/*PackageTests`
-            core=`ls -t /cores/* | head -n1`
-        else
-            executable=`ls .build/debug/*PackageTests.xctest`
-            core='./core'
-        fi
-
-        if [ ! -f "$core" ]; then
-            echo "core file: '$core' not found"
-        elif [ ! -x "$executable" ]; then
-            echo "'$executable': not found or not executable"
-            lldb -c "$core" --batch -o 'thread backtrace all' -o 'quit'
-        else
-            lldb "$executable" -c "$core" --batch -o 'thread backtrace all' -o 'quit'
-        fi
-
-        exit $TEST_EXIT_CODE
-    fi
-    set -e
+    source ./Package-Builder/run_tests.sh
 
     # Execute common post-test steps
     sourceScript "`find ${projectFolder} -path "*/${projectName}/common/after_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed common post-tests steps."
