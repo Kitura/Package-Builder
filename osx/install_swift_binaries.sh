@@ -29,12 +29,10 @@ brew unlink git
 brew install git
 
 brew install curl
-brew install wget || brew outdated wget || brew upgrade wget
 
 # Install swiftenv
 brew install kylef/formulae/swiftenv
-echo 'if which swiftenv > /dev/null; then eval "$(swiftenv init -)"; fi' >> ~/.bash_profile
-source ~/.bash_profile
+eval "$(swiftenv init -)"
 
 # Install Swift toolchain
 cd $projectFolder
