@@ -115,7 +115,7 @@ if [ -e "${projectFolder}/Tests" ]; then
     # Execute common pre-test steps
     sourceScript "`find ${projectFolder} -path "*/${projectName}/common/before_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed common pre-tests steps."
 
-    swift test
+    source ./Package-Builder/run_tests.sh
 
     # Execute common post-test steps
     sourceScript "`find ${projectFolder} -path "*/${projectName}/common/after_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed common post-tests steps."
