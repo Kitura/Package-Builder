@@ -41,10 +41,9 @@ sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-3.8 100
 
 # Install swiftenv
 git clone https://github.com/kylef/swiftenv.git ~/.swiftenv
-echo 'export SWIFTENV_ROOT="$HOME/.swiftenv"' >> ~/.bashrc
-echo 'export PATH="$SWIFTENV_ROOT/bin:$PATH"' >> ~/.bashrc
-echo 'eval "$(swiftenv init -)"' >> ~/.bashrc
-source ~/.bashrc
+export SWIFTENV_ROOT="$HOME/.swiftenv"
+export PATH="$SWIFTENV_ROOT/bin:$PATH"
+eval "$(swiftenv init -)"
 
 # Install Swift toolchain
 cd $projectFolder
