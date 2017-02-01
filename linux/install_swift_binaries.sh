@@ -41,8 +41,6 @@ sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-3.8 100
 
 if [[ ${SWIFT_SNAPSHOT} =~ ^.*RELEASE.*$ ]]; then
 	SNAPSHOT_TYPE=$(echo "$SWIFT_SNAPSHOT" | tr '[:upper:]' '[:lower:]')
-elif [[ ${SWIFT_SNAPSHOT} =~ ^swift-.*-DEVELOPMENT.*$ ]]; then
-    SNAPSHOT_TYPE=${SWIFT_SNAPSHOT%-DEVELOPMENT*}-branch
 elif [[ ${SWIFT_SNAPSHOT} =~ ^.*DEVELOPMENT.*$ ]]; then
 	SNAPSHOT_TYPE=development
 else
