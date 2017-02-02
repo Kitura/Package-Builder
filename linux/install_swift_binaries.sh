@@ -55,4 +55,11 @@ else
 fi
 
 echo "Installing Swift toolchain version $SWIFT_VERSION"
-swiftenv install $SWIFT_VERSION
+
+# Use swiftenv local as a check for whether or not $SWIFT_VERSION has been installed on system
+if swiftenv local $SWIFT_VERSION; then
+    echo "Swift $SWIFT_VERSION is already installed"
+else
+    swiftenv install $SWIFT_VERSION
+    swiftenv local $SWIFT_VERSION
+fi

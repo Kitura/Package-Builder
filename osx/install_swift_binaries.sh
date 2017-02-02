@@ -24,7 +24,7 @@ set -e
 # Install OS X system level dependencies
 brew update
 
-# Install git CLI using hoebrew until Travis-CI gets off of git CLI 2.9.0 which has problems with Swift.
+# Install git CLI using homebrew until Travis-CI gets off of git CLI 2.9.0 which has problems with Swift.
 brew unlink git
 brew install git
 
@@ -44,4 +44,11 @@ else
 fi
 
 echo "Installing Swift toolchain version $SWIFT_VERSION"
-swiftenv install $SWIFT_VERSION
+
+# Use swiftenv local as a check for whether or not $SWIFT_VERSION has been installed on system
+if swiftenv local $SWIFT_VERSION; then
+    echo "Swift $SWIFT_VERSION is already installed"
+else
+    swiftenv install $SWIFT_VERSION
+    swiftenv local $SWIFT_VERSION
+fi
