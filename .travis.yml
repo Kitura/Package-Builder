@@ -25,8 +25,7 @@ matrix:
       osx_image: xcode8
       sudo: required
 
-before_install:
-  - git clone <url of repository>
-
 script:
-  - ./build-package.sh -projectDir <name of repository>
+  - set -e
+  - ./build-package.sh -projectDir ./tests/library
+  - ./build-package.sh -projectDir ./tests/executable
