@@ -27,5 +27,5 @@ matrix:
 
 script:
   - set -e
-  - ./build-package.sh -projectDir ./tests/library
-  - ./build-package.sh -projectDir ./tests/executable
+  - ./build-package.sh -projectDir $TRAVIS_BUILD_DIR/tests/library
+  - ./build-package.sh -projectDir $TRAVIS_BUILD_DIR/tests/executable
