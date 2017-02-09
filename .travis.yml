@@ -26,7 +26,6 @@ matrix:
       sudo: required
 
 script:
-  - set -ev
   # Set up project build structure
   - mv tests/library ../library
   - mv tests/executable ../executable
