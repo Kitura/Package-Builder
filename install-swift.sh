@@ -42,23 +42,6 @@ projectName="$(basename $projectFolder)"
 echo ">> projectName: $projectName"
 echo
 
-# Swift version for build
-if [ -f "$projectFolder/.swift-version" ]; then
-  string="$(cat $projectFolder/.swift-version)";
-  if [[ $string == *"swift-"* ]]; then
-    echo ">> using SWIFT_VERSION from file"
-    export SWIFT_SNAPSHOT=$string
-  else
-    echo ">> normalizing SWIFT_VERSION from file"
-    add="swift-"
-    export SWIFT_SNAPSHOT=$add$string
-  fi
-else
-  echo ">> no swift-version file using default value"
-  export SWIFT_SNAPSHOT=swift-3.0.1-RELEASE
-fi
-
-echo ">> SWIFT_SNAPSHOT: $SWIFT_SNAPSHOT"
 # Install Swift binaries
 source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries.sh
 
