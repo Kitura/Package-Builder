@@ -3,10 +3,10 @@
 set +e                   # do not exit immediately temporarily so we can generate a backtrace for any crash
 ulimit -c unlimited      # enable core file generation
 if [ -e ${TRAVIS_BUILD_DIR}/.swift-test-macOS ] && [ "$osName" == "osx" ]; then
-  echo `cat ${TRAVIS_BUILD_DIR}/.swift-test-macOS`
+  echo Running custom OSX test commands: `cat ${TRAVIS_BUILD_DIR}/.swift-test-macOS`
   source ${TRAVIS_BUILD_DIR}/.swift-test-macOS
 elif [ -e ${TRAVIS_BUILD_DIR}/.swift-test-linux ] && [ "$osName" == "linux" ]; then
-  echo `cat ${TRAVIS_BUILD_DIR}/.swift-test-linux`
+  echo Running custom Linux test commands: `cat ${TRAVIS_BUILD_DIR}/.swift-test-linux`
   source ${TRAVIS_BUILD_DIR}/.swift-test-linux
 else
   swift test
