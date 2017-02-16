@@ -34,6 +34,4 @@ script:
   - cd ../library
   - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR/library
   - cd ../executable
-  # Remove swiftenv to prevent installation error
-  - rm -rf  ~/.swiftenv
   - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR/executable

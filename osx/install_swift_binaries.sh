@@ -29,19 +29,20 @@ brew unlink git
 brew install git
 
 brew install curl
+brew install wget || brew outdated wget || brew upgrade wget
 
-# Install swiftenv
-brew install kylef/formulae/swiftenv
-eval "$(swiftenv init -)"
-
-# Install Swift toolchain
-cd $projectFolder
-
-if [ -f "$projectFolder/.swift-version" ]; then
-    SWIFT_VERSION=`cat .swift-version`
+if [[ ${SWIFT_SNAPSHOT} =~ ^.*RELEASE.*$ ]]; then
+	SNAPSHOT_TYPE=$(echo "$SWIFT_SNAPSHOT" | tr '[:upper:]' '[:lower:]')
+elif [[ ${SWIFT_SNAPSHOT} =~ ^.*DEVELOPMENT.*$ ]]; then
+	SNAPSHOT_TYPE=development
 else
-    SWIFT_VERSION="3.0.2"
+	SNAPSHOT_TYPE="$(echo "$SWIFT_SNAPSHOT" | tr '[:upper:]' '[:lower:]')-release"
+    SWIFT_SNAPSHOT="${SWIFT_SNAPSHOT}-RELEASE"
 fi
 
-echo "Installing Swift toolchain version $SWIFT_VERSION"
-swiftenv install $SWIFT_VERSION -s
+# Install Swift binaries
+# See http://apple.stackexchange.com/questions/72226/installing-pkg-with-terminal
+wget https://swift.org/builds/$SNAPSHOT_TYPE/xcode/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-osx.pkg
+sudo installer -pkg $SWIFT_SNAPSHOT-osx.pkg -target /
+export PATH=/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin:"${PATH}"
+rm $SWIFT_SNAPSHOT-osx.pkg

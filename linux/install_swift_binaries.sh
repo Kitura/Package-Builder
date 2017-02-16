@@ -39,20 +39,25 @@ export PATH=`echo ${PATH} | awk -v RS=: -v ORS=: '/clang/ {next} {print}'`
 sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-3.8 100
 sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-3.8 100
 
-# Install swiftenv
-git clone https://github.com/kylef/swiftenv.git ~/.swiftenv
-export SWIFTENV_ROOT="$HOME/.swiftenv"
-export PATH="$SWIFTENV_ROOT/bin:$PATH"
-eval "$(swiftenv init -)"
-
-# Install Swift toolchain
-cd $projectFolder
-
-if [ -f "$projectFolder/.swift-version" ]; then
-    SWIFT_VERSION=`cat .swift-version`
+if [[ ${SWIFT_SNAPSHOT} =~ ^.*RELEASE.*$ ]]; then
+	SNAPSHOT_TYPE=$(echo "$SWIFT_SNAPSHOT" | tr '[:upper:]' '[:lower:]')
+elif [[ ${SWIFT_SNAPSHOT} =~ ^.*DEVELOPMENT.*$ ]]; then
+	SNAPSHOT_TYPE=development
 else
-    SWIFT_VERSION="3.0.2"
+	SNAPSHOT_TYPE="$(echo "$SWIFT_SNAPSHOT" | tr '[:upper:]' '[:lower:]')-release"
+    SWIFT_SNAPSHOT="${SWIFT_SNAPSHOT}-RELEASE"
 fi
 
-echo "Installing Swift toolchain version $SWIFT_VERSION"
-swiftenv install $SWIFT_VERSION -s
+# Environment vars
+version=`lsb_release -d | awk '{print tolower($2) $3}'`
+export UBUNTU_VERSION=`echo $version | awk -F. '{print $1"."$2}'`
+export UBUNTU_VERSION_NO_DOTS=`echo $version | awk -F. '{print $1$2}'`
+
+echo ">> Installing '${SWIFT_SNAPSHOT}'..."
+# Install Swift compiler
+cd $projectFolder
+wget https://swift.org/builds/$SNAPSHOT_TYPE/$UBUNTU_VERSION_NO_DOTS/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
+tar xzvf $SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
+export PATH=$projectFolder/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin:$PATH
+rm $SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
+swiftc -h
