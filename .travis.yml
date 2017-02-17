@@ -29,9 +29,13 @@ script:
   # Set up project build structure
   - mv tests/library ../library
   - mv tests/executable ../executable
+  - mv tests/library-dev-snapshot ../library-dev-snapshot
   - cp -R ./ ../library/Package-Builder
   - cp -R ./ ../executable/Package-Builder
+  - cp -R ./ ../library-dev-snapshot/Package-Builder
   - cd ../library
   - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR/library
   - cd ../executable
   - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR/executable
+  - cd ../library-dev-snapshot
+  - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR/library-dev-snapshot
