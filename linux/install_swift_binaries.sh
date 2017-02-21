@@ -16,12 +16,9 @@
 # limitations under the License.
 ##
 
-# This script installs the Swift binaries. The following environment variables
+# This script installs the Swift binaries. The following variable
 # must be set for this script to work:
 #   SWIFT_SNAPSHOT - version of the Swift binaries to install.
-#   UBUNTU_VERSION - Linux Ubuntu version for the Swift binaries.
-#   UBUNTU_V ERSION_NO_DOTS - Linux Ubuntu version for the Swift binaries (no dots).
-#   WORK_DIR - The working directory for the installation.
 
 # If any commands fail, we want the shell script to exit immediately.
 set -e
@@ -38,17 +35,6 @@ export PATH=`echo ${PATH} | awk -v RS=: -v ORS=: '/clang/ {next} {print}'`
 # Set clang 3.8 as default
 sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-3.8 100
 sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-3.8 100
-
-if [[ ${SWIFT_SNAPSHOT} =~ ^.*RELEASE.*$ ]]; then
-	SNAPSHOT_TYPE=$(echo "$SWIFT_SNAPSHOT" | tr '[:upper:]' '[:lower:]')
-elif [[ ${SWIFT_SNAPSHOT} =~ ^swift-.*-DEVELOPMENT.*$ ]]; then
-  SNAPSHOT_TYPE=${SWIFT_SNAPSHOT%-DEVELOPMENT*}-branch
-elif [[ ${SWIFT_SNAPSHOT} =~ ^.*DEVELOPMENT.*$ ]]; then
-	SNAPSHOT_TYPE=development
-else
-	SNAPSHOT_TYPE="$(echo "$SWIFT_SNAPSHOT" | tr '[:upper:]' '[:lower:]')-release"
-    SWIFT_SNAPSHOT="${SWIFT_SNAPSHOT}-RELEASE"
-fi
 
 # Environment vars
 version=`lsb_release -d | awk '{print tolower($2) $3}'`
