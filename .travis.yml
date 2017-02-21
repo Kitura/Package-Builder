@@ -34,8 +34,10 @@ script:
   - cp -R ./ ../executable/Package-Builder
   - cp -R ./ ../library-dev-snapshot/Package-Builder
   - cd ../library
+  # These test Package-Builder against 3.0.2 release version from .swift-version file
   - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR/library
   - cd ../executable
   - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR/executable
+  # These test Package-Builder against swift-DEVELOPMENT-SNAPSHOT-2017-02-14-a
   - cd ../library-dev-snapshot
   - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR/library-dev-snapshot
