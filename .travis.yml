@@ -1,5 +1,5 @@
-# Travis CI build file for Kitura sample app.
-# Kitura runs on OS X and Linux (Ubuntu).
+# Travis CI build file for Package-Builder.
+# Package-Builder runs on OS X and Linux (Ubuntu).
 # See the following URLs for further details on Travis CI
 # https://docs.travis-ci.com/user/customizing-the-build/
 # https://docs.travis-ci.com/user/docker/
