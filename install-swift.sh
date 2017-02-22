@@ -59,6 +59,17 @@ else
 fi
 
 echo ">> SWIFT_SNAPSHOT: $SWIFT_SNAPSHOT"
+
+if [[ ${SWIFT_SNAPSHOT} =~ ^.*RELEASE.*$ ]]; then
+	SNAPSHOT_TYPE=$(echo "$SWIFT_SNAPSHOT" | tr '[:upper:]' '[:lower:]')
+elif [[ ${SWIFT_SNAPSHOT} =~ ^swift-.*-DEVELOPMENT.*$ ]]; then
+  SNAPSHOT_TYPE=${SWIFT_SNAPSHOT%-DEVELOPMENT*}-branch
+elif [[ ${SWIFT_SNAPSHOT} =~ ^.*DEVELOPMENT.*$ ]]; then
+	SNAPSHOT_TYPE=development
+else
+	SNAPSHOT_TYPE="$(echo "$SWIFT_SNAPSHOT" | tr '[:upper:]' '[:lower:]')-release"
+  SWIFT_SNAPSHOT="${SWIFT_SNAPSHOT}-RELEASE"
+fi
+
 # Install Swift binaries
 source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries.sh
-
