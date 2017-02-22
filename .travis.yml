@@ -31,7 +31,7 @@ script:
   - mv tests/executable ../executable
   - cp -R ./ ../library/Package-Builder
   - cp -R ./ ../executable/Package-Builder
-  - cp ../library ../library-dev-snapshot
+  - cp -R ../library ../library-dev-snapshot
   # These test Package-Builder against 3.0.2 release version from .swift-version file
   - cd ../library
   - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR/library
