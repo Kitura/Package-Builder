@@ -20,9 +20,19 @@ if [[ $? != 0 ]]; then
     exit 1
 fi
 
-PROJ_CMD="swift package generate-xcodeproj"
-echo "Running $PROJ_CMD"
-PROJ_OUTPUT=$(eval "$PROJ_CMD")
+if [[ "$osName" == "linux" ]]; then
+  CUSTOM_FILE="${TRAVIS_BUILD_DIR}/.swift-xcodeproj-linux"
+else
+  CUSTOM_FILE="${TRAVIS_BUILD_DIR}/.swift-xcodeproj-macOS"
+fi
+
+if [[ -f "$CUSTOM_FILE" ]]; then
+  echo Running custom "$osName" xcodeproj command: $(cat "$CUSTOM_FILE")
+  PROJ_OUTPUT=$(source "$CUSTOM_FILE")
+else
+  PROJ_OUTPUT=$(swift package generate-xcodeproj)
+fi
+
 PROJ_EXIT_CODE=$?
 echo "$PROJ_OUTPUT"
 if [[ $PROJ_EXIT_CODE != 0 ]]; then
