@@ -52,6 +52,9 @@ $ cat .swift-build-linux
 swift build -Xcc -I/usr/include/postgresql
 ```
 
+### Custom Xcode project generation
+Following the same naming convention as above, a `.swift-xcodeproj-linux` and `.swift-xcodeproj-macOS` file can be provided that contain a custom `swift package generate-xcodeproj` command.
+
 ### Custom configuration for executing tests
 Sometimes, a dependency must be set up in order for the testing process to be complete.  In order to leverage this extension point, include a `before_tests.sh` or `after_tests.sh` file for each operation system that requires special set up. For example, if custom installation was needed, there would be three `before_tests.sh` files, each in a `linux`, `osx`, and `common` directory from the root.  The `common/before_tests.sh` is executed after the operating system specific `before_tests.sh` but `common/after_tests.sh` before the `after_tests.sh` for each operating system.
 
