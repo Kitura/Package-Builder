@@ -29,9 +29,18 @@ script:
 
 You should install any required system-level dependencies in the `before_install` section of the `.travis.yml` file so that the Travis CI build environment is ready for compilation and testing of your Swift package.
 
+### Providing custom credentials
+In order to meet the needs of projects that use credentials from another repository, Package-Builder will copy and overwrite project files with the same names from the contents from the specified directory.  To leverage this functionality, be sure to download the credentials in the `before_install` sections, and then use the following in your `.travis.yml`:
+```
+script:
+  - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR -credentialsDir <path to credentials>
+```
+
+
 ## Codecov
 [Codecov](https://codecov.io/) is used in Package-Builder to determine how much test coverage exists in your code. Codecov allows us to determine which methods and statements in our code are not currently covered by the automated test cases included in the project. Codecov performs its analysis by generating an Xcode project. For example, see the current test coverage for the [Swift-cfenv](https://github.com/IBM-Swift/Swift-cfenv) package [here](https://codecov.io/gh/IBM-Swift/Swift-cfenv).
 
+![Codecov Report](/img/codecov-swift-cfenv-1024x768.png?raw=true "Code Coverage Report")
 
 
 ### Custom Xcode project generation
