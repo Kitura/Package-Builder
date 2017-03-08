@@ -94,7 +94,7 @@ swift-DEVELOPMENT-SNAPSHOT-2017-02-14-a
 ```
 
 ## Custom build and test commands
-If you need a custom command for *compiling* your Swift package, you should include a `.swift-build-linux` or `.swift-build-macOS` file in the root level of your repository and specify in it the exact compilation command for the corresponding platform.
+If you need a custom command for **compiling** your Swift package, you should include a `.swift-build-linux` or `.swift-build-macOS` file in the root level of your repository and specify in it the exact compilation command for the corresponding platform.
 
 ```
 $ cat .swift-build-linux
@@ -102,7 +102,7 @@ $ cat .swift-build-linux
 swift build -Xcc -I/usr/include/postgresql
 ```
 
-If you need a custom command for *testing* your Swift package, you should include a `.swift-test-linux` or `.swift-test-macOS` file in the root level of your repository and specify in it the exact testing command for the corresponding platform.
+If you need a custom command for **testing** your Swift package, you should include a `.swift-test-linux` or `.swift-test-macOS` file in the root level of your repository and specify in it the exact testing command for the corresponding platform.
 
 ```
 $ cat .swift-test-linux
