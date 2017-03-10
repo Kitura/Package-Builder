@@ -20,11 +20,8 @@ if [[ $? != 0 ]]; then
     exit 1
 fi
 
-if [[ "$osName" == "linux" ]]; then
-  CUSTOM_FILE="${TRAVIS_BUILD_DIR}/.swift-xcodeproj-linux"
-else
-  CUSTOM_FILE="${TRAVIS_BUILD_DIR}/.swift-xcodeproj-macOS"
-fi
+
+CUSTOM_FILE="${TRAVIS_BUILD_DIR}/.swift-xcodeproj"
 
 if [[ -f "$CUSTOM_FILE" ]]; then
   echo Running custom "$osName" xcodeproj command: $(cat "$CUSTOM_FILE")
