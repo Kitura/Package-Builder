@@ -79,7 +79,7 @@ For example, see the [current test coverage](https://codecov.io/gh/IBM-Swift/Swi
 
 
 ### Custom Xcode project generation
-If you need custom commands to create the Xcode project for your Swift Package, a `.swift-xcodeproj` file can be provided that contains a custom `swift package generate-xcodeproj` command.
+If for Codecov, you need a custom command to generate the Xcode project for your Swift package, you should include a `.swift-xcodeproj` file that contains your custom `swift package generate-xcodeproj` command.
 
 ## Custom SwiftLint
 [SwiftLint](https://github.com/realm/SwiftLint) is a tool to enforce Swift style and conventions. Ensure that your team's coding standard conventions are being met by providing your own `.swiftlint.yml` in the root directory with the specified rules to be run by Package-Builder.  For now each project should provide their own `.swiftlint.yml` file to adhere to your preferences.  A default may be used in the future, but as of now no SwiftLint operations are performed unless a `.swiftlint.yml` file exists.
@@ -111,11 +111,11 @@ swift test -Xcc -I/usr/include/postgresql
 ```
 
 ### Custom configuration for executing tests
-Sometimes, a dependency must be set up in order for the testing process to be complete.  Package-Builder provides an extension point to do this by including a `before_tests.sh` or `after_tests.sh` file containing the commands to be executed.
+Sometimes, a dependency must be set up before the testing process can begin. You may also have the need to execute certain actions after your tests have completed (e.g. shutting down a server). Package-Builder provides an extension point to do this; you can include a `before_tests.sh` and/or a `after_tests.sh` file containing the commands to be executed before and after the tests.
 
-Put the relevant commands in a directory in the root, either `linux`, `osx` or `common`, as shown below:
+These files should be placed in a folder structure that matches the outline shown below (see the `linux`, `osx`, and `common` folders):
 
-![File Structure](/img/file_structure.jpg?raw=true "Sample File Structure")
+![File Structure](/img/file_screenshot.jpg?raw=true "Sample File Structure")
 
 *Before Tests:* The linux or macOS `before_tests.sh` will be executed first if present, followed by `common/before_tests.sh`. Once complete, the tests will commence.
 
