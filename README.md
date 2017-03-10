@@ -117,7 +117,7 @@ These files should be placed in a folder structure that matches the outline show
 
 ![File Structure](/img/file_screenshot.jpg?raw=true "Sample File Structure")
 
-*Before Tests:* The linux or macOS `before_tests.sh` will be executed first if present, followed by `common/before_tests.sh`. Once complete, the tests will commence.
+*Before Tests:* The `linux/before_tests.sh` and `osx/before_tests.sh` scripts will be executed first if present, followed by `common/before_tests.sh`. Once complete, the tests will commence.
 
 *After Tests:* After the tests are performed, `common/after_tests.sh` is executed first, followed by `linux/after_tests.sh` or `osx/after_tests.sh`.
 
