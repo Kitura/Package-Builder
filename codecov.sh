@@ -21,7 +21,7 @@ if [[ $? != 0 ]]; then
 fi
 
 
-CUSTOM_FILE="${TRAVIS_BUILD_DIR}/.swift-xcodeproj"
+CUSTOM_FILE="${projectFolder}/.swift-xcodeproj"
 
 if [[ -f "$CUSTOM_FILE" ]]; then
   echo Running custom "$osName" xcodeproj command: $(cat "$CUSTOM_FILE")
