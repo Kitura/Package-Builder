@@ -57,23 +57,9 @@ function sourceScript () {
   fi
 }
 
-# Determine platform/OS
-echo ">> uname: $(uname)"
-if [ "$(uname)" == "Darwin" ]; then
-  osName="osx"
-elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-  osName="linux"
-else
-  echo ">> Unsupported platform!"
-  exit 1
-fi
-echo ">> osName: $osName"
-
 # Install swift binaries based on OS
 cd "$(dirname "$0")"/..
 export projectFolder=`pwd`
-projectName="$(basename $projectFolder)"
-echo ">> projectName: $projectName"
 source ./Package-Builder/install-swift.sh
 
 # Show path

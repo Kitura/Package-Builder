@@ -23,6 +23,25 @@
 # If any commands fail, we want the shell script to exit immediately.
 set -e
 
+# Determine platform/OS
+echo ">> uname: $(uname)"
+if [ "$(uname)" == "Darwin" ]; then
+  osName="osx"
+elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+  osName="linux"
+else
+  echo ">> Unsupported platform!"
+  exit 1
+fi
+echo ">> osName: $osName"
+
+# Make the working directory the parent folder of this script
+# Get project name from project folder
+
+projectName="$(basename $projectFolder)"
+echo ">> projectName: $projectName"
+echo
+
 # Swift version for build
 if [ -f "$projectFolder/.swift-version" ]; then
   string="$(cat $projectFolder/.swift-version)";
