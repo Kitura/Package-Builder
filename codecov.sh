@@ -1,16 +1,16 @@
 #! /bin/bash
 
-if [[ $TRAVIS && $TRAVIS_BRANCH != "master" && $TRAVIS_EVENT_TYPE != "cron" ]]; then
+if [[ $TRAVIS_BRANCH != "master" && $TRAVIS_EVENT_TYPE != "cron" ]]; then
     echo "Not master or cron build. Skipping code coverage generation"
     exit 0
 fi
 
-if [[ $TRAVIS && $TRAVIS_OS_NAME != "osx" ]]; then
+if [[ ${osName}} != "osx" ]]; then
     echo "Not osx build. Skipping code coverage generation"
     exit 0
 fi
 
-echo "Starting code coverage generation"
+echo "Starting code coverage generation..."
 uname -a
 
 SDK=macosx
@@ -21,7 +21,7 @@ if [[ $? != 0 ]]; then
 fi
 
 
-CUSTOM_FILE="${TRAVIS_BUILD_DIR}/.swift-xcodeproj"
+CUSTOM_FILE="${projectFolder}/.swift-xcodeproj"
 
 if [[ -f "$CUSTOM_FILE" ]]; then
   echo Running custom "$osName" xcodeproj command: $(cat "$CUSTOM_FILE")
@@ -58,4 +58,3 @@ for pkg in $(ls -F Sources/ 2>/dev/null | grep '/$'); do   # get only directorie
         exit 1
     fi
 done
-
