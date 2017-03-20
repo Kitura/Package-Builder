@@ -5,7 +5,7 @@ if [[ $TRAVIS_BRANCH != "master" && $TRAVIS_EVENT_TYPE != "cron" ]]; then
     exit 0
 fi
 
-if [[ ${osName}} != "osx" ]]; then
+if [[ ${osName} != "osx" ]]; then
     echo "Not osx build. Skipping code coverage generation"
     exit 0
 fi
