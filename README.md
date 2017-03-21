@@ -29,6 +29,9 @@ script:
 
 If you need to install system-level dependencies such as libmysqlclient-dev, you can do so in the `before_install` section of the `.travis.yml` file so that the Travis CI build environment is ready for compilation and testing of your Swift package.
 
+### How to start the build-package.sh script
+This script must be started form the folder that contains your Swift package. Also, please note that the `projectDir` argument passed to the script should be the directory of the whole repository. For most projects, this is the same as the folder that contains your Swift package, as shown in the example above. However, there are repositories where the Swift packaage is a sub-folder in the main project.
+
 ### Providing custom credentials
 It is not uncommon for swift packages to need to connect to secure services, offerings, and middleware such as databases.  To do this, credentials are needed from properties files.  To ensure the security of these credentials, many teams use private repositories to store these credentials while their public ones contain dummy files like the one below:
 

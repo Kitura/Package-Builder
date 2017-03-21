@@ -73,12 +73,12 @@ echo ">> Building swift package..."
 
 cd ${projectFolder}
 
-if [ -e ${TRAVIS_BUILD_DIR}/.swift-build-macOS ] && [ "${osName}" == "osx" ]; then
-  echo Running custom macOS build command: `cat ${TRAVIS_BUILD_DIR}/.swift-build-macOS`
-  source ${TRAVIS_BUILD_DIR}/.swift-build-macOS
-elif [ -e ${TRAVIS_BUILD_DIR}/.swift-build-linux ] && [ "${osName}" == "linux" ]; then
-  echo Running custom Linux build command: `cat ${TRAVIS_BUILD_DIR}/.swift-build-linux`
-  source ${TRAVIS_BUILD_DIR}/.swift-build-linux
+if [ -e ${projectFolder}/.swift-build-macOS ] && [ "${osName}" == "osx" ]; then
+  echo Running custom macOS build command: `cat ${projectFolder}/.swift-build-macOS`
+  source ${projectFolder}/.swift-build-macOS
+elif [ -e ${projectFolder}/.swift-build-linux ] && [ "${osName}" == "linux" ]; then
+  echo Running custom Linux build command: `cat ${projectFolder}/.swift-build-linux`
+  source ${projectFolder}/.swift-build-linux
 else
   swift build
 fi
