@@ -88,7 +88,7 @@ If for Codecov, you need a custom command to generate the Xcode project for your
 [SwiftLint](https://github.com/realm/SwiftLint) is a tool to enforce Swift style and conventions. Ensure that your team's coding standard conventions are being met by providing your own `.swiftlint.yml` in the root directory with the specified rules to be run by Package-Builder.  For now each project should provide their own `.swiftlint.yml` file to adhere to your preferences.  A default may be used in the future, but as of now no SwiftLint operations are performed unless a `.swiftlint.yml` file exists.
 
 ## Using different Swift versions and snapshots
-Package-Builder uses, by default, the most recent release version of Swift, at the time of writing `3.1`.  If you need a specific version of Swift to build and compile your repo, you should specify that version in a `.swift-version` file in the root level of your repository.  Valid contents of this file include release and development snapshots from [Swift.org](https://swift.org/).
+Package-Builder uses, by default, the most recent release version of Swift, which at the time of writing is `3.1`. If you need a specific version of Swift to build and compile your repo, you should specify that version in a `.swift-version` file in the root level of your repository.  Valid contents of this file include release and development snapshots from [Swift.org](https://swift.org/).
 
 ```
 $ cat .swift-version
