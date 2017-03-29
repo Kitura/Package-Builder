@@ -36,7 +36,7 @@ if [ -f "$projectFolder/.swift-version" ]; then
   fi
 else
   echo ">> no swift-version file using default value"
-  export SWIFT_SNAPSHOT=swift-3.0.2-RELEASE
+  export SWIFT_SNAPSHOT=swift-3.1-RELEASE
 fi
 
 echo ">> SWIFT_SNAPSHOT: $SWIFT_SNAPSHOT"
