@@ -145,3 +145,11 @@ fi
 
 # Generate test code coverage report
 sourceScript "${projectFolder}/Package-Builder/codecov.sh"
+
+# Clean up build artifacts
+ls -la
+rm -rf ${projectFolder}/.build
+rm -rf ${projectFolder}/Packages
+ls -la
+rm -rf ${projectFolder}/${SWIFT_SNAPSHOT}
+ls -la
