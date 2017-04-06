@@ -144,13 +144,9 @@ else
 fi
 
 # Clean up build artifacts
-ls -la
 rm -rf ${projectFolder}/.build
-rm -rf ${projectFolder}/Packages
-ls -la
-echo ${SWIFT_SNAPSHOT}-${UBUNTU_VERSION}
 rm -rf ${projectFolder}/${SWIFT_SNAPSHOT}-${UBUNTU_VERSION}
-ls -la
+
 
 # Generate test code coverage report
 sourceScript "${projectFolder}/Package-Builder/codecov.sh"
