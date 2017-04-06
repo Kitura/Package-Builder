@@ -148,7 +148,8 @@ ls -la
 rm -rf ${projectFolder}/.build
 rm -rf ${projectFolder}/Packages
 ls -la
-rm -rf ${projectFolder}/${SWIFT_SNAPSHOT}
+echo ${SWIFT_SNAPSHOT}-${UBUNTU_VERSION}
+rm -rf ${projectFolder}/${SWIFT_SNAPSHOT}-${UBUNTU_VERSION}
 ls -la
 
 # Generate test code coverage report
