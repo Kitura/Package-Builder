@@ -143,5 +143,10 @@ else
     echo ">> No testcases exist..."
 fi
 
+# Clean up build artifacts
+rm -rf ${projectFolder}/.build
+rm -rf ${projectFolder}/${SWIFT_SNAPSHOT}-${UBUNTU_VERSION}
+
+
 # Generate test code coverage report
 sourceScript "${projectFolder}/Package-Builder/codecov.sh"
