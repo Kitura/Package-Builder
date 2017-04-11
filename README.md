@@ -95,6 +95,13 @@ $ cat .swift-version
 
 swift-DEVELOPMENT-SNAPSHOT-2017-02-14-a
 ```
+### Testing multiple Swift versions
+To test your package against multiple versions of swift, simply include a `.swift-other-versions` file containing the desired secondary versions, separated by a comma as shown below:
+```
+$ cat .swift-version
+
+swift-DEVELOPMENT-SNAPSHOT-2017-02-14-a,3.0.2,swift-branch-preview
+```
 
 ## Custom build and test commands
 If you need a custom command for **compiling** your Swift package, you should include a `.swift-build-linux` or `.swift-build-macOS` file in the root level of your repository and specify in it the exact compilation command for the corresponding platform.

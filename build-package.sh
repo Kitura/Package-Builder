@@ -57,7 +57,7 @@ function sourceScript () {
   fi
 }
 
-# Determine platform/OS
+# Determine platform/OS and project name
 echo ">> uname: $(uname)"
 if [ "$(uname)" == "Darwin" ]; then
   osName="osx"
@@ -69,11 +69,17 @@ else
 fi
 echo ">> osName: $osName"
 
-# Install swift binaries based on OS
 cd "$(dirname "$0")"/..
 export projectFolder=`pwd`
 projectName="$(basename $projectFolder)"
 echo ">> projectName: $projectName"
+
+export IFS=";"
+for version in $(cat .swift-versions); do
+  echo "Testing with $version"
+done
+
+# Install swift binaries based on OS
 source ./Package-Builder/install-swift.sh
 
 # Show path
@@ -110,16 +116,6 @@ else
   echo ">> No folder found with test credentials."
 fi
 
-# Run SwiftLint to ensure Swift style and conventions
-if [ "$(uname)" == "Darwin" ]; then
-  # Is the repository overriding the default swiftlint file in pacakge builder?
-  if [ -e "${projectFolder}/.swiftlint.yml" ]; then
-    swiftlint lint --config ${projectFolder}/.swiftlint.yml
-#  else
-#    swiftlint lint --config ${projectFolder}/Package-Builder/.swiftlint.yml
-  fi
-fi
-
 # Execute test cases
 if [ -e "${projectFolder}/Tests" ]; then
     echo ">> Testing Swift package..."
@@ -147,6 +143,15 @@ fi
 rm -rf ${projectFolder}/.build
 rm -rf ${projectFolder}/${SWIFT_SNAPSHOT}-${UBUNTU_VERSION}
 
+# Run SwiftLint to ensure Swift style and conventions
+if [ "$(uname)" == "Darwin" ]; then
+  # Is the repository overriding the default swiftlint file in pacakge builder?
+  if [ -e "${projectFolder}/.swiftlint.yml" ]; then
+    swiftlint lint --config ${projectFolder}/.swiftlint.yml
+#  else
+#    swiftlint lint --config ${projectFolder}/Package-Builder/.swiftlint.yml
+  fi
+fi
 
 # Generate test code coverage report
 sourceScript "${projectFolder}/Package-Builder/codecov.sh"
