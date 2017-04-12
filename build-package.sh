@@ -82,7 +82,7 @@ echo "Determining which SWIFT_SNAPSHOT(s) to use..."
 if [ -f "$projectFolder/.swift-versions" ]; then
   echo ">> found swift-versions file"
   string="$(cat $projectFolder/.swift-version)";
-  string=$string;"$(cat $projectFolder/.swift-versions)";
+  string=$string";"$(cat $projectFolder/.swift-versions);
 # If there is only a .swift-version file, use that version
 else
   echo ">> no swift-versions file found, checking for swift-version file..."
