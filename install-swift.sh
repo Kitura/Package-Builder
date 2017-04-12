@@ -25,7 +25,7 @@ set -e
 
 # Swift version for build
 if [ -z $SWIFT_SNAPSHOT ]; then
-  echo "Determining SWIFT_SNAPSHOT..."
+  echo ">> Determining SWIFT_SNAPSHOT..."
   #statements
   if [ -f "$projectFolder/.swift-version" ]; then
     string="$(cat $projectFolder/.swift-version)";

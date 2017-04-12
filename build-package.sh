@@ -97,7 +97,7 @@ else
 fi
 
 for version in $string; do
-  echo "Testing with $version..."
+  echo ">> Testing with $version..."
   # reconcile version with naming conventions by prepending "swift-" if nesseccary
   if [[ $version == *"swift-"* ]]; then
     export SWIFT_SNAPSHOT=$version
@@ -165,12 +165,9 @@ for version in $string; do
   fi
 
   # Clean up build artifacts
-  ls -la
   rm -rf ${projectFolder}/.build
   rm -rf ${projectFolder}/Packages
   rm -rf ${projectFolder}/${SWIFT_SNAPSHOT}-${UBUNTU_VERSION}
-  ls -la
-
 
 done
 
