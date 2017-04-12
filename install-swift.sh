@@ -24,19 +24,23 @@
 set -e
 
 # Swift version for build
-if [ -f "$projectFolder/.swift-version" ]; then
-  string="$(cat $projectFolder/.swift-version)";
-  if [[ $string == *"swift-"* ]]; then
-    echo ">> using SWIFT_VERSION from file"
-    export SWIFT_SNAPSHOT=$string
+if [ -z $SWIFT_SNAPSHOT ]; then
+  echo "Determining SWIFT_SNAPSHOT..."
+  #statements
+  if [ -f "$projectFolder/.swift-version" ]; then
+    string="$(cat $projectFolder/.swift-version)";
+    if [[ $string == *"swift-"* ]]; then
+      echo ">> using SWIFT_VERSION from file"
+      export SWIFT_SNAPSHOT=$string
+    else
+      echo ">> normalizing SWIFT_VERSION from file"
+      add="swift-"
+      export SWIFT_SNAPSHOT=$add$string
+    fi
   else
-    echo ">> normalizing SWIFT_VERSION from file"
-    add="swift-"
-    export SWIFT_SNAPSHOT=$add$string
+    echo ">> no swift-version file using default value"
+    export SWIFT_SNAPSHOT=swift-3.1-RELEASE
   fi
-else
-  echo ">> no swift-version file using default value"
-  export SWIFT_SNAPSHOT=swift-3.1-RELEASE
 fi
 
 echo ">> SWIFT_SNAPSHOT: $SWIFT_SNAPSHOT"
