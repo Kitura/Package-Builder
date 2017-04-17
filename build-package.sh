@@ -74,7 +74,7 @@ export projectFolder=`pwd`
 projectName="$(basename $projectFolder)"
 echo ">> projectName: $projectName"
 
-export IFS=$";|\n"
+export IFS=$';|\n'
 
 # Build list of Swift versions
 echo "Determining which SWIFT_SNAPSHOT(s) to use..."
