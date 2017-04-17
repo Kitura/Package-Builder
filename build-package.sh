@@ -74,11 +74,11 @@ export projectFolder=`pwd`
 projectName="$(basename $projectFolder)"
 echo ">> projectName: $projectName"
 
-export IFS=";"
+export IFS=$';|\n'
 
-# CHRISTIAN - First step, build list of things to test against
+# Build list of Swift versions
 echo "Determining which SWIFT_SNAPSHOT(s) to use..."
-#If there is a .swift-versions file, prepend .swift-version to list of versions
+# If there is a .swift-versions file, prepend .swift-version to list of versions
 if [ -f "$projectFolder/.swift-versions" ]; then
   echo ">> found swift-versions file"
   string="$(cat $projectFolder/.swift-version)";
