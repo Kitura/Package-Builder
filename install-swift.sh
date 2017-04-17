@@ -25,7 +25,7 @@ set -e
 
 # Swift version for build
 if [ -z $SWIFT_SNAPSHOT ]; then
-  echo ">> no swift-version file using default value"
+  echo ">> no $SWIFT_SNAPSHOT set, using default value..."
   export SWIFT_SNAPSHOT=swift-3.1-RELEASE
 fi
 
