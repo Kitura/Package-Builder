@@ -31,7 +31,7 @@ sudo apt-get update
 sudo apt-get -y install clang lldb-3.8 libicu-dev libtool libcurl4-openssl-dev libbsd-dev build-essential libssl-dev uuid-dev
 
 # Remove default version of clang from PATH
-export PATH=`echo ${PATH} | awk -v RS=: -v ORS=: '/clang/ {next} {print}'`
+#export PATH=`echo ${PATH} | awk -v RS=: -v ORS=: '/clang/ {next} {print}'`
 
 # Set clang 3.8 as default - does not work on Bluemix DevOps Pipeline, using regular clang install instead
 #sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-3.8 100
