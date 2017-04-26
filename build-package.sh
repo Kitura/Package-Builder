@@ -23,6 +23,8 @@
 # If any commands fail, we want the shell script to exit immediately.
 set -e
 
+DEFAULT_SWIFT=swift-3.1.1-RELEASE
+
 function usage {
   echo "Usage: build-package.sh -projectDir <project dir> [-credentialsDir <credentials dir>]"
   echo -e "\t<project dir>: \t\tThe directory where the project resides."
@@ -92,7 +94,8 @@ else
   # Else use default
   else
     echo ">> no swift-version file found, using default value"
-    string=swift-3.1-RELEASE
+    echo $DEFAULT_SWIFT
+    string=$DEFAULT_SWIFT
   fi
 fi
 
