@@ -23,10 +23,27 @@
 # If any commands fail, we want the shell script to exit immediately.
 set -e
 
-# Swift version for build
+# Determine SWIFT_SNAPSHOT for build
 if [ -z $SWIFT_SNAPSHOT ]; then
-  echo ">> no $SWIFT_SNAPSHOT set, using default value..."
-  export SWIFT_SNAPSHOT=$DEFAULT_SWIFT
+  echo ">> no $SWIFT_SNAPSHOT set, checking for .swift-version file..."
+  if [ -f "$projectFolder/.swift-version" ]; then
+    echo ">> found .swift-version file"
+    SWIFT_SNAPSHOT="$(cat $projectFolder/.swift-version)";
+  # Else use default
+  else
+    echo ">> no swift-version file found, using default value"
+    echo $DEFAULT_SWIFT
+    SWIFT_SNAPSHOT=$DEFAULT_SWIFT
+  fi
+fi
+
+# reconcile version with naming conventions by prepending "swift-" if nesseccary
+if [[ $SWIFT_SNAPSHOT == *"swift-"* ]]; then
+  export SWIFT_SNAPSHOT
+else
+  echo ">> normalizing SWIFT_VERSION from file"
+  add="swift-"
+  export SWIFT_SNAPSHOT=$add$SWIFT_SNAPSHOT
 fi
 
 echo ">> SWIFT_SNAPSHOT: $SWIFT_SNAPSHOT"
