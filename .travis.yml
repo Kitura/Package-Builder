@@ -32,6 +32,22 @@ matrix:
       osx_image: xcode8.3
       sudo: required
       env: SWIFT_SNAPSHOT=3.1
+    - os: linux
+      dist: trusty
+      sudo: required
+      env: SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2017-02-14-a
+    - os: osx
+      osx_image: xcode8.3
+      sudo: required
+      env: SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2017-02-14-a
+    - os: linux
+      dist: trusty
+      sudo: required
+      env: SWIFT_SNAPSHOT=swift-3.1-DEVELOPMENT-SNAPSHOT-2017-03-18-a
+    - os: osx
+      osx_image: xcode8.3
+      sudo: required
+      env: SWIFT_SNAPSHOT=swift-3.1-DEVELOPMENT-SNAPSHOT-2017-03-18-a
 
 script:
   # Set up build structure for test projects
