@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-# Copyright IBM Corporation 2016
+# Copyright IBM Corporation 2016,2017
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,14 +25,13 @@ set -e
 
 # Determine SWIFT_SNAPSHOT for build
 if [ -z $SWIFT_SNAPSHOT ]; then
-  echo ">> no $SWIFT_SNAPSHOT set, checking for .swift-version file..."
+  echo ">> No $SWIFT_SNAPSHOT set, checking for .swift-version file..."
   if [ -f "$projectFolder/.swift-version" ]; then
-    echo ">> found .swift-version file"
+    echo ">> Found .swift-version file."
     SWIFT_SNAPSHOT="$(cat $projectFolder/.swift-version)";
   # Else use default
   else
-    echo ">> no swift-version file found, using default value"
-    echo $DEFAULT_SWIFT
+    echo ">> No swift-version file found, using default value: $DEFAULT_SWIFT"
     SWIFT_SNAPSHOT=$DEFAULT_SWIFT
   fi
 fi
@@ -41,7 +40,7 @@ fi
 if [[ $SWIFT_SNAPSHOT == *"swift-"* ]]; then
   export SWIFT_SNAPSHOT
 else
-  echo ">> normalizing SWIFT_VERSION from file"
+  echo ">> Normalizing SWIFT_VERSION from file"
   add="swift-"
   export SWIFT_SNAPSHOT=$add$SWIFT_SNAPSHOT
 fi

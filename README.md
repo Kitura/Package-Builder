@@ -96,7 +96,7 @@ $ cat .swift-version
 swift-DEVELOPMENT-SNAPSHOT-2017-02-14-a
 ```
 ### Testing with multiple Swift versions
-To test your package against multiple versions of swift, simply add the following environment variable to your `.travis.yml` file:
+To test your package using a different version of Swift than the one specified in your `.swift-version` file, simply add the `SWIFT_SNAPSHOT` environment variable to your `.travis.yml` file in each one of the entries under the matrix section as shown below:
 ```
 $ cat .travis.yml
 
@@ -108,7 +108,7 @@ matrix:
     - os: linux
       dist: trusty
       sudo: required
-      env: SWIFT_SNAPSHOT=3.0.2
+      env: SWIFT_SNAPSHOT=3.1
 
 before_install:
   - git clone https://github.com/IBM-Swift/Package-Builder.git
@@ -116,8 +116,8 @@ before_install:
 script:
   - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR
 ```
-In this example above, the first build uses the version specified in the `.swift-version` of the project, or the default version supported by Package-Builder.  The second one declares a `SWIFT_SNAPSHOT` environment variable, which overrides the default and `.swift-version` versions for that build.
 
+In this example above, the first build uses the version specified in the `.swift-version` of the project, or the default version supported by Package-Builder.  The second one declares a `SWIFT_SNAPSHOT` environment variable, which overrides the default and `.swift-version` versions for that build.
 
 ## Custom build and test commands
 If you need a custom command for **compiling** your Swift package, you should include a `.swift-build-linux` or `.swift-build-macOS` file in the root level of your repository and specify in it the exact compilation command for the corresponding platform.
