@@ -76,103 +76,67 @@ export projectFolder=`pwd`
 projectName="$(basename $projectFolder)"
 echo ">> projectName: $projectName"
 
-export IFS=$';|\n'
+# Install swift binaries based on OS
+source ./Package-Builder/install-swift.sh
 
-# Build list of Swift versions
-echo "Determining which SWIFT_SNAPSHOT(s) to use..."
-# If there is a .swift-versions file, prepend .swift-version to list of versions
-if [ -f "$projectFolder/.swift-versions" ]; then
-  echo ">> found swift-versions file"
-  string="$(cat $projectFolder/.swift-version)";
-  string=$string";"$(cat $projectFolder/.swift-versions);
-# If there is only a .swift-version file, use that version
+# Show path
+echo ">> PATH: $PATH"
+
+# Build swift package
+echo ">> Building swift package..."
+
+cd ${projectFolder}
+
+if [ -e ${projectFolder}/.swift-build-macOS ] && [ "${osName}" == "osx" ]; then
+  echo Running custom macOS build command: `cat ${projectFolder}/.swift-build-macOS`
+  source ${projectFolder}/.swift-build-macOS
+elif [ -e ${projectFolder}/.swift-build-linux ] && [ "${osName}" == "linux" ]; then
+  echo Running custom Linux build command: `cat ${projectFolder}/.swift-build-linux`
+  source ${projectFolder}/.swift-build-linux
 else
-  echo ">> no swift-versions file found, checking for swift-version file..."
-  if [ -f "$projectFolder/.swift-version" ]; then
-    echo ">> found swift-version file"
-    string="$(cat $projectFolder/.swift-version)";
-  # Else use default
-  else
-    echo ">> no swift-version file found, using default value"
-    echo $DEFAULT_SWIFT
-    string=$DEFAULT_SWIFT
-  fi
+  swift build
 fi
 
-for version in $string; do
-  echo ">> Testing with $version..."
-  # reconcile version with naming conventions by prepending "swift-" if nesseccary
-  if [[ $version == *"swift-"* ]]; then
-    export SWIFT_SNAPSHOT=$version
-  else
-    echo ">> normalizing SWIFT_VERSION from file"
-    add="swift-"
-    export SWIFT_SNAPSHOT=$add$version
-  fi
+echo ">> Finished building swift package..."
 
-  # Install swift binaries based on OS
-  source ./Package-Builder/install-swift.sh
+# Copy test credentials for project if available
+if [ -e "${credentialsDir}" ]; then
+  echo ">> Found folder with test credentials."
 
-  # Show path
-  echo ">> PATH: $PATH"
+  # Copy test credentials over
+  echo ">> copying ${credentialsDir} to ${projectBuildDir}"
+  cp -RP ${credentialsDir}/* ${projectBuildDir}
+else
+  echo ">> No folder found with test credentials."
+fi
 
-  # Build swift package
-  echo ">> Building swift package..."
+# Execute test cases
+if [ -e "${projectFolder}/Tests" ]; then
+    echo ">> Testing Swift package..."
+    # Execute OS specific pre-test steps
+    sourceScript "`find ${projectFolder} -path "*/${projectName}/${osName}/before_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed ${osName} pre-tests steps."
 
-  cd ${projectFolder}
+    # Execute common pre-test steps
+    sourceScript "`find ${projectFolder} -path "*/${projectName}/common/before_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed common pre-tests steps."
 
-  if [ -e ${projectFolder}/.swift-build-macOS ] && [ "${osName}" == "osx" ]; then
-    echo Running custom macOS build command: `cat ${projectFolder}/.swift-build-macOS`
-    source ${projectFolder}/.swift-build-macOS
-  elif [ -e ${projectFolder}/.swift-build-linux ] && [ "${osName}" == "linux" ]; then
-    echo Running custom Linux build command: `cat ${projectFolder}/.swift-build-linux`
-    source ${projectFolder}/.swift-build-linux
-  else
-    swift build
-  fi
+    source ./Package-Builder/run_tests.sh
 
-  echo ">> Finished building swift package..."
+    # Execute common post-test steps
+    sourceScript "`find ${projectFolder} -path "*/${projectName}/common/after_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed common post-tests steps."
 
-  # Copy test credentials for project if available
-  if [ -e "${credentialsDir}" ]; then
-    echo ">> Found folder with test credentials."
+    # Execute OS specific post-test steps
+    sourceScript "`find ${projectFolder} -path "*/${projectName}/${osName}/after_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed ${osName} post-tests steps."
 
-    # Copy test credentials over
-    echo ">> copying ${credentialsDir} to ${projectBuildDir}"
-    cp -RP ${credentialsDir}/* ${projectBuildDir}
-  else
-    echo ">> No folder found with test credentials."
-  fi
+    echo ">> Finished testing Swift package."
+    echo
+else
+    echo ">> No testcases exist..."
+fi
 
-  # Execute test cases
-  if [ -e "${projectFolder}/Tests" ]; then
-      echo ">> Testing Swift package..."
-      # Execute OS specific pre-test steps
-      sourceScript "`find ${projectFolder} -path "*/${projectName}/${osName}/before_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed ${osName} pre-tests steps."
-
-      # Execute common pre-test steps
-      sourceScript "`find ${projectFolder} -path "*/${projectName}/common/before_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed common pre-tests steps."
-
-      source ./Package-Builder/run_tests.sh
-
-      # Execute common post-test steps
-      sourceScript "`find ${projectFolder} -path "*/${projectName}/common/after_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed common post-tests steps."
-
-      # Execute OS specific post-test steps
-      sourceScript "`find ${projectFolder} -path "*/${projectName}/${osName}/after_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed ${osName} post-tests steps."
-
-      echo ">> Finished testing Swift package."
-      echo
-  else
-      echo ">> No testcases exist..."
-  fi
-
-  # Clean up build artifacts
-  rm -rf ${projectFolder}/.build
-  rm -rf ${projectFolder}/Packages
-  rm -rf ${projectFolder}/${SWIFT_SNAPSHOT}-${UBUNTU_VERSION}
-
-done
+# Clean up build artifacts
+rm -rf ${projectFolder}/.build
+rm -rf ${projectFolder}/Packages
+rm -rf ${projectFolder}/${SWIFT_SNAPSHOT}-${UBUNTU_VERSION}
 
 # Run SwiftLint to ensure Swift style and conventions
 if [ "$(uname)" == "Darwin" ]; then
