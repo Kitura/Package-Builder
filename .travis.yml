@@ -22,18 +22,47 @@ matrix:
       dist: trusty
       sudo: required
     - os: osx
-      osx_image: xcode8.2
+      osx_image: xcode8.3
       sudo: required
+    - os: linux
+      dist: trusty
+      sudo: required
+      env: SWIFT_SNAPSHOT=3.1
+    - os: osx
+      osx_image: xcode8.3
+      sudo: required
+      env: SWIFT_SNAPSHOT=3.1
+    - os: linux
+      dist: trusty
+      sudo: required
+      env: SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2017-02-14-a
+    - os: osx
+      osx_image: xcode8.3
+      sudo: required
+      env: SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2017-02-14-a
+    - os: linux
+      dist: trusty
+      sudo: required
+      env: SWIFT_SNAPSHOT=swift-3.1-DEVELOPMENT-SNAPSHOT-2017-03-18-a
+    - os: osx
+      osx_image: xcode8.3
+      sudo: required
+      env: SWIFT_SNAPSHOT=swift-3.1-DEVELOPMENT-SNAPSHOT-2017-03-18-a
 
 script:
-  # Set up project build structure
+  # Set up build structure for test projects
   - mv tests/library ../library
   - mv tests/executable ../executable
   - cp -R ./ ../library/Package-Builder
   - cp -R ./ ../executable/Package-Builder
-  # This tests Package-Builder against 3.1, 3.0.2, & swift-DEVELOPMENT-SNAPSHOT-2017-02-14-a
+  - cp -R ../executable ../executable-no-swift-version
+  - rm ../executable-no-swift-version/.swift-version
+  # This tests Package-Builder with a library
   - cd ../library
   - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR/library
-  # This tests Package-Builder against 3.1
+  # This tests Package-Builder with an executable
   - cd ../executable
   - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR/executable
+  # Test building a package that does not have a .swift-version file
+  - cd ../executable-no-swift-version
+  - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR/executable-no-swift-version

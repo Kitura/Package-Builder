@@ -88,28 +88,36 @@ If for Codecov, you need a custom command to generate the Xcode project for your
 [SwiftLint](https://github.com/realm/SwiftLint) is a tool to enforce Swift style and conventions. Ensure that your team's coding standard conventions are being met by providing your own `.swiftlint.yml` in the root directory with the specified rules to be run by Package-Builder.  For now each project should provide their own `.swiftlint.yml` file to adhere to your preferences.  A default may be used in the future, but as of now no SwiftLint operations are performed unless a `.swiftlint.yml` file exists.
 
 ## Using different Swift versions and snapshots
-Package-Builder uses, by default, the most recent release version of Swift, which at the time of writing is `3.1`. If you need a specific version of Swift to build and compile your repo, you should specify that version in a `.swift-version` file in the root level of your repository.  Valid contents of this file include release and development snapshots from [Swift.org](https://swift.org/).
+Package-Builder uses, by default, the most recent release version of Swift, which at the time of writing is `3.1.1`. If you need a specific version of Swift to build and compile your repo, you should specify that version in a `.swift-version` file in the root level of your repository.  Valid contents of this file include release and development snapshots from [Swift.org](https://swift.org/).
 
 ```
 $ cat .swift-version
 
 swift-DEVELOPMENT-SNAPSHOT-2017-02-14-a
 ```
-### Testing multiple Swift versions
-To test your package against multiple versions of swift, simply include a `.swift-versions` file containing the desired secondary versions, separated by a new line or semicolon as shown below:
+### Testing with multiple Swift versions
+To test your package using a different version of Swift than the one specified in your `.swift-version` file, simply add the `SWIFT_SNAPSHOT` environment variable to your `.travis.yml` file in each one of the entries under the matrix section as shown below:
 ```
-$ cat .swift-versions
+$ cat .travis.yml
 
-swift-DEVELOPMENT-SNAPSHOT-2017-02-14-a;3.0.2;swift-3.1-DEVELOPMENT-SNAPSHOT-2017-03-18-a
-```
-```
-$ cat .swift-versions
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      sudo: required
+    - os: linux
+      dist: trusty
+      sudo: required
+      env: SWIFT_SNAPSHOT=3.1
 
-swift-DEVELOPMENT-SNAPSHOT-2017-02-14-a
-3.0.2
-swift-3.1-DEVELOPMENT-SNAPSHOT-2017-03-18-a
+before_install:
+  - git clone https://github.com/IBM-Swift/Package-Builder.git
+
+script:
+  - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR
 ```
-This approach assumes that you also have a `.swift-version` file that contains your primary swift version, which Package-Builder will build with first before the secondary versions referenced in the `.swift-versions` file.
+
+In this example above, the first build uses the version specified in the `.swift-version` of the project, or the default version supported by Package-Builder.  The second one declares a `SWIFT_SNAPSHOT` environment variable, which overrides the default and `.swift-version` versions for that build.
 
 ## Custom build and test commands
 If you need a custom command for **compiling** your Swift package, you should include a `.swift-build-linux` or `.swift-build-macOS` file in the root level of your repository and specify in it the exact compilation command for the corresponding platform.
