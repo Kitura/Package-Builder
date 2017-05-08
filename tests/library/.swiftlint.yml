@@ -1,0 +1,17 @@
+included:
+    - Sources
+
+custom_rules:
+  double_space:
+    include: "*.swift"
+    name: "Double space"
+    regex: "([a-z,A-Z] \s+)"
+    message: "Double space between keywords"
+    match_kinds: keyword
+    severity: warning
+
+line_length:
+  warning: 250
+  error: 500
+
+#  - Package-Builder
