@@ -143,8 +143,7 @@ if [ "$(uname)" == "Darwin" ]; then
   # Is the repository overriding the default swiftlint file in pacakge builder?
   if [ -e "${projectFolder}/.swiftlint.yml" ]; then
     # Determine whether custom swiftlint contains "excluded:" section
-    grep "excluded:" ${projectFolder}/.swiftlint.yml
-    if [ $? -ne 0 ]; then     # Add exclude section to .swiftlint.yml
+    if ! grep -q "excluded:" ${projectFolder}/.swiftlint.yml; then    # Add "excluded:"" section to .swiftlint.yml
       echo "excluded:" >> ${projectFolder}/.swiftlint.yml
     fi
     # Add "  - Package-Builder" to section
