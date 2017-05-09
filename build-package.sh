@@ -142,6 +142,15 @@ rm -rf ${projectFolder}/${SWIFT_SNAPSHOT}-${UBUNTU_VERSION}
 if [ "$(uname)" == "Darwin" ]; then
   # Is the repository overriding the default swiftlint file in pacakge builder?
   if [ -e "${projectFolder}/.swiftlint.yml" ]; then
+    # Determine whether custom swiftlint contains "excluded:" section
+    grep "excluded:" ${projectFolder}/.swiftlint.yml
+    if [ $? -ne 0 ]; then     # Add exclude section to .swiftlint.yml
+      echo "excluded:" >> ${projectFolder}/.swiftlint.yml
+    fi
+    # Add "  - Package-Builder" to section
+    sed -i '' 's/excluded:/excluded:\
+  - Package-Builder/g' ${projectFolder}/.swiftlint.yml
+
     swiftlint lint --config ${projectFolder}/.swiftlint.yml
 #  else
 #    swiftlint lint --config ${projectFolder}/Package-Builder/.swiftlint.yml
