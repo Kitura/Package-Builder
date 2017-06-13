@@ -1,7 +1,7 @@
 #! /bin/bash
 
-if [[ $TRAVIS_BRANCH != "master" && $TRAVIS_EVENT_TYPE != "cron" ]]; then
-    echo "Not master or cron build. Skipping code coverage generation"
+if [[ $TRAVIS_BRANCH != "master" && $TRAVIS_BRANCH != "develop" && $TRAVIS_EVENT_TYPE != "cron" ]]; then
+    echo "Not master, develop or cron build. Skipping code coverage generation"
     exit 0
 fi
 
