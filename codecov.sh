@@ -36,10 +36,10 @@ if [[ $PROJ_EXIT_CODE != 0 ]]; then
     exit 1
 fi
 
-PROJECT="${PROJ_OUTPUT##*/}"
-SCHEME="${PROJECT%.xcodeproj}"
+# PROJECT="${PROJ_OUTPUT##*/}"
+SCHEME=$(xcodebuild -list | grep --after-context=1 '^\s*Schemes:' | tail -n 1)
 
-TEST_CMD="xcodebuild -project $PROJECT -scheme $SCHEME -sdk $SDK -enableCodeCoverage YES -skipUnavailableActions test"
+TEST_CMD="xcodebuild -scheme $SCHEME -sdk $SDK -enableCodeCoverage YES -skipUnavailableActions test"
 echo "Running $TEST_CMD"
 eval "$TEST_CMD"
 if [[ $? != 0 ]]; then
