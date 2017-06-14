@@ -1,7 +1,7 @@
 #! /bin/bash
 
-if [[ $TRAVIS_BRANCH != "master" && $TRAVIS_EVENT_TYPE != "cron" ]]; then
-    echo "Not master or cron build. Skipping code coverage generation"
+if [[ $TRAVIS_BRANCH != "master" && $TRAVIS_BRANCH != "develop" && $TRAVIS_EVENT_TYPE != "cron" ]]; then
+    echo "Not master, develop or cron build. Skipping code coverage generation"
     exit 0
 fi
 
@@ -36,10 +36,10 @@ if [[ $PROJ_EXIT_CODE != 0 ]]; then
     exit 1
 fi
 
-PROJECT="${PROJ_OUTPUT##*/}"
-SCHEME="${PROJECT%.xcodeproj}"
+# PROJECT="${PROJ_OUTPUT##*/}"
+SCHEME=$(xcodebuild -list | grep --after-context=1 '^\s*Schemes:' | tail -n 1)
 
-TEST_CMD="xcodebuild -project $PROJECT -scheme $SCHEME -sdk $SDK -enableCodeCoverage YES -skipUnavailableActions test"
+TEST_CMD="xcodebuild -scheme $SCHEME -sdk $SDK -enableCodeCoverage YES -skipUnavailableActions test"
 echo "Running $TEST_CMD"
 eval "$TEST_CMD"
 if [[ $? != 0 ]]; then
