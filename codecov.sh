@@ -46,10 +46,12 @@ if [[ $? != 0 ]]; then
     exit 1
 fi
 
+(( MODULE_COUNT = 0 ))
 BASH_BASE="bash <(curl -s https://codecov.io/bash)"
-for pkg in $(ls -F Sources/ 2>/dev/null | grep '/$'); do   # get only directories in "Sources/"
-    pkg=${pkg%/}                                           # remove trailing slash
-    BASH_CMD="$BASH_BASE -J '^${pkg}\$' -F '${pkg}'"
+for module in $(ls -F Sources/ 2>/dev/null | grep '/$'); do   # get only directories in "Sources/"
+    module=${module%/}                                           # remove trailing slash
+    BASH_CMD="$BASH_BASE -J '^${module}\$' -F '${module}'"
+    (( MODULE_COUNT++ ))
 
     echo "Running $BASH_CMD"
     eval "$BASH_CMD"
@@ -58,3 +60,12 @@ for pkg in $(ls -F Sources/ 2>/dev/null | grep '/$'); do   # get only directorie
         exit 1
     fi
 done
+
+if (( MODULE_COUNT == 0 )); then
+    echo "Running $BASH_BASE"
+    eval "$BASH_BASE"
+    if [[ $? != 0 ]]; then
+        echo "Error running $BASH_BASE"
+        exit 1
+    fi
+fi
