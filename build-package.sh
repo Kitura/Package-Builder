@@ -150,9 +150,9 @@ if [ "$(uname)" == "Darwin" ]; then
     sed -i '' 's/excluded:/excluded:\
   - Package-Builder/g' ${projectFolder}/.swiftlint.yml
 
-    swiftlint lint --config ${projectFolder}/.swiftlint.yml
-#  else
-#    swiftlint lint --config ${projectFolder}/Package-Builder/.swiftlint.yml
+    swiftlint lint --quiet --config ${projectFolder}/.swiftlint.yml
+  #else
+  #swiftlint lint --quiet --config ${projectFolder}/Package-Builder/.swiftlint.yml
   fi
 fi
 
