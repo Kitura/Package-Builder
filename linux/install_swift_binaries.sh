@@ -43,4 +43,3 @@ wget https://swift.org/builds/$SNAPSHOT_TYPE/$UBUNTU_VERSION_NO_DOTS/$SWIFT_SNAP
 tar xzf $SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
 export PATH=$projectFolder/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin:$PATH
 rm $SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
-swift -version

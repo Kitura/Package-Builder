@@ -21,14 +21,12 @@
 # If any commands fail, we want the shell script to exit immediately.
 set -e
 
+# Echo commands before executing them.
+set -o verbose
+
 # Install OS X system level dependencies
-brew update
-
-# Install git CLI using homebrew until Travis-CI gets off of git CLI 2.9.0 which has problems with Swift.
-brew unlink git
-brew install git
-
-brew install curl
+brew update > /dev/null
+#brew install curl
 brew install wget || brew outdated wget || brew upgrade wget
 
 # Install Swift binaries

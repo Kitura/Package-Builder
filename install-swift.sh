@@ -60,3 +60,6 @@ fi
 
 # Install Swift binaries
 source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries.sh
+
+# Output swift version
+swift -version
