@@ -26,16 +26,10 @@ set -e
 # Echo commands before executing them.
 set -o verbose
 
-sudo apt-get update
-#sudo apt-get -y install clang-3.8 lldb-3.8 libicu-dev libtool libcurl4-openssl-dev libbsd-dev build-essential libssl-dev uuid-dev # does not work on Bluemix DevOps Pipeline, using regular clang install instead
-sudo apt-get -y install clang lldb-3.8 libicu-dev libtool libcurl4-openssl-dev libbsd-dev build-essential libssl-dev uuid-dev tzdata
-
-# Remove default version of clang from PATH
-#export PATH=`echo ${PATH} | awk -v RS=: -v ORS=: '/clang/ {next} {print}'`
-
-# Set clang 3.8 as default - does not work on Bluemix DevOps Pipeline, using regular clang install instead
-#sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-3.8 100
-#sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-3.8 100
+sudo apt-get -qq update
+ # Following line does not work on Bluemix DevOps Pipeline; hence using regular clang install instead.
+#sudo apt-get -y install clang-3.8 lldb-3.8 libicu-dev libtool libcurl4-openssl-dev libbsd-dev build-essential libssl-dev uuid-dev
+sudo apt-get -y -qq install clang lldb-3.8 libicu-dev libtool libcurl4-openssl-dev libbsd-dev build-essential libssl-dev uuid-dev tzdata
 
 # Environment vars
 version=`lsb_release -d | awk '{print tolower($2) $3}'`
@@ -46,7 +40,7 @@ echo ">> Installing '${SWIFT_SNAPSHOT}'..."
 # Install Swift compiler
 cd $projectFolder
 wget https://swift.org/builds/$SNAPSHOT_TYPE/$UBUNTU_VERSION_NO_DOTS/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
-tar xzvf $SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
+tar xzf $SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
 export PATH=$projectFolder/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin:$PATH
 rm $SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
-swiftc -h
+swift -version
