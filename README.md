@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/IBM-Swift/Package-Builder.svg?branch=master)](https://travis-ci.org/IBM-Swift/Package-Builder)
+[![Build Status](https://travis-ci.org/IBM-Swift/Package-Builder.svg?branch=develop)](https://travis-ci.org/IBM-Swift/Package-Builder)
 
 # Package-Builder
 

@@ -130,7 +130,7 @@ if [ -e "${projectFolder}/Tests" ]; then
     echo ">> Finished testing Swift package."
     echo
 else
-    echo ">> No testcases exist..."
+    echo ">> No test cases found."
 fi
 
 # Clean up build artifacts

@@ -26,7 +26,7 @@ if [[ ${osName} != "osx" ]]; then
     exit 0
 fi
 
-echo "Starting code coverage generation..."
+echo ">> Starting code coverage generation..."
 uname -a
 
 SDK=macosx
@@ -40,7 +40,7 @@ fi
 CUSTOM_FILE="${projectFolder}/.swift-xcodeproj"
 
 if [[ -f "$CUSTOM_FILE" ]]; then
-  echo Running custom "$osName" xcodeproj command: $(cat "$CUSTOM_FILE")
+  echo ">> Running custom xcodeproj command: $(cat $CUSTOM_FILE)"
   PROJ_OUTPUT=$(source "$CUSTOM_FILE")
 else
   PROJ_OUTPUT=$(swift package generate-xcodeproj)
@@ -56,7 +56,7 @@ PROJECT="${PROJ_OUTPUT##*/}"
 SCHEME=$(xcodebuild -list -project $PROJECT | grep --after-context=1 '^\s*Schemes:' | tail -n 1 | xargs)
 TEST_CMD="xcodebuild -quiet -project $PROJECT -scheme $SCHEME -sdk $SDK -enableCodeCoverage YES -skipUnavailableActions test"
 
-echo "Running $TEST_CMD"
+echo ">> Running: $TEST_CMD"
 eval "$TEST_CMD"
 if [[ $? != 0 ]]; then
     exit 1
@@ -69,19 +69,19 @@ for module in $(ls -F Sources/ 2>/dev/null | grep '/$'); do   # get only directo
     BASH_CMD="$BASH_BASE -J '^${module}\$' -F '${module}'"
     (( MODULE_COUNT++ ))
 
-    echo "Running $BASH_CMD"
+    echo ">> Running: $BASH_CMD"
     eval "$BASH_CMD"
     if [[ $? != 0 ]]; then
-        echo "Error running: $BASH_CMD"
+        echo ">> Error running: $BASH_CMD"
         exit 1
     fi
 done
 
 if (( MODULE_COUNT == 0 )); then
-    echo "Running $BASH_BASE"
+    echo ">> Running: $BASH_BASE"
     eval "$BASH_BASE"
     if [[ $? != 0 ]]; then
-        echo "Error running $BASH_BASE"
+        echo ">> Error running: $BASH_BASE"
         exit 1
     fi
 fi

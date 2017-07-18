@@ -27,7 +27,7 @@ set -e
 # Install OS X system level dependencies
 brew update > /dev/null
 #brew install curl
-brew install wget || brew outdated wget || brew upgrade wget
+brew install wget > /dev/null || brew outdated wget > /dev/null || brew upgrade wget > /dev/null
 
 # Install Swift binaries
 # See http://apple.stackexchange.com/questions/72226/installing-pkg-with-terminal
