@@ -24,7 +24,7 @@
 set -e
 
 # Echo commands before executing them.
-set -o verbose
+#set -o verbose
 
 sudo apt-get -qq update
  # Following line does not work on Bluemix DevOps Pipeline; hence using regular clang install instead.

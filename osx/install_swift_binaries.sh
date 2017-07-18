@@ -22,7 +22,7 @@
 set -e
 
 # Echo commands before executing them.
-set -o verbose
+#set -o verbose
 
 # Install OS X system level dependencies
 brew update > /dev/null
