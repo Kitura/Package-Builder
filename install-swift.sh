@@ -62,4 +62,6 @@ fi
 source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries.sh
 
 # Output swift version
+echo ">> Swift version shown below: "
 swift -version
+echo 

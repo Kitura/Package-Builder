@@ -81,9 +81,10 @@ source ./Package-Builder/install-swift.sh
 
 # Show path
 echo ">> PATH: $PATH"
+echo
 
 # Build swift package
-echo ">> Building swift package..."
+echo ">> Building Swift package..."
 
 cd ${projectFolder}
 
@@ -97,7 +98,7 @@ else
   swift build
 fi
 
-echo ">> Finished building swift package..."
+echo ">> Finished building Swift package."
 
 # Copy test credentials for project if available
 if [ -e "${credentialsDir}" ]; then

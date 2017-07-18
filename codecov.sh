@@ -26,7 +26,7 @@ if [[ ${osName} != "osx" ]]; then
     exit 0
 fi
 
-echo ">> Starting code coverage generation..."
+echo ">> Starting code coverage analysis..."
 uname -a
 
 SDK=macosx
@@ -85,3 +85,5 @@ if (( MODULE_COUNT == 0 )); then
         exit 1
     fi
 fi
+
+echo ">> Finished code coverage analysis."
