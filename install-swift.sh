@@ -25,7 +25,7 @@ set -e
 
 # Determine SWIFT_SNAPSHOT for build
 if [ -z $SWIFT_SNAPSHOT ]; then
-  echo ">> No $SWIFT_SNAPSHOT set, checking for .swift-version file..."
+  echo ">> No 'SWIFT_SNAPSHOT' set, checking for .swift-version file..."
   if [ -f "$projectFolder/.swift-version" ]; then
     echo ">> Found .swift-version file."
     SWIFT_SNAPSHOT="$(cat $projectFolder/.swift-version)";
@@ -40,7 +40,7 @@ fi
 if [[ $SWIFT_SNAPSHOT == *"swift-"* ]]; then
   export SWIFT_SNAPSHOT
 else
-  echo ">> Normalizing SWIFT_VERSION from file"
+  echo ">> Normalizing SWIFT_VERSION from .swift-version file."
   add="swift-"
   export SWIFT_SNAPSHOT=$add$SWIFT_SNAPSHOT
 fi

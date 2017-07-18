@@ -29,7 +29,7 @@ set -e
 sudo apt-get -qq update
  # Following line does not work on Bluemix DevOps Pipeline; hence using regular clang install instead.
 #sudo apt-get -y install clang-3.8 lldb-3.8 libicu-dev libtool libcurl4-openssl-dev libbsd-dev build-essential libssl-dev uuid-dev
-sudo apt-get -y -qq install clang lldb-3.8 libicu-dev libtool libcurl4-openssl-dev libbsd-dev build-essential libssl-dev uuid-dev tzdata
+sudo apt-get -y -qq install clang lldb-3.8 libicu-dev libtool libcurl4-openssl-dev libbsd-dev build-essential libssl-dev uuid-dev tzdata > /dev/null
 
 # Environment vars
 version=`lsb_release -d | awk '{print tolower($2) $3}'`
