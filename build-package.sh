@@ -158,4 +158,8 @@ if [ "$(uname)" == "Darwin" ]; then
 fi
 
 # Generate test code coverage report
-sourceScript "${projectFolder}/Package-Builder/codecov.sh"
+if [ -e ${projectFolder}/.swift-codecov ]; then
+    source ${projectFolder}/.swift-codecov
+else
+    sourceScript "${projectFolder}/Package-Builder/codecov.sh"
+fi

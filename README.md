@@ -84,6 +84,9 @@ For example, see the [current test coverage](https://codecov.io/gh/IBM-Swift/Swi
 ### Custom Xcode project generation
 If for Codecov, you need a custom command to generate the Xcode project for your Swift package, you should include a `.swift-xcodeproj` file that contains your custom `swift package generate-xcodeproj` command.
 
+### Custom code coverage
+If you need to run a custom command to generate code coverage for your Swift package, you should include a `.swift-codecov` file that contains your command.
+
 ## Custom SwiftLint
 [SwiftLint](https://github.com/realm/SwiftLint) is a tool to enforce Swift style and conventions. Ensure that your team's coding standard conventions are being met by providing your own `.swiftlint.yml` in the root directory with the specified rules to be run by Package-Builder.  For now each project should provide their own `.swiftlint.yml` file to adhere to your preferences.  A default may be used in the future, but as of now no SwiftLint operations are performed unless a `.swiftlint.yml` file exists.
 
