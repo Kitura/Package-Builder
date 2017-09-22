@@ -36,12 +36,11 @@ if [[ $? != 0 ]]; then
     exit 1
 fi
 
-
-CUSTOM_FILE="${projectFolder}/.swift-xcodeproj"
-
-if [[ -f "$CUSTOM_FILE" ]]; then
-  echo ">> Running custom xcodeproj command: $(cat $CUSTOM_FILE)"
-  PROJ_OUTPUT=$(source "$CUSTOM_FILE")
+# Determine if there is a custom command for generating xcode project
+CUSTOM_XCODE_PROJ_GEN_CMD="${projectFolder}/.swift-xcodeproj"
+if [[ -f "$CUSTOM_XCODE_PROJ_GEN_CMD" ]]; then
+  echo ">> Running custom xcodeproj command: $(cat $CUSTOM_XCODE_PROJ_GEN_CMD)"
+  PROJ_OUTPUT=$(source "$CUSTOM_XCODE_PROJ_GEN_CMD")
 else
   PROJ_OUTPUT=$(swift package generate-xcodeproj)
 fi
@@ -52,12 +51,17 @@ if [[ $PROJ_EXIT_CODE != 0 ]]; then
     exit 1
 fi
 
-PROJECT="${PROJ_OUTPUT##*/}"
-SCHEME=$(xcodebuild -list -project $PROJECT | grep --after-context=1 '^\s*Schemes:' | tail -n 1 | xargs)
-TEST_CMD="xcodebuild -quiet -project $PROJECT -scheme $SCHEME -sdk $SDK -enableCodeCoverage YES -skipUnavailableActions test"
+# Determine if there is a custom command for xcode build (code coverage tests)
+if [ -e ${projectFolder}/.swift-codecov ]; then
+    XCODE_BUILD_CMD=$(cat ${projectFolder}/.swift-codecov)
+else
+    PROJECT="${PROJ_OUTPUT##*/}"
+    SCHEME=$(xcodebuild -list -project $PROJECT | grep --after-context=1 '^\s*Schemes:' | tail -n 1 | xargs)
+    XCODE_BUILD_CMD="xcodebuild -quiet -project $PROJECT -scheme $SCHEME -sdk $SDK -enableCodeCoverage YES -skipUnavailableActions test"
+fi
 
-echo ">> Running: $TEST_CMD"
-eval "$TEST_CMD"
+echo ">> Running: $XCODE_BUILD_CMD"
+eval "$XCODE_BUILD_CMD"
 if [[ $? != 0 ]]; then
     exit 1
 fi
