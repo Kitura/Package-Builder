@@ -26,9 +26,10 @@ set -e
 DEFAULT_SWIFT=swift-4.0-RELEASE
 
 function usage {
-  echo "Usage: build-package.sh -projectDir <project dir> [-credentialsDir <credentials dir>]"
+  echo "Usage: build-package.sh -projectDir <project dir> [-credentialsDir <credentials dir>] [--skip-cleanup]"
   echo -e "\t<project dir>: \t\tThe directory where the project resides."
   echo -e "\t<credentials dir>:\tThe directory where the test credentials reside. (optional)"
+  echo -e "\t--skip-cleanup:\tSkip clean up build artifacts. (optional)"
   exit 1
 }
 
@@ -42,6 +43,9 @@ do
     -credentialsDir)
       shift
       credentialsDir=$1
+      ;;
+    --skip-cleanup)
+      skipCleanup=true
       ;;
   esac
   shift
@@ -135,9 +139,14 @@ else
 fi
 
 # Clean up build artifacts
-rm -rf ${projectFolder}/.build
-rm -rf ${projectFolder}/Packages
-rm -rf ${projectFolder}/${SWIFT_SNAPSHOT}-${UBUNTU_VERSION}
+if [ ! "$skipCleanup" = "true" ] ; then
+    echo ">> Cleaning up build artifacts."
+    rm -rf ${projectFolder}/.build
+    rm -rf ${projectFolder}/Packages
+    rm -rf ${projectFolder}/${SWIFT_SNAPSHOT}-${UBUNTU_VERSION}
+else
+    echo ">> Skip cleaning up build artifacts."
+fi
 
 # Run SwiftLint to ensure Swift style and conventions
 if [ "$(uname)" == "Darwin" ]; then
