@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-# Copyright IBM Corporation 2016
+# Copyright IBM Corporation 2016,2017
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -134,12 +134,7 @@ else
     echo ">> No test cases found."
 fi
 
-# Clean up build artifacts
-rm -rf ${projectFolder}/.build
-rm -rf ${projectFolder}/Packages
-rm -rf ${projectFolder}/${SWIFT_SNAPSHOT}-${UBUNTU_VERSION}
-
-# Run SwiftLint to ensure Swift style and conventions
+# Run SwiftLint to ensure Swift style and conventions (macOS)
 if [ "$(uname)" == "Darwin" ]; then
   # Is the repository overriding the default swiftlint file in pacakge builder?
   if [ -e "${projectFolder}/.swiftlint.yml" ]; then
@@ -157,9 +152,19 @@ if [ "$(uname)" == "Darwin" ]; then
   fi
 fi
 
-# Generate test code coverage report
-if [ -e ${projectFolder}/.swift-codecov ]; then
-    source ${projectFolder}/.swift-codecov
-else
-    sourceScript "${projectFolder}/Package-Builder/codecov.sh"
+# Generate test code coverage report (macOS)
+if [ "$(uname)" == "Darwin" ]; then
+  if [ -e ${projectFolder}/.swift-codecov ]; then
+      source ${projectFolder}/.swift-codecov
+  else
+      sourceScript "${projectFolder}/Package-Builder/codecov.sh"
+  fi
 fi
+
+# Clean up build artifacts
+# If at some point we integrate this script in a toolchain/pipeline,
+# we will need to resurrect the code below
+#rm -rf ${projectFolder}/.build
+#rm -rf ${projectFolder}/Packages
+#rm -rf ${projectFolder}/${SWIFT_SNAPSHOT}-${UBUNTU_VERSION}
+# Clean up build artifacts

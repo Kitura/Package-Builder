@@ -1,7 +1,7 @@
 #! /bin/bash
 
 ##
-# Copyright IBM Corporation 2016
+# Copyright IBM Corporation 2016,2017
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,12 +17,7 @@
 ##
 
 if [[ $TRAVIS_BRANCH != "master" && $TRAVIS_BRANCH != "develop" && $TRAVIS_EVENT_TYPE != "cron" ]]; then
-    echo "Not master, develop or cron build. Skipping code coverage generation"
-    exit 0
-fi
-
-if [[ ${osName} != "osx" ]]; then
-    echo "Not a macOS build. Hence, skipping code coverage generation."
+    echo "Not master, develop or cron build. Skipping code coverage generation."
     exit 0
 fi
 
