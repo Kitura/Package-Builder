@@ -23,7 +23,7 @@
 # If any commands fail, we want the shell script to exit immediately.
 set -e
 
-DEFAULT_SWIFT=swift-4.0-RELEASE
+DEFAULT_SWIFT=swift-4.0.2-RELEASE
 
 function usage {
   echo "Usage: build-package.sh -projectDir <project dir> [-credentialsDir <credentials dir>]"
