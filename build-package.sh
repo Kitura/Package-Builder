@@ -146,6 +146,9 @@ if [ "$(uname)" == "Darwin" ]; then
     sed -i '' 's/excluded:/excluded:\
   - Package-Builder/g' ${projectFolder}/.swiftlint.yml
 
+    # Print linter version
+    echo "Running linter swiftlint version $(swiftlint version)"
+
     swiftlint lint --quiet --config ${projectFolder}/.swiftlint.yml
   #else
   #swiftlint lint --quiet --config ${projectFolder}/Package-Builder/.swiftlint.yml
