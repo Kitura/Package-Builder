@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-# Copyright IBM Corporation 2016,2017
+# Copyright IBM Corporation 2016,2017,2018
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
 # If any commands fail, we want the shell script to exit immediately.
 set -e
 
-DEFAULT_SWIFT=swift-4.0.2-RELEASE
+DEFAULT_SWIFT=swift-4.0.3-RELEASE
 
 function usage {
   echo "Usage: build-package.sh -projectDir <project dir> [-credentialsDir <credentials dir>]"

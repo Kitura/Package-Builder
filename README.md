@@ -93,7 +93,7 @@ If you need to run a custom command to generate code coverage for your Swift pac
 Please note that SwiftLint is only leveraged when executing builds on the macOS platform.
 
 ## Using different Swift versions and snapshots
-Package-Builder uses, by default, the most recent release version of Swift, which at the time of writing is `4.0.2`. If you need a specific version of Swift to build and compile your repo, you should specify that version in a `.swift-version` file in the root level of your repository.  Valid contents of this file include release and development snapshots from [Swift.org](https://swift.org/).
+Package-Builder uses, by default, the most recent release version of Swift, which at the time of writing is `4.0.3`. If you need a specific version of Swift to build and compile your repo, you should specify that version in a `.swift-version` file in the root level of your repository.  Valid contents of this file include release and development snapshots from [Swift.org](https://swift.org/).
 
 ```
 $ cat .swift-version
