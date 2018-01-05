@@ -51,8 +51,10 @@ matrix:
       env: SWIFT_SNAPSHOT=swift-3.1-DEVELOPMENT-SNAPSHOT-2017-06-14-a
 
 before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get -y -qq install clang lldb-3.8 libicu-dev libtool libcurl4-openssl-dev libbsd-dev build-essential libssl-dev uuid-dev tzdata libz-dev
   - git clone https://github.com/IBM-Swift/Package-Builder.git
-  - if [[ "$TRAVIS_OS_NAME" == "osx" && $TRAVIS_COMMIT_MESSAGE == *"Docs"* ]]; then ./ci/update.sh; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" && $TRAVIS_COMMIT_MESSAGE == *"Docs"* ]]; then ./jazzy.sh; fi
 
 script:
   # Set up build structure for test projects
