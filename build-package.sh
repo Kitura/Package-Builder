@@ -164,6 +164,11 @@ if [ "$(uname)" == "Darwin" ]; then
   fi
 fi
 
+# Generate jazzy docs (macOS)
+if [ "$(uname)" == "Darwin" ]; then
+    source ./Package-Builder/jazzy.sh
+fi
+
 # Clean up build artifacts
 # If at some point we integrate this script in a toolchain/pipeline,
 # we will need to resurrect the code below

@@ -34,11 +34,21 @@ rm $SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
 
 # Actions after Swift installation
 git remote rm origin
-git remote add origin https://SwiftDevOps:${GITHUB_TOKEN}@github.com/IBM-Swift/KituraKit
+git remote add origin https://SwiftDevOps:${GITHUB_TOKEN}@github.com/IBM-Swift/$(projectFolder)
 git fetch
 
 swift package generate-xcodeproj
 ruby --version
-sudo gem install jazzy
-cd /Users/travis/build/IBM-Swift/KituraContracts
-jazzy
+if [[ -e $(projectFolder)/.jazzy.yaml ]]; then
+    sudo gem install jazzy
+    CUSTOM_XCODE_PROJ_GEN_CMD="${projectFolder}/.swift-xcodeproj"
+    if [[ -f "$CUSTOM_XCODE_PROJ_GEN_CMD" ]]; then
+        echo ">> Running custom xcodeproj command: $(cat $CUSTOM_XCODE_PROJ_GEN_CMD)"
+        PROJ_OUTPUT=$(source "$CUSTOM_XCODE_PROJ_GEN_CMD")
+    else
+        PROJ_OUTPUT=$(swift package generate-xcodeproj)
+    fi
+    cd /Users/travis/build/IBM-Swift/$(projectFolder)
+    jazzy
+else
+fi
