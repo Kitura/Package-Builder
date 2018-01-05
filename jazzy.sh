@@ -1,5 +1,4 @@
-osName="linux"
-if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then osName="osx"; fi
+osName="osx"
 export osName
 export projectFolder=`pwd`
 projectName="$(basename $projectFolder)"
