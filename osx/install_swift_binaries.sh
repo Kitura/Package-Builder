@@ -33,7 +33,16 @@ brew install wget > /dev/null || brew outdated wget > /dev/null || brew upgrade 
 # See http://apple.stackexchange.com/questions/72226/installing-pkg-with-terminal
 # TODO: Since Xcode now includes the Swift compiler and Xcode is included in the macOS image provided
 # by Travis CI, we could add logic here that checks whether the Swift binaries are already available
-wget https://swift.org/builds/$SNAPSHOT_TYPE/xcode/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-osx.pkg
-sudo installer -pkg $SWIFT_SNAPSHOT-osx.pkg -target /
-export PATH=/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin:"${PATH}"
-rm $SWIFT_SNAPSHOT-osx.pkg
+
+# Set the var to be the version of swift that is intalled.
+SWIFT_PREINSTALL="$(swift --version | awk '{print $5}' | sed 's/[)(]//g' )"
+
+if [ "$SWIFT_PREINSTALL" == "$SWIFT_SNAPSHOT" || "$SWIFT_SNAPSHOT" == "" ]
+then
+  echo "Required Swift version is already installed, skipping download..."
+else
+  wget https://swift.org/builds/$SNAPSHOT_TYPE/xcode/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-osx.pkg
+  sudo installer -pkg $SWIFT_SNAPSHOT-osx.pkg -target /
+  export PATH=/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin:"${PATH}"
+  rm $SWIFT_SNAPSHOT-osx.pkg
+fi
