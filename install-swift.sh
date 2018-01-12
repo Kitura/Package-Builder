@@ -41,8 +41,8 @@ if [[ $SWIFT_SNAPSHOT == *"swift-"* ]]; then
   export SWIFT_SNAPSHOT
 else
   echo ">> Normalizing SWIFT_VERSION from .swift-version file."
-  add="swift-"
-  export SWIFT_SNAPSHOT=$add$SWIFT_SNAPSHOT
+  prefix="swift-"
+  export SWIFT_SNAPSHOT=$prefix$SWIFT_SNAPSHOT
 fi
 
 echo ">> SWIFT_SNAPSHOT: $SWIFT_SNAPSHOT"
