@@ -36,8 +36,9 @@ brew install wget > /dev/null || brew outdated wget > /dev/null || brew upgrade 
 
 # Set the var to be the version of swift that is intalled.
 SWIFT_PREINSTALL="$(swift --version | awk '{print $5}' | sed 's/[)(]//g' )"
+SWIFT_PREINSTALL_MINIMAL="$(swift --version | awk '{print $5}' | sed 's/[)(]//g' | cut -b 7-11 )"
 
-if [ "$SWIFT_PREINSTALL" == "$SWIFT_SNAPSHOT" || "$SWIFT_SNAPSHOT" == "" ]
+if [ "$SWIFT_PREINSTALL" == "$SWIFT_SNAPSHOT" || "$SWIFT_SNAPSHOT" == "" || "$SWIFT_PREINSTALL_MINIMAL" == "$SWIFT_SNAPSHOT" ]
 then
   echo "Required Swift version is already installed, skipping download..."
 else
