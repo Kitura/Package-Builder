@@ -94,9 +94,10 @@ if [ -e ${projectFolder}/.swift-build-macOS ] && [ "${osName}" == "osx" ]; then
 elif [ -e ${projectFolder}/.swift-build-linux ] && [ "${osName}" == "linux" ]; then
   echo Running custom Linux build command: `cat ${projectFolder}/.swift-build-linux`
   source ${projectFolder}/.swift-build-linux
-else
-  swift build
 fi
+# else
+#   swift build
+# fi
 
 echo ">> Finished building Swift package."
 
