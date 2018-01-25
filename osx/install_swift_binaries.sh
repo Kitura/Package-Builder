@@ -16,7 +16,7 @@
 # limitations under the License.
 ##
 
-# This script installs the Swift binaries on OS X.
+# This script installs the Swift binaries on macOS.
 
 # If any commands fail, we want the shell script to exit immediately.
 set -e
@@ -24,28 +24,24 @@ set -e
 # Echo commands before executing them.
 #set -o verbose
 
-# Install OS X system level dependencies
-brew update > /dev/null
-#brew install curl
-brew install wget > /dev/null || brew outdated wget > /dev/null || brew upgrade wget > /dev/null
-
 # Install Swift binaries
 # See http://apple.stackexchange.com/questions/72226/installing-pkg-with-terminal
 
 # Set the var to be the version of swift that is intalled.
 SWIFT_PREINSTALL="swift-$(swift --version | awk '{print $4}')"
-echo "Preinstalled: $SWIFT_PREINSTALL"
-echo "Snapshot type: $SNAPSHOT_TYPE"
-echo "Swift version: $SWIFT_VERSION"
-echo "Default Swift: $DEFAULT_SWIFT"
-
 extra="-RELEASE"
 
 if [[ ${SWIFT_SNAPSHOT} == ${SWIFT_PREINSTALL} ]]; then
-  echo "Required Swift version is already installed, skipping download... A"
+  echo "Required Swift version is already installed, skipping download..."
 elif [[ ${SWIFT_SNAPSHOT} == "${SWIFT_PREINSTALL}-RELEASE" ]]; then
-  echo "Required Swift version is already installed, skipping download... B"
+  echo "Required Swift version is already installed, skipping download..."
 else
+  # Install macOS system level dependencies
+  brew update > /dev/null
+  #brew install curl
+  brew install wget > /dev/null || brew outdated wget > /dev/null || brew upgrade wget > /dev/null
+
+  #Download and install Swift
   echo "Swift installed $SWIFT_PREINSTALL does not match snapshot $SNAPSHOT_TYPE."
   wget https://swift.org/builds/$SNAPSHOT_TYPE/xcode/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-osx.pkg
   sudo installer -pkg $SWIFT_SNAPSHOT-osx.pkg -target /
