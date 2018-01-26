@@ -14,16 +14,11 @@
 # limitations under the License.
 ##
 
-# Check if .jazzy.yaml exists in the root folder of the repo
-if [[ -e $(projectFolder)/.jazzy.yaml ]]; then
-    # Install jazzy
-    sudo gem install jazzy
-    # Generate xcode project
-    cat ${./generate-xcodeproj.sh)
-    # Run jazzy
-    jazzy
-    # Commit and push to relevant branch
-    git add *
-    git commit -m 'Documentation update [ci skip]'
-    git push
+# Determine if there is a custom command for generating xcode project
+CUSTOM_XCODE_PROJ_GEN_CMD="${projectFolder}/.swift-xcodeproj"
+if [[ -f "$CUSTOM_XCODE_PROJ_GEN_CMD" ]]; then
+  echo ">> Running custom xcodeproj command: $(cat $CUSTOM_XCODE_PROJ_GEN_CMD)"
+  PROJ_OUTPUT=$(source "$CUSTOM_XCODE_PROJ_GEN_CMD")
+else
+  PROJ_OUTPUT=$(swift package generate-xcodeproj)
 fi

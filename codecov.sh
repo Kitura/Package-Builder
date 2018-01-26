@@ -34,26 +34,14 @@ fi
 # Determine if there is a custom command for generating xcode project
 CUSTOM_XCODE_PROJ_GEN_CMD="${projectFolder}/.swift-xcodeproj"
 if [[ -f "$CUSTOM_XCODE_PROJ_GEN_CMD" ]]; then
-  echo ">> Running custom xcodeproj command: $(cat $CUSTOM_XCODE_PROJ_GEN_CMD)"
-  PROJ_OUTPUT=$(source "$CUSTOM_XCODE_PROJ_GEN_CMD")
+    echo ">> Running custom xcodeproj command: $(cat $CUSTOM_XCODE_PROJ_GEN_CMD)"
+    PROJ_OUTPUT=$(source "$CUSTOM_XCODE_PROJ_GEN_CMD")
 else
-  PROJ_OUTPUT=$(swift package generate-xcodeproj)
-fi
-
-PROJ_EXIT_CODE=$?
-echo "$PROJ_OUTPUT"
-if [[ $PROJ_EXIT_CODE != 0 ]]; then
-    exit 1
+    PROJ_OUTPUT=$(swift package generate-xcodeproj)
 fi
 
 # Determine if there is a custom command for xcode build (code coverage tests)
-if [ -e ${projectFolder}/.swift-codecov ]; then
-    XCODE_BUILD_CMD=$(cat ${projectFolder}/.swift-codecov)
-else
-    PROJECT="${PROJ_OUTPUT##*/}"
-    SCHEME=$(xcodebuild -list -project $PROJECT | grep --after-context=1 '^\s*Schemes:' | tail -n 1 | xargs)
-    XCODE_BUILD_CMD="xcodebuild -quiet -project $PROJECT -scheme $SCHEME -sdk $SDK -enableCodeCoverage YES -skipUnavailableActions test"
-fi
+cat ${./generate-xcodeproj.sh)
 
 echo ">> Running: $XCODE_BUILD_CMD"
 eval "$XCODE_BUILD_CMD"
