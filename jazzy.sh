@@ -19,7 +19,7 @@ if [[ -e $(projectFolder)/.jazzy.yaml ]]; then
     # Install jazzy
     sudo gem install jazzy
     # Generate xcode project
-    cat ${./generate-xcodeproj.sh)
+    source ./Package-Builder/generate-xcodeproj.sh
     # Run jazzy
     jazzy
     # Commit and push to relevant branch
