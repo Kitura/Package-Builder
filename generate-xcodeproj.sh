@@ -22,3 +22,9 @@ if [[ -f "$CUSTOM_XCODE_PROJ_GEN_CMD" ]]; then
 else
   PROJ_OUTPUT=$(swift package generate-xcodeproj)
 fi
+
+PROJ_EXIT_CODE=$?
+echo "$PROJ_OUTPUT"
+if [[ $PROJ_EXIT_CODE != 0 ]]; then
+  exit 1
+fi
