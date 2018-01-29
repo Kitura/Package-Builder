@@ -32,7 +32,7 @@ if [[ $? != 0 ]]; then
 fi
 
 # Determine if there is a custom command for generating xcode project
-cat $(./Package-Builder/generate-xcodeproj.sh)
+source ./Package-Builder/generate-xcodeproj.sh
 
 # Determine if there is a custom command for xcode build (code coverage tests)
 if [ -e ${projectFolder}/.swift-codecov ]; then
