@@ -166,7 +166,7 @@ fi
 
 # Generate jazzy docs (macOS)
 if [ "$(uname)" == "Darwin" ]; then
-    source ./Package-Builder/jazzy.sh
+    sourceScript "${projectFolder}/Package-Builder/jazzy.sh"
 fi
 
 # Clean up build artifacts

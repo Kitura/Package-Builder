@@ -1,5 +1,5 @@
 ##
-# Copyright IBM Corporation 2016,2017
+# Copyright IBM Corporation 2016,2017,2018
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,10 +16,16 @@
 
 # Check if .jazzy.yaml exists in the root folder of the repo
 if [[ -e $(projectFolder)/.jazzy.yaml ]]; then
+
+    if [[ $TRAVIS_BRANCH != "master" ]]; then
+        echo "Not master. Skipping jazzy generation."
+        exit 0
+    fi
+
     # Install jazzy
     sudo gem install jazzy
     # Generate xcode project
-    source ./Package-Builder/generate-xcodeproj.sh
+    sourceScript "${projectFolder}/generate-xcodeproj.sh"
     # Run jazzy
     jazzy
     # Commit and push to relevant branch
