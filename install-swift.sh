@@ -58,8 +58,51 @@ else
   SWIFT_SNAPSHOT="${SWIFT_SNAPSHOT}-RELEASE"
 fi
 
-# Install Swift binaries
-source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries.sh
+# Swift has to be installed to run commands, if Swift isn't installed, skip checks.
+if [[ $(swift --version) ]]; then
+  # Get the version already installed, if any. OS dependant.
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    SWIFT_PREINSTALL="swift-$(swift --version | awk '{print $4}')"
+  elif [[ "$OSTYPE" == "linux-gnu" ]]; then
+    SWIFT_PREINSTALL="swift-$(swift --version | awk '{print $3}')"
+  else
+    echo "Unsupported OS. Exiting..."
+    exit 1
+  fi
+
+  # If the snapshot is a development one, extract the swift-versionNumber for use later on.
+  if [[ "$SWIFT_SNAPSHOT" = *"DEVELOPMENT"* ]]; then
+    if [[ "$SWIFT_SNAPSHOT" = "swift-DEVELOPMENT"* ]]; then
+      SWIFT_SNAPSHOT_SIMPLE="$(echo ${SWIFT_SNAPSHOT} | sed 's/D.*//')"
+      if [[ "$OSTYPE" == "darwin"* ]]; then
+        SWIFT_SNAPSHOT_SIMPLE="${SWIFT_SNAPSHOT_SIMPLE%?}-$(swift --version | awk '{print $4}')"
+      elif [[ "$OSTYPE" == "linux-gnu" ]]; then
+        SWIFT_SNAPSHOT_SIMPLE="${SWIFT_SNAPSHOT_SIMPLE%?}-$(swift --version | awk '{print $3}')"
+      fi
+    else
+      SWIFT_SNAPSHOT_SIMPLE="$(echo ${SWIFT_SNAPSHOT} | sed 's/D.*//')"
+      SWIFT_SNAPSHOT_SIMPLE=${SWIFT_SNAPSHOT_SIMPLE%?}
+    fi
+  fi
+fi
+
+# Checks for if the needed version of swift matches the one already on the system.
+if [[ $SWIFT_PREINSTALL == "" ]]; then
+  echo "Swift is not installed."
+  source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries.sh
+else
+  if [[ ${SWIFT_SNAPSHOT} == ${SWIFT_PREINSTALL} ]]; then
+    echo "Required Swift version is already installed, skipping download..."
+  elif [[ ${SWIFT_SNAPSHOT} == "${SWIFT_PREINSTALL}-RELEASE" ]]; then
+    echo "Required Swift version is already installed, skipping download..."
+  elif [[ "${SWIFT_SNAPSHOT_SIMPLE}-dev" == "${SWIFT_PREINSTALL}" || "${SWIFT_SNAPSHOT_SIMPLE}" == "${SWIFT_PREINSTALL}" ]]; then
+    echo "SWIFT_PREINSTALL: $SWIFT_PREINSTALL, SWIFT_SNAPSHOT: $SWIFT_SNAPSHOT, SWIFT_SNAPSHOT_SIMPLE: $SWIFT_SNAPSHOT_SIMPLE"
+    echo "Swift development snapshot installed, version number matches but it could be out of date. Skipping download..."
+  else
+    # Starts script to install Swift.
+    source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries.sh
+  fi
+fi
 
 # Output swift version
 echo ">> Swift version shown below: "

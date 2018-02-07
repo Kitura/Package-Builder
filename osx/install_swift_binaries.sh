@@ -27,24 +27,14 @@ set -e
 # Install Swift binaries
 # See http://apple.stackexchange.com/questions/72226/installing-pkg-with-terminal
 
-# Set the var to be the version of swift that is intalled.
-SWIFT_PREINSTALL="swift-$(swift --version | awk '{print $4}')"
-extra="-RELEASE"
+# Install macOS system level dependencies
+brew update > /dev/null
+#brew install curl
+brew install wget > /dev/null || brew outdated wget > /dev/null || brew upgrade wget > /dev/null
 
-if [[ ${SWIFT_SNAPSHOT} == ${SWIFT_PREINSTALL} ]]; then
-  echo "Required Swift version is already installed, skipping download..."
-elif [[ ${SWIFT_SNAPSHOT} == "${SWIFT_PREINSTALL}-RELEASE" ]]; then
-  echo "Required Swift version is already installed, skipping download..."
-else
-  # Install macOS system level dependencies
-  brew update > /dev/null
-  #brew install curl
-  brew install wget > /dev/null || brew outdated wget > /dev/null || brew upgrade wget > /dev/null
-
-  #Download and install Swift
-  echo "Swift installed $SWIFT_PREINSTALL does not match snapshot $SNAPSHOT_TYPE."
-  wget https://swift.org/builds/$SNAPSHOT_TYPE/xcode/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-osx.pkg
-  sudo installer -pkg $SWIFT_SNAPSHOT-osx.pkg -target /
-  export PATH=/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin:"${PATH}"
-  rm $SWIFT_SNAPSHOT-osx.pkg
-fi
+#Download and install Swift
+echo "Swift installed $SWIFT_PREINSTALL does not match snapshot $SWIFT_SNAPSHOT."
+wget https://swift.org/builds/$SNAPSHOT_TYPE/xcode/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-osx.pkg
+sudo installer -pkg $SWIFT_SNAPSHOT-osx.pkg -target /
+export PATH=/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin:"${PATH}"
+rm $SWIFT_SNAPSHOT-osx.pkg
