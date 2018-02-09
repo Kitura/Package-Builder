@@ -97,9 +97,6 @@ elif [ -e ${projectFolder}/.swift-build-linux ] && [ "${osName}" == "linux" ]; t
 else
   swift build
 fi
-# else
-#   swift build
-# fi
 
 echo ">> Finished building Swift package."
 
