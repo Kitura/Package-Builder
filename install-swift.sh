@@ -95,9 +95,6 @@ else
     echo "Required Swift version is already installed, skipping download..."
   elif [[ ${SWIFT_SNAPSHOT} == "${SWIFT_PREINSTALL}-RELEASE" ]]; then
     echo "Required Swift version is already installed, skipping download..."
-  elif [[ "${SWIFT_SNAPSHOT_SIMPLE}-dev" == "${SWIFT_PREINSTALL}" || "${SWIFT_SNAPSHOT_SIMPLE}" == "${SWIFT_PREINSTALL}" ]]; then
-    echo "SWIFT_PREINSTALL: $SWIFT_PREINSTALL, SWIFT_SNAPSHOT: $SWIFT_SNAPSHOT, SWIFT_SNAPSHOT_SIMPLE: $SWIFT_SNAPSHOT_SIMPLE"
-    echo "Swift development snapshot installed, version number matches but it could be out of date. Skipping download..."
   else
     # Starts script to install Swift.
     source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries.sh
