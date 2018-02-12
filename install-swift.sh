@@ -70,22 +70,6 @@ if [[ $(swift --version) ]]; then
     exit 1
   fi
 
-  # If the snapshot is a development one, extract the swift-versionNumber for use later on.
-  if [[ "$SWIFT_SNAPSHOT" = *"DEVELOPMENT"* ]]; then
-    if [[ "$SWIFT_SNAPSHOT" = "swift-DEVELOPMENT"* ]]; then
-      SWIFT_SNAPSHOT_SIMPLE="$(echo ${SWIFT_SNAPSHOT} | sed 's/D.*//')"
-      if [[ "$OSTYPE" == "darwin"* ]]; then
-        SWIFT_SNAPSHOT_SIMPLE="${SWIFT_SNAPSHOT_SIMPLE%?}-$(swift --version | awk '{print $4}')"
-      elif [[ "$OSTYPE" == "linux-gnu" ]]; then
-        SWIFT_SNAPSHOT_SIMPLE="${SWIFT_SNAPSHOT_SIMPLE%?}-$(swift --version | awk '{print $3}')"
-      fi
-    else
-      SWIFT_SNAPSHOT_SIMPLE="$(echo ${SWIFT_SNAPSHOT} | sed 's/D.*//')"
-      SWIFT_SNAPSHOT_SIMPLE=${SWIFT_SNAPSHOT_SIMPLE%?}
-    fi
-  fi
-fi
-
 # Checks for if the needed version of swift matches the one already on the system.
 if [[ $SWIFT_PREINSTALL == "" ]]; then
   echo "Swift is not installed."
