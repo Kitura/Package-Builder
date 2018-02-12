@@ -16,7 +16,7 @@
 # limitations under the License.
 ##
 
-# This script installs the Swift binaries on OS X.
+# This script installs the Swift binaries on macOS.
 
 # If any commands fail, we want the shell script to exit immediately.
 set -e
@@ -24,15 +24,16 @@ set -e
 # Echo commands before executing them.
 #set -o verbose
 
-# Install OS X system level dependencies
+# Install Swift binaries
+# See http://apple.stackexchange.com/questions/72226/installing-pkg-with-terminal
+
+# Install macOS system level dependencies
 brew update > /dev/null
 #brew install curl
 brew install wget > /dev/null || brew outdated wget > /dev/null || brew upgrade wget > /dev/null
 
-# Install Swift binaries
-# See http://apple.stackexchange.com/questions/72226/installing-pkg-with-terminal
-# TODO: Since Xcode now includes the Swift compiler and Xcode is included in the macOS image provided
-# by Travis CI, we could add logic here that checks whether the Swift binaries are already available
+#Download and install Swift
+echo "Swift installed $SWIFT_PREINSTALL does not match snapshot $SWIFT_SNAPSHOT."
 wget https://swift.org/builds/$SNAPSHOT_TYPE/xcode/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-osx.pkg
 sudo installer -pkg $SWIFT_SNAPSHOT-osx.pkg -target /
 export PATH=/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin:"${PATH}"
