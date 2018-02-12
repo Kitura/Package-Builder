@@ -69,6 +69,7 @@ if [[ $(swift --version) ]]; then
     echo "Unsupported OS. Exiting..."
     exit 1
   fi
+fi
 
 # Checks for if the needed version of swift matches the one already on the system.
 if [[ $SWIFT_PREINSTALL == "" ]]; then
