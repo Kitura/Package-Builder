@@ -15,7 +15,9 @@
 ##
 
 # Check if .jazzy.yaml exists in the root folder of the repo
-if [[ -e $(projectFolder)/.jazzy.yaml ]]; then
+#cd ..
+export projectFolder=`pwd`
+if [ -e ./$(projectFolder)/.jazzy.yaml ] || [ -e $(projectFolder)/tests/library/.jazzy.yaml ]; then
 
     if [[ $TRAVIS_BRANCH != "master" ]]; then
         echo "Not master. Skipping jazzy generation."
