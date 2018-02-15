@@ -15,9 +15,7 @@
 ##
 
 # Check if .jazzy.yaml exists in the root folder of the repo
-#cd ..
-export projectFolder=`pwd`
-if [ -e ./$(projectFolder)/.jazzy.yaml ] || [ -e $(projectFolder)/tests/library/.jazzy.yaml ]; then
+if [ -e ./$(projectFolder)/.jazzy.yaml ]; then
 
     if [[ $TRAVIS_BRANCH != "master" ]]; then
         echo "Not master. Skipping jazzy generation."
@@ -30,8 +28,11 @@ if [ -e ./$(projectFolder)/.jazzy.yaml ] || [ -e $(projectFolder)/tests/library/
     sourceScript "${projectFolder}/generate-xcodeproj.sh"
     # Run jazzy
     jazzy
+    # Configure endpoint
+    REPO=`git config remote.origin.url`
+    AUTH_REPO=${REPO/https:\/\/github.com\//https://${GITHUB_TOKEN}@github.com/}
     # Commit and push to relevant branch
     git add *
     git commit -m 'Documentation update [ci skip]'
-    git push
+    git push $AUTH_REPO master
 fi
