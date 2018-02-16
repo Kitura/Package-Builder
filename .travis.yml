@@ -51,4 +51,18 @@ matrix:
 
 script:
   # Set up build structure for test projects
-  - /tests/execute_tests.sh
+  - mv tests/library ../library
+  - mv tests/executable ../executable
+  - cp -R ./ ../library/Package-Builder
+  - cp -R ./ ../executable/Package-Builder
+  - cp -R ../executable ../executable-no-swift-version
+  - rm ../executable-no-swift-version/.swift-version
+  # This tests Package-Builder with a library
+  - cd ../library
+  - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR/library
+  # This tests Package-Builder with an executable
+  - cd ../executable
+  - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR/executable
+  # Test building a package that does not have a .swift-version file
+  - cd ../executable-no-swift-version
+  - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR/executable-no-swift-version
