@@ -28,11 +28,14 @@ if [ -e ./$(projectFolder)/.jazzy.yaml ]; then
     sourceScript "${projectFolder}/generate-xcodeproj.sh"
     # Run jazzy
     jazzy
+    
     # Configure endpoint
     REPO=`git config remote.origin.url`
     AUTH_REPO=${REPO/https:\/\/github.com\//https://${GITHUB_TOKEN}@github.com/}
+    
     # Commit and push to relevant branch
-    git add *
+    git checkout master
+    git add docs/.
     git commit -m 'Documentation update [ci skip]'
     git push $AUTH_REPO master
 fi
