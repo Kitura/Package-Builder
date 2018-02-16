@@ -165,7 +165,7 @@ if [ "$(uname)" == "Darwin" ]; then
 fi
 
 # Generate jazzy docs (macOS)
-if [ "$(uname)" == "Darwin" ] && [ -e "${credentialsDir}" ]; then
+if [ "$(uname)" == "Darwin" ] && [ ! -z "${GITHUB_TOKEN}" ]; then
     sourceScript "${projectFolder}/Package-Builder/jazzy.sh"
 fi
 
