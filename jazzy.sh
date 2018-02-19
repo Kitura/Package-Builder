@@ -14,10 +14,15 @@
 # limitations under the License.
 ##
 
+# Check that we have credentials
+if [ -z "${GITHUB_USERNAME}" ] && [ -z "${GITHUB_PASSWORD}" ]; then
+    echo "Supplied jazzy docs flag, but credentials were not provided."
+    echo "Expected: GITHUB_USER && GITHUB_PASSWORD Env variables."
+    exit 1
+fi
+
 # Check if .jazzy.yaml exists in the root folder of the repo
-#cd ..
-export projectFolder=`pwd`
-if [ -e ./$(projectFolder)/.jazzy.yaml ] || [ -e $(projectFolder)/tests/library/.jazzy.yaml ]; then
+if [ -e "${projectFolder}"/.jazzy.yaml ]; then
 
     if [[ $TRAVIS_BRANCH != "master" ]]; then
         echo "Not master. Skipping jazzy generation."
@@ -28,10 +33,16 @@ if [ -e ./$(projectFolder)/.jazzy.yaml ] || [ -e $(projectFolder)/tests/library/
     sudo gem install jazzy
     # Generate xcode project
     sourceScript "${projectFolder}/generate-xcodeproj.sh"
+    # Commit and push to relevant branch
+    git checkout master
     # Run jazzy
     jazzy
-    # Commit and push to relevant branch
-    git add *
+
+    # Configure endpoint
+    REPO=`git config remote.origin.url`
+    AUTH_REPO=${REPO/https:\/\/github.com\//https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@github.com/}
+  
+    git add docs/.
     git commit -m 'Documentation update [ci skip]'
-    git push
+    git push $AUTH_REPO master
 fi
