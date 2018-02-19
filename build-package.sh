@@ -24,9 +24,10 @@
 set -e
 
 DEFAULT_SWIFT=swift-4.0.3-RELEASE
+docs=false
 
 function usage {
-  echo "Usage: build-package.sh -projectDir <project dir> [-credentialsDir <credentials dir>]"
+  echo "Usage: build-package.sh -projectDir <project dir> [-credentialsDir <credentials dir>] [-docs]"
   echo -e "\t<project dir>: \t\tThe directory where the project resides."
   echo -e "\t<credentials dir>:\tThe directory where the test credentials reside. (optional)"
   exit 1
@@ -42,6 +43,9 @@ do
     -credentialsDir)
       shift
       credentialsDir=$1
+      ;;
+    -docs)
+      docs=true
       ;;
   esac
   shift
@@ -164,6 +168,10 @@ if [ "$(uname)" == "Darwin" ]; then
   fi
 fi
 
+# Generate jazzy docs (macOS)
+if [ "${docs}" == "true" ] && [ "$(uname)" == "Darwin" ]; then
+    sourceScript "${projectFolder}/Package-Builder/jazzy.sh"
+fi
 # Clean up build artifacts
 # If at some point we integrate this script in a toolchain/pipeline,
 # we will need to resurrect the code below
