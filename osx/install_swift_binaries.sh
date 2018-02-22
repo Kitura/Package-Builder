@@ -24,6 +24,8 @@ set -e
 # Echo commands before executing them.
 #set -o verbose
 
+echo ">> Running $(basename "$0")"
+
 # Install Swift binaries
 # See http://apple.stackexchange.com/questions/72226/installing-pkg-with-terminal
 
