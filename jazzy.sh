@@ -31,8 +31,6 @@ if [ -e ./$(projectFolder) ]; then
     sudo gem install jazzy
     # Generate xcode project
     sourceScript "${projectFolder}/generate-xcodeproj.sh"
-    # Commit and push to relevant branch
-    git checkout master
     # Run jazzy
     jazzy
 
