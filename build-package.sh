@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-# Copyright IBM Corporation 2016,2017
+# Copyright IBM Corporation 2016,2017,2018
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,12 +23,13 @@
 # If any commands fail, we want the shell script to exit immediately.
 set -e
 
-DEFAULT_SWIFT=swift-4.0-RELEASE
+DEFAULT_SWIFT=swift-4.0.3-RELEASE
+docs=false
 
 function usage {
-  echo "Usage: build-package.sh -projectDir <project dir> [-credentialsDir <credentials dir>]"
-  echo -e "\t<project dir>: \t\tThe directory where the project resides."
-  echo -e "\t<credentials dir>:\tThe directory where the test credentials reside. (optional)"
+  echo "Usage: build-package.sh -projectDir <project dir> [-credentialsDir <credentials dir>] [-docs]"
+  echo "\t<project dir>: \t\tThe directory where the project resides."
+  echo "\t<credentials dir>:\tThe directory where the test credentials reside. (optional)"
   exit 1
 }
 
@@ -42,6 +43,9 @@ do
     -credentialsDir)
       shift
       credentialsDir=$1
+      ;;
+    -docs)
+      docs=true
       ;;
   esac
   shift
@@ -146,6 +150,9 @@ if [ "$(uname)" == "Darwin" ]; then
     sed -i '' 's/excluded:/excluded:\
   - Package-Builder/g' ${projectFolder}/.swiftlint.yml
 
+    # Print linter version
+    echo "Running linter swiftlint version $(swiftlint version)"
+
     swiftlint lint --quiet --config ${projectFolder}/.swiftlint.yml
   #else
   #swiftlint lint --quiet --config ${projectFolder}/Package-Builder/.swiftlint.yml
@@ -159,6 +166,26 @@ if [ "$(uname)" == "Darwin" ]; then
   else
       sourceScript "${projectFolder}/Package-Builder/codecov.sh"
   fi
+fi
+
+# Generate jazzy docs (macOS)
+#if [ "${docs}" == "true" ] && [ "$(uname)" == "Darwin" ]; then
+#sourceScript "${projectFolder}/Package-Builder/jazzy.sh"
+#fi
+
+# Generate jazzy docs (macOS) where the 'documentation' tag exists on the issue label
+if [ "$(uname)" == "darwin"* ] && [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
+    if  [ -z "${GITHUB_USERNAME}" ] && [ -z "${GITHUB_PASSWORD}" ]; then
+        response= curl -s -X GET echo "https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@api.github.com/repos/${TRAVIS_REPO_SLUG}/issues/${TRAVIS_PULL_REQUEST}/labels" | sed 's/\\\\\//\//g' | sed 's/[{}]//g' | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | sed 's/\"\:\"/\|/g' | sed 's/[\,]/ /g' | sed 's/\"//g' | grep -w 'name'
+        if [[ $response = *"jazzy-doc"* ]]; then
+            echo "Documentation tag exists for this repo"
+            sourceScript "${projectFolder}/Package-Builder/jazzy.sh"
+        fi
+    else
+        echo "Expected: GITHUB_USER && GITHUB_PASSWORD Env variables."
+    fi
+else
+    echo "Expected this to be a pull request. Skipping Jazzy docs generation."
 fi
 
 # Clean up build artifacts

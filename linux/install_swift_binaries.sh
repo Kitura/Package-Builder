@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-# Copyright IBM Corporation 2016
+# Copyright IBM Corporation 2016,2018
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@ set -e
 
 # Echo commands before executing them.
 #set -o verbose
+
+echo ">> Running ${BASH_SOURCE[0]}"
 
 sudo apt-get -qq update > /dev/null
 sudo apt-get -y -qq install clang lldb-3.8 libicu-dev libtool libcurl4-openssl-dev libbsd-dev build-essential libssl-dev uuid-dev tzdata libz-dev > /dev/null
