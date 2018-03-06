@@ -40,5 +40,5 @@ if [ -e ./$(projectFolder) ]; then
   
     git add docs/.
     git commit -m 'Documentation update [ci skip]'
-    git push $AUTH_REPO master
+    git push
 fi
