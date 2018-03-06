@@ -25,7 +25,7 @@ fi
 #cd ..
 export projectFolder=`pwd`
 
-if [ -e ./$(projectFolder)/.jazzy.yaml ] || [ -e $(projectFolder)/tests/library/.jazzy.yaml ]; then
+if [ -e ./$(projectFolder) ]; then
 
     if [[ $TRAVIS_BRANCH != "master" ]]; then
         echo "Not master. Skipping jazzy generation."
