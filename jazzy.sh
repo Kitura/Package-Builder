@@ -27,11 +27,6 @@ export projectFolder=`pwd`
 
 if [ -e ./$(projectFolder) ]; then
 
-    if [[ $TRAVIS_BRANCH != "master" ]]; then
-        echo "Not master. Skipping jazzy generation."
-        exit 0
-    fi
-
     # Install jazzy
     sudo gem install jazzy
     # Generate xcode project
