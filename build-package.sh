@@ -28,8 +28,8 @@ docs=false
 
 function usage {
   echo "Usage: build-package.sh -projectDir <project dir> [-credentialsDir <credentials dir>] [-docs]"
-  echo "\t<project dir>: \t\tThe directory where the project resides."
-  echo "\t<credentials dir>:\tThe directory where the test credentials reside. (optional)"
+  echo -e "\t<project dir>: \t\tThe directory where the project resides."
+  echo -e "\t<credentials dir>:\tThe directory where the test credentials reside. (optional)"
   exit 1
 }
 
