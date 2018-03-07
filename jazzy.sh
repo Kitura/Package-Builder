@@ -22,19 +22,15 @@ if [ -z "${GITHUB_USERNAME}" ] && [ -z "${GITHUB_PASSWORD}" ]; then
 fi
 
 # Check if .jazzy.yaml exists in the root folder of the repo
-if [ -e "${projectFolder}"/.jazzy.yaml ]; then
+#cd ..
+export projectFolder=`pwd`
 
-    if [[ $TRAVIS_BRANCH != "master" ]]; then
-        echo "Not master. Skipping jazzy generation."
-        exit 0
-    fi
+if [ -e ./$(projectFolder) ]; then
 
     # Install jazzy
     sudo gem install jazzy
     # Generate xcode project
     sourceScript "${projectFolder}/generate-xcodeproj.sh"
-    # Commit and push to relevant branch
-    git checkout master
     # Run jazzy
     jazzy
 
@@ -44,5 +40,5 @@ if [ -e "${projectFolder}"/.jazzy.yaml ]; then
   
     git add docs/.
     git commit -m 'Documentation update [ci skip]'
-    git push $AUTH_REPO master
+    git push
 fi
