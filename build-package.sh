@@ -170,15 +170,18 @@ fi
 
 # Generate jazzy docs (macOS) where the 'documentation' tag exists on the issue label
 if [ "$(uname)" == "Darwin" ] && [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
+    echo "This is a pull request, running on Darwin"
     if  [ -z "${GITHUB_USERNAME}" ] && [ -z "${GITHUB_PASSWORD}" ]; then
-
+        echo "Github credentials are available"
         # Obtain the name of the tag from the GitHub repo using the GitHub Username and Password, discarding unnecessary text around the retrieved string
         response= curl -s -X GET echo "https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@api.github.com/repos/${TRAVIS_REPO_SLUG}/issues/${TRAVIS_PULL_REQUEST}/labels" | sed 's/\\\\\//\//g' | sed 's/[{}]//g' | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | sed 's/\"\:\"/\|/g' | sed 's/[\,]/ /g' | sed 's/\"//g' | grep -w 'name'
-
+        echo "Tags retreived: $response"
         # Check if the response tag name contains the name 'jazzy-doc'
-        if [[ $response = *"jazzy-doc"* ]]; then
-            echo "Documentation tag exists for this repo"
+        if [[ $response == *"jazzy-doc"* ]]; then
+            echo "Documentation tag jazzy-doc exists for this repo"
             sourceScript "${projectFolder}/Package-Builder/jazzy.sh"
+        else
+            echo "No jazzy-doc tag found"
         fi
 
     else
