@@ -169,7 +169,7 @@ if [ "$(uname)" == "Darwin" ]; then
 fi
 
 # Generate jazzy docs (macOS) where the 'documentation' tag exists on the issue label
-if [ "$(uname)" == "darwin"* ] && [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
+if [ "$(uname)" == "Darwin" ] && [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
     if  [ -z "${GITHUB_USERNAME}" ] && [ -z "${GITHUB_PASSWORD}" ]; then
 
         # Obtain the name of the tag from the GitHub repo using the GitHub Username and Password, discarding unnecessary text around the retrieved string
