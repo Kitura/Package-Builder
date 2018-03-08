@@ -170,13 +170,13 @@ fi
 
 # Generate jazzy docs (macOS) where the 'documentation' tag exists on the issue label
 if [ "$(uname)" == "Darwin" ] && [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
-    if  [ -z "${GITHUB_USERNAME}" ] && [ -z "${GITHUB_PASSWORD}" ]; then
+    if  [ -n "${GITHUB_USERNAME}" -a -n "${GITHUB_PASSWORD}" ]; then
         echo "Checking PR for docs generation tag"
         # Obtain the name of the tag from the GitHub repo using the GitHub Username and Password, discarding unnecessary text around the retrieved string
         jsonResponse=`curl -s -X GET https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@api.github.com/repos/${TRAVIS_REPO_SLUG}/issues/${TRAVIS_PULL_REQUEST}/labels`
         echo "Label data retreived: $jsonResponse"
-        # candidateTags=`echo $jsonResponse | sed 's/\\\\\//\//g' | sed 's/[{}]//g' | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | sed 's/\"\:\"/\|/g' | sed 's/[\,]/ /g' | sed 's/\"//g' | grep -w 'name'`
         labelNames=`echo "$jsonResponse" | grep '"name"'`
+        # Extract the label name from the "name": "value" pair. This assumes each pair is on a separate line.
         candidateTags=`echo "$labelNames" | sed -e's#.*"name" *: *"\([^"]*\)".*#\1#'`
         echo "Labels: " $candidateTags
         # Check if the response tag name contains the name 'jazzy-doc'
