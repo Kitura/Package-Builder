@@ -177,9 +177,8 @@ if [ "$(uname)" == "Darwin" ] && [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
         echo "Label data retreived: $jsonResponse"
         # candidateTags=`echo $jsonResponse | sed 's/\\\\\//\//g' | sed 's/[{}]//g' | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | sed 's/\"\:\"/\|/g' | sed 's/[\,]/ /g' | sed 's/\"//g' | grep -w 'name'`
         labelNames=`echo "$jsonResponse" | grep '"name"'`
-        echo "Lines containing labels: $labelNames"
         candidateTags=`echo "$labelNames" | sed -e's#.*"name" *: *"\([^"]*\)".*#\1#'`
-        echo "Label names: $candidateTags"
+        echo "Labels: " $candidateTags
         # Check if the response tag name contains the name 'jazzy-doc'
         if [[ $candidateTags == *"jazzy-doc"* ]]; then
             echo "Documentation tag jazzy-doc exists for this repo"
