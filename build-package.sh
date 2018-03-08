@@ -173,11 +173,13 @@ if [ "$(uname)" == "Darwin" ] && [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
     if  [ -z "${GITHUB_USERNAME}" ] && [ -z "${GITHUB_PASSWORD}" ]; then
         echo "Checking PR for docs generation tag"
         # Obtain the name of the tag from the GitHub repo using the GitHub Username and Password, discarding unnecessary text around the retrieved string
-        jsonResponse=`curl -s -X GET https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@api.github.com/repos/${TRAVIS_REPO_SLUG}/issues/${TRAVIS_PULL_REQUEST}/labels | grep '"name"'`
+        jsonResponse=`curl -s -X GET https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@api.github.com/repos/${TRAVIS_REPO_SLUG}/issues/${TRAVIS_PULL_REQUEST}/labels`
+        echo "Label data retreived: $jsonResponse"
         # candidateTags=`echo $jsonResponse | sed 's/\\\\\//\//g' | sed 's/[{}]//g' | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | sed 's/\"\:\"/\|/g' | sed 's/[\,]/ /g' | sed 's/\"//g' | grep -w 'name'`
-        candidateTags=`echo $jsonResponse | sed -e's#.*"name" *: *"\([^"]*\).*"#\1#'`
-        echo "Tags retreived: $jsonResponse"
-        echo "Converted to: $candidateTags"
+        labelNames=`echo "$jsonResponse" | grep '"name"'`
+        echo "Lines containing labels: $labelNames"
+        candidateTags=`echo "$labelNames" | sed -e's#.*"name" *: *"\([^"]*\)".*#\1#'`
+        echo "Label names: $candidateTags"
         # Check if the response tag name contains the name 'jazzy-doc'
         if [[ $candidateTags == *"jazzy-doc"* ]]; then
             echo "Documentation tag jazzy-doc exists for this repo"
