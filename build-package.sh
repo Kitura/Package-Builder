@@ -168,7 +168,7 @@ if [ "$(uname)" == "Darwin" ]; then
   fi
 fi
 
-# Generate jazzy docs (MacOS) for Pull Requests that have the 'jazzy-doc' label.
+# Generate jazzy docs (macOS) for Pull Requests that have the 'jazzy-doc' label.
 # The docs will be generated and pushed as a new [ci skip] commit to the PR branch.
 # Suitable credentials are required for this purpose. These should be defined in
 # the repo's Travis configuration as GITHUB_USERNAME and GITHUB_PASSWORD.
