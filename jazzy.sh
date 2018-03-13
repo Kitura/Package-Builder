@@ -24,7 +24,11 @@ fi
 # Check if .jazzy.yaml exists in the root folder of the repo
 if [ ! -f "/.jazzy.yaml" ] then
     echo ".jazzy.yaml file does not exist"
+    exit 1
 fi
+
+# Checkout to the current branch
+git checkout "${TRAVIS_PULL_REQUEST_BRANCH}"
 
 # Install jazzy
 sudo gem install jazzy
@@ -32,9 +36,6 @@ sudo gem install jazzy
 sourceScript "/generate-xcodeproj.sh"
 # Run jazzy
 jazzy
-
-# Checkout to the current branch
-git checkout "${TRAVIS_PULL_REQUEST_BRANCH}"
 
 # Configure endpoint
 REPO=`git config remote.origin.url`
