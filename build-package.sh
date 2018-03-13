@@ -180,7 +180,7 @@ if [ "$(uname)" == "Darwin" ] && [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
         jsonResponse=`curl -s -X GET https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@api.github.com/repos/${TRAVIS_REPO_SLUG}/issues/${TRAVIS_PULL_REQUEST}/labels`
         echo "Label data retrieved: $jsonResponse"
         # We require only the text of the label - filter on the "name" attribute
-        labelNames=`echo "$jsonResponse" | grep '"name"'`
+        labelNames=`echo "$jsonResponse" | grep '"name"' || true`
         # Extract the label name from the "name": "value" pair. This assumes each pair is on a separate line
         candidateTags=`echo "$labelNames" | sed -e's#.*"name" *: *"\([^"]*\)".*#\1#'`
         echo "Labels: " $candidateTags
