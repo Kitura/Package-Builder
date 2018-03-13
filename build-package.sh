@@ -173,7 +173,7 @@ fi
 # Suitable credentials are required for this purpose. These should be defined in
 # the repo's Travis configuration as GITHUB_USERNAME and GITHUB_PASSWORD.
 #
-if [ "$(uname)" == "Darwin" ] && [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
+if [ "$(uname)" == "Darwin" ] && [ "${TRAVIS_PULL_REQUEST}" != "false" ] && [ $JAZZY_ELIGIBLE ]; then
     if  [ -n "${GITHUB_USERNAME}" -a -n "${GITHUB_PASSWORD}" ]; then
         echo "Checking PR for docs generation tag"
         # Obtain the label information for this PR from the GitHub. This is a JSON document describing each label

@@ -22,23 +22,24 @@ if [ -z "${GITHUB_USERNAME}" ] && [ -z "${GITHUB_PASSWORD}" ]; then
 fi
 
 # Check if .jazzy.yaml exists in the root folder of the repo
-#cd ..
-export projectFolder=`pwd`
-
-if [ -e ./$(projectFolder) ]; then
-
-    # Install jazzy
-    sudo gem install jazzy
-    # Generate xcode project
-    sourceScript "${projectFolder}/generate-xcodeproj.sh"
-    # Run jazzy
-    jazzy
-
-    # Configure endpoint
-    REPO=`git config remote.origin.url`
-    AUTH_REPO=${REPO/https:\/\/github.com\//https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@github.com/}
-  
-    git add docs/.
-    git commit -m 'Documentation update [ci skip]'
-    git push
+if [ ! -f "/.jazzy.yaml" ] then
+    echo ".jazzy.yaml file does not exist"
 fi
+
+# Install jazzy
+sudo gem install jazzy
+# Generate xcode project
+sourceScript "/generate-xcodeproj.sh"
+# Run jazzy
+jazzy
+
+# Checkout to the current branch
+git checkout "${TRAVIS_PULL_REQUEST_BRANCH}"
+
+# Configure endpoint
+REPO=`git config remote.origin.url`
+AUTH_REPO=${REPO/https:\/\/github.com\//https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@github.com/}
+
+git add docs/.
+git commit -m 'Documentation update [ci skip]'
+git push
