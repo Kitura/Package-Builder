@@ -39,8 +39,12 @@ if [ ! -f "${projectFolder}/.jazzy.yaml" ]; then
     exit 1
 fi
 
-# Checkout to the current branch
-git checkout "${TRAVIS_PULL_REQUEST_BRANCH}"
+# Checkout to the current branch. The repo cloned by Travis is a shallow clone,
+# so we cannot just check out the branch. Instead, create a new remote for this
+# purpose and checkout the branch from there.
+git remote add jazzy https://github.com/${TRAVIS_REPO_SLUG}.git
+git fetch jazzy
+git checkout jazzy/${TRAVIS_PULL_REQUEST_BRANCH} -b ${TRAVIS_PULL_REQUEST_BRANCH}
 
 # Install jazzy
 sudo gem install jazzy
