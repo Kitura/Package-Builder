@@ -21,8 +21,20 @@ if [ -z "${GITHUB_USERNAME}" ] && [ -z "${GITHUB_PASSWORD}" ]; then
     exit 1
 fi
 
+# Check that projectFolder and SCRIPT_DIR exist
+if [ -z "${projectFolder}" ]; then
+    projectFolder="$pwd"
+    echo "Warning: projectFolder not set. Defaulting to pwd ($projectFolder)"
+fi
+
+if [ -z "${SCRIPT_DIR}" ]; then
+    # Determine location of this script
+    SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+    echo "Warning: SCRIPT_DIR not set. Defaulting to current script location ($SCRIPT_DIR}"
+fi
+
 # Check if .jazzy.yaml exists in the root folder of the repo
-if [ ! -f "/.jazzy.yaml" ] then
+if [ ! -f "${projectFolder}/.jazzy.yaml" ]; then
     echo ".jazzy.yaml file does not exist"
     exit 1
 fi
@@ -33,7 +45,7 @@ git checkout "${TRAVIS_PULL_REQUEST_BRANCH}"
 # Install jazzy
 sudo gem install jazzy
 # Generate xcode project
-sourceScript "/generate-xcodeproj.sh"
+sourceScript "${SCRIPT_DIR}/generate-xcodeproj.sh" "xcodeproj generation"
 # Run jazzy
 jazzy
 
