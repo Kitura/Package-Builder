@@ -56,6 +56,7 @@ if [ -z "$projectBuildDir" ]; then
 fi
 
 # Determine location of this script
+# Ref: https://stackoverflow.com/questions/59895/getting-the-source-directory-of-a-bash-script-from-within
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Utility functions
