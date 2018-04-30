@@ -13,7 +13,7 @@
 ##
 
 # Check that the project is eligible for a podspec, based on the POD_ELIGIBLE tag in the travis file
-if [ "$(uname)" == "Darwin" ] && [ "${TRAVIS_PULL_REQUEST}" != "false" ] && [ $POD_ELIGIBLE ]; then
+if [ "$(uname)" == "Darwin" ] && [ $POD_ELIGIBLE ]; then
     if  [ -n "${GITHUB_USERNAME}" -a -n "${GITHUB_PASSWORD}" ]; then
 
         # Determine project name
