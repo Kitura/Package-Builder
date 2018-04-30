@@ -23,14 +23,13 @@ if [ "$(uname)" == "Darwin" ] && [ "${TRAVIS_PULL_REQUEST}" != "false" ] && [ $P
         echo ">> projectName: $projectName"
 
         # Create the podspec file
-        file="$projectName.podspec"
-        touch "$file"
-        podDirectory=/some/directory/path/"$file"
+        podFile="$projectName.podspec"
+        touch "$podFile}
+        podDirectory=${projectFolder}/${podFile}
 
-        # Create the contents of the podspec file
+        # Create and populate the contents of the podspec file
+        # Need to also consider the possibility of source files also being in folders that don't match the project name
         podspec="Pod::Spec.new do |s|\ns.name        = \"$projectName\"\ns.version     = \"5.0.1\"\ns.summary     = \"$TRAVIS_DESCRIPTION\"\ns.homepage    = \"https://github.com/IBM-Swift/$projectName\"\ns.license     = { :type => \"Apache License, Version 2.0\" }\ns.author     = \"IBM\"\ns.module_name  = '$projectName'\ns.requires_arc = true\ns.ios.deployment_target = \"10.0\"\ns.source   = { :git => \"https://github.com/IBM-Swift/$projectName.git\", :tag => s.version }\ns.source_files = \"Sources/$projectName/*.swift\"\ns.pod_target_xcconfig =  {\n'SWIFT_VERSION' => '4.0.3',\n}"
-
-        # Need to consider possibility of source files also being in folders that don't match the project name
 
         # Check that a Package.swift file exists, extract dependencies, and use within the podspec file
         if [ -e "$Package.swift" ]; then
@@ -59,6 +58,8 @@ if [ "$(uname)" == "Darwin" ] && [ "${TRAVIS_PULL_REQUEST}" != "false" ] && [ $P
 
         # Upload the podspec to the Cocoapods Spec
         pod trunk push "$projectName".podspec
+
+        # Need to check successful upload to the Cocoapods Spec - TO DO
 
         exit 1
     else
