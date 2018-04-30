@@ -60,8 +60,12 @@ if [ "$(uname)" == "Darwin" ] && [ "${TRAVIS_PULL_REQUEST}" != "false" ] && [ $P
         git push
 
         # Upload the podspec to the Cocoapods Spec
-        # Need to check successful upload to the Cocoapods Spec - TO DO
-        pod trunk push "$projectName".podspec
+        # Check for a successful upload to the Cocoapods Spec
+        if echo $(pod trunk push "$projectName".podspec) | grep -q "congrats"; then
+            echo "Pod successfully uploaded to the Spec."
+        else
+            echo "Pod was not uploaded to the Spec, it may already exist."
+        fi
 
         exit 1
     else
