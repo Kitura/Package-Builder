@@ -59,6 +59,10 @@ if [ "$(uname)" == "Darwin" ] && [ "${TRAVIS_PULL_REQUEST}" != "false" ] && [ $P
         git commit -m 'Created podspec file [ci skip]'
         git push
 
+        # Register a session
+        # Needs replacing with default IBM credentials - TO DO
+        pod trunk register swift@ibm.com 'IBM' --description='IBM-Dev'
+
         # Upload the podspec to the Cocoapods Spec
         # Check for a successful upload to the Cocoapods Spec
         if echo $(pod trunk push "$projectName".podspec) | grep -q "congrats"; then
