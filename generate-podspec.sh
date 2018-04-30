@@ -29,13 +29,14 @@ if [ "$(uname)" == "Darwin" ] && [ "${TRAVIS_PULL_REQUEST}" != "false" ] && [ $P
 
         # Create and populate the contents of the podspec file
         # Need to also consider the possibility of source files also being in folders that don't match the project name
-        podspec="Pod::Spec.new do |s|\ns.name        = \"$projectName\"\ns.version     = \"5.0.1\"\ns.summary     = \"$TRAVIS_DESCRIPTION\"\ns.homepage    = \"https://github.com/IBM-Swift/$projectName\"\ns.license     = { :type => \"Apache License, Version 2.0\" }\ns.author     = \"IBM\"\ns.module_name  = '$projectName'\ns.requires_arc = true\ns.ios.deployment_target = \"10.0\"\ns.source   = { :git => \"https://github.com/IBM-Swift/$projectName.git\", :tag => s.version }\ns.source_files = \"Sources/$projectName/*.swift\"\ns.pod_target_xcconfig =  {\n'SWIFT_VERSION' => '4.0.3',\n}"
+        podspec="Pod::Spec.new do |s|\ns.name        = \"$projectName\"\ns.version     = \"$TRAVIS_TAG\"\ns.summary     = \"$TRAVIS_DESCRIPTION\"\ns.homepage    = \"https://github.com/IBM-Swift/$projectName\"\ns.license     = { :type => \"Apache License, Version 2.0\" }\ns.author     = \"IBM\"\ns.module_name  = '$projectName'\ns.requires_arc = true\ns.ios.deployment_target = \"10.0\"\ns.source   = { :git => \"https://github.com/IBM-Swift/$projectName.git\", :tag => s.version }\ns.source_files = \"Sources/$projectName/*.swift\"\ns.pod_target_xcconfig =  {\n'SWIFT_VERSION' => '4.0.3',\n}"
 
         # Check that a Package.swift file exists, extract dependencies, and use within the podspec file
         if [ -e "$Package.swift" ]; then
             echo "Package.swift file found, may contain dependencies."
-            # Get and append dependencies - TO DO
-            dependency = ""
+            # Get and append dependencies
+            # Need a loop to iterate over all dependencies found - TO DO
+            dependency = sed 's/.*IBM-Swift\/\(.*\).git.*/\1/' <<< $(cat "Package.swift")
             podspec = podspec + "\ns.dependency '$dependency'\nend"
         else
             podspec = podspec + "\nend"
