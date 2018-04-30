@@ -34,7 +34,7 @@ if [ "$(uname)" == "Darwin" ] && [ "${TRAVIS_PULL_REQUEST}" != "false" ] && [ $P
         # Check that a Package.swift file exists, extract dependencies, and use within the podspec file
         if [ -e "$Package.swift" ]; then
             echo "Package.swift file found, may contain dependencies."
-            # Get and append dependencies
+            # Get and append name of dependencies from the Package.swift file
             # Need a loop to iterate over all dependencies found - TO DO
             dependency = sed 's/.*IBM-Swift\/\(.*\).git.*/\1/' <<< $(cat "Package.swift")
             podspec = podspec + "\ns.dependency '$dependency'\nend"
@@ -46,9 +46,11 @@ if [ "$(uname)" == "Darwin" ] && [ "${TRAVIS_PULL_REQUEST}" != "false" ] && [ $P
         echo "$podspec" >> "$podDirectory"
 
         # Do a pod lint to check for warnings and errors
-        pod lib lint
-
-        # Need to check result of pod lint and terminate if there are warnings or errors - TO DO
+        # Exit if there's an error
+        if echo $(pod lib lint) | grep -q "error"; then
+            echo "Pod lint check did not pass - found an ERROR... Terminating.";
+            exit 1
+        fi
 
         # Configure endpoint, and upload the podspec to Github
         REPO=`git config remote.origin.url`
@@ -58,9 +60,8 @@ if [ "$(uname)" == "Darwin" ] && [ "${TRAVIS_PULL_REQUEST}" != "false" ] && [ $P
         git push
 
         # Upload the podspec to the Cocoapods Spec
-        pod trunk push "$projectName".podspec
-
         # Need to check successful upload to the Cocoapods Spec - TO DO
+        pod trunk push "$projectName".podspec
 
         exit 1
     else
