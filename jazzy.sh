@@ -50,8 +50,8 @@ git remote add jazzy https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@github.com/${
 git fetch jazzy
 git checkout jazzy/${TRAVIS_PULL_REQUEST_BRANCH} -b ${TRAVIS_PULL_REQUEST_BRANCH}
 
-# Install jazzy
-sudo gem install jazzy
+# Install jazzy (version set to 0.9.1 until https://github.com/realm/jazzy/issues/972 is fixed)
+sudo gem install jazzy -v 0.9.1
 # Generate xcode project
 sourceScript "${SCRIPT_DIR}/generate-xcodeproj.sh" "xcodeproj generation"
 # Run jazzy
