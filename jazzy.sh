@@ -19,7 +19,7 @@
 # updates back to Github.
 if [ -z "${GITHUB_USERNAME}" -o -z "${GITHUB_PASSWORD}" -o -z "${GITHUB_EMAIL}" ]; then
     echo "Supplied jazzy docs flag, but credentials were not provided."
-    echo "Expected: GITHUB_USER, GITHUB_PASSWORD and GITHUB_EMAIL Env variables."
+    echo "Expected: GITHUB_USERNAME, GITHUB_PASSWORD and GITHUB_EMAIL Env variables."
     exit 1
 fi
 
@@ -50,6 +50,19 @@ git remote add jazzy https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@github.com/${
 git fetch jazzy
 git checkout jazzy/${TRAVIS_PULL_REQUEST_BRANCH} -b ${TRAVIS_PULL_REQUEST_BRANCH}
 
+# Check whether the latest commit is itself a jazzy-doc commit, and bail out if
+# so. Otherwise, we would loop indefinitely creating documentation commits.
+LATEST_COMMIT_MESSAGE=`git log -1 --oneline`
+GIT_SUCCESS=$?
+if [ $GIT_SUCCESS -ne 0 -o -z "${LATEST_COMMIT_MESSAGE}" ]; then
+    echo "Failed to get latest commit message - aborting."
+    exit 1
+fi
+if [[ "${LATEST_COMMIT_MESSAGE}" =~ "[jazzy-doc]" ]]; then
+    echo "Skipping jazzy-doc generation: latest commit is a jazzy-doc commit."
+    exit 0
+fi
+
 # Install jazzy (version set to 0.9.1 until https://github.com/realm/jazzy/issues/972 is fixed)
 sudo gem install jazzy -v 0.9.1
 # Generate xcode project
@@ -64,5 +77,5 @@ git config --global --add push.default simple
 
 # Push the updated docs as a new commit to the PR branch
 git add docs/.
-git commit -m 'Documentation update [ci skip]'
+git commit -m '[jazzy-doc] Documentation update'
 git push
