@@ -163,8 +163,9 @@ if [ "$(uname)" == "Darwin" ]; then
   fi
 fi
 
-# Generate test code coverage report (macOS)
-if [ "$(uname)" == "Darwin" ]; then
+# Generate test code coverage report (macOS). The Travis build must have the
+# CODECOV_ELIGIBLE environment variable defined.
+if [ "$(uname)" == "Darwin" -a -n "${CODECOV_ELIGIBLE}" ]; then
   if [ -e ${projectFolder}/.swift-codecov ]; then
       source ${projectFolder}/.swift-codecov
   else
@@ -183,6 +184,7 @@ fi
 # one build (per commit) produces a documentation commit.
 #
 if [ "$(uname)" == "Darwin" -a "${TRAVIS_PULL_REQUEST}" != "false" -a -n "${JAZZY_ELIGIBLE}" ]; then
+  if [ "${TRAVIS_PULL_REQUEST_SLUG}" == "${TRAVIS_REPO_SLUG}" ]; then
     if  [ -n "${GITHUB_USERNAME}" -a -n "${GITHUB_PASSWORD}" ]; then
         echo "Checking PR for docs generation tag"
         # Obtain the label information for this PR from the GitHub. This is a JSON document describing each label
@@ -198,14 +200,17 @@ if [ "$(uname)" == "Darwin" -a "${TRAVIS_PULL_REQUEST}" != "false" -a -n "${JAZZ
             echo "Documentation tag jazzy-doc exists for this repo"
             sourceScript "${SCRIPT_DIR}/jazzy.sh" "jazzy-doc generation"
         else
-            echo "No jazzy-doc tag found"
+            echo "Note: No jazzy-doc tag found."
         fi
 
     else
-        echo "Expected: GITHUB_USER && GITHUB_PASSWORD Env variables."
+        echo "Error: Expected GITHUB_USERNAME && GITHUB_PASSWORD Env variables."
     fi
+  else
+      echo "Error: jazzy-doc generation cannot be performed from a fork."
+  fi
 else
-    echo "Expected this to be a pull request. Skipping Jazzy docs generation."
+    echo "Note: Build not eligible for jazzy doc generation."
 fi
 
 # Clean up build artifacts
