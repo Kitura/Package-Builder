@@ -37,6 +37,6 @@ cd $projectFolder
 wget $SWIFT_SNAPSHOT
 FILENAME=$(echo $SWIFT_SNAPSHOT | rev | cut -d/ -f1 | rev)
 tar xzf $FILENAME
-SWIFT_FOLDER=basename -s .tar.gz $FILENAME
+SWIFT_FOLDER=$(basename -s .tar.gz $FILENAME)
 export PATH=$projectFolder/$SWIFT_FOLDER/usr/bin:$PATH
 rm $FILENAME
