@@ -37,7 +37,7 @@ if [ -z $SWIFT_SNAPSHOT ]; then
 fi
 
 #If SWIFT_SNAPSHOT is a URL then we call the alternative download function
-if [ $SWIFT_SNAPSHOT == https* ]; then
+if [[ $SWIFT_SNAPSHOT == https* ]]; then
   # Starts script to install Swift.
     source ${projectFolder}/Package-Builder/${osName}/install_swift_from_url.sh
 else
