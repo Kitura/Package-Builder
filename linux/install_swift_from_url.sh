@@ -34,7 +34,7 @@ sudo apt-get -y -qq install clang lldb-3.8 libicu-dev libtool libcurl4-openssl-d
 echo ">> Installing '${SWIFT_SNAPSHOT}'..."
 # Install Swift compiler
 cd $projectFolder
-wget $SWIFT_SNAPSHOT
+wget --no-verbose $SWIFT_SNAPSHOT
 FILENAME=$(echo $SWIFT_SNAPSHOT | rev | cut -d/ -f1 | rev)
 tar xzf $FILENAME
 SWIFT_FOLDER=$(basename -s .tar.gz $FILENAME)
