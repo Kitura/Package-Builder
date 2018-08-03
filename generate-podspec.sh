@@ -13,13 +13,14 @@
 ##
 
 # Check that the project is eligible for a podspec, based on the POD_ELIGIBLE tag in the travis file
-if [ "$(uname)" == "Darwin" ] && [ $POD_ELIGIBLE ]; then
+if [ "$(uname)" == "Darwin" ] && [ "$POD_ELIGIBLE" ]; then
     if  [ -n "${GITHUB_USERNAME}" -a -n "${GITHUB_PASSWORD}" ]; then
 
         # Determine project name
-        cd "$(dirname "$0")"/..
-        export projectFolder=`pwd`
-        projectName="$(basename $projectFolder)"
+        cd "$(dirname "$0")"/.. || return
+        projectFolder=$(pwd)
+        export projectFolder
+        projectName="$(basename) $(projectFolder)"
         echo ">> projectName: $projectName"
 
         # Create the podspec file
@@ -49,13 +50,13 @@ if [ "$(uname)" == "Darwin" ] && [ $POD_ELIGIBLE ]; then
 
         # Do a pod lint to check for warnings and errors
         # Exit if there's an error
-        if echo $(pod lib lint) | grep -q "error"; then
+        if pod lib lint | grep -q "error"; then
             echo "Pod lint check did not pass - found an ERROR... Terminating.";
             exit 1
         fi
 
         # Configure endpoint, and upload the podspec to Github
-        REPO=`git config remote.origin.url`
+        REPO=$(git config remote.origin.url)
         AUTH_REPO=${REPO/https:\/\/github.com\//https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@github.com/}
         git add "$projectName".podspec
         git commit -m 'Created podspec file [ci skip]'
@@ -66,7 +67,7 @@ if [ "$(uname)" == "Darwin" ] && [ $POD_ELIGIBLE ]; then
 
         # Upload the podspec to the Cocoapods Spec
         # Check for a successful upload to the Cocoapods Spec
-        if echo $(pod trunk push "$projectName".podspec) | grep -q "congrats"; then
+        if pod trunk push "$projectName".podspec | grep -q "congrats"; then
             echo "Pod successfully uploaded to the Spec."
         else
             echo "Pod was not uploaded to the Spec, it may already exist."
