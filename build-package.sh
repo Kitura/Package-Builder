@@ -55,11 +55,15 @@ if [ -z "$projectBuildDir" ]; then
   usage
 fi
 
+# Determine location of this script
+# Ref: https://stackoverflow.com/questions/59895/getting-the-source-directory-of-a-bash-script-from-within
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 # Utility functions
 function sourceScript () {
   if [ -e "$1" ]; then
     source "$1"
-    echo "$2"
+    echo ">> Completed ${2}."
   fi
 }
 
@@ -81,7 +85,7 @@ projectName="$(basename $projectFolder)"
 echo ">> projectName: $projectName"
 
 # Install swift binaries based on OS
-source ./Package-Builder/install-swift.sh
+source ${SCRIPT_DIR}/install-swift.sh
 
 # Show path
 echo ">> PATH: $PATH"
@@ -119,18 +123,18 @@ fi
 if [ -e "${projectFolder}/Tests" ]; then
     echo ">> Testing Swift package..."
     # Execute OS specific pre-test steps
-    sourceScript "`find ${projectFolder} -path "*/${projectName}/${osName}/before_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed ${osName} pre-tests steps."
+    sourceScript "`find ${projectFolder} -path "*/${projectName}/${osName}/before_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" "${osName} pre-tests steps"
 
     # Execute common pre-test steps
-    sourceScript "`find ${projectFolder} -path "*/${projectName}/common/before_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed common pre-tests steps."
+    sourceScript "`find ${projectFolder} -path "*/${projectName}/common/before_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" "common pre-tests steps"
 
-    source ./Package-Builder/run_tests.sh
+    source ${SCRIPT_DIR}/run_tests.sh
 
     # Execute common post-test steps
-    sourceScript "`find ${projectFolder} -path "*/${projectName}/common/after_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed common post-tests steps."
+    sourceScript "`find ${projectFolder} -path "*/${projectName}/common/after_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" "common post-tests steps"
 
     # Execute OS specific post-test steps
-    sourceScript "`find ${projectFolder} -path "*/${projectName}/${osName}/after_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" ">> Completed ${osName} post-tests steps."
+    sourceScript "`find ${projectFolder} -path "*/${projectName}/${osName}/after_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" "${osName} post-tests steps"
 
     echo ">> Finished testing Swift package."
     echo
@@ -159,44 +163,54 @@ if [ "$(uname)" == "Darwin" ]; then
   fi
 fi
 
-# Generate test code coverage report (macOS)
-if [ "$(uname)" == "Darwin" ]; then
+# Generate test code coverage report (macOS). The Travis build must have the
+# CODECOV_ELIGIBLE environment variable defined.
+if [ "$(uname)" == "Darwin" -a -n "${CODECOV_ELIGIBLE}" ]; then
   if [ -e ${projectFolder}/.swift-codecov ]; then
       source ${projectFolder}/.swift-codecov
   else
-      sourceScript "${projectFolder}/Package-Builder/codecov.sh"
+      sourceScript "${SCRIPT_DIR}/codecov.sh" "codecov generation"
   fi
 fi
 
 # Generate jazzy docs (macOS) for Pull Requests that have the 'jazzy-doc' label.
 # The docs will be generated and pushed as a new [ci skip] commit to the PR branch.
+#
 # Suitable credentials are required for this purpose. These should be defined in
 # the repo's Travis configuration as GITHUB_USERNAME and GITHUB_PASSWORD.
 #
-if [ "$(uname)" == "Darwin" ] && [ "${TRAVIS_PULL_REQUEST}" != "false" ] && [ $JAZZY_ELIGIBLE ]; then
+# Additionally, the Travis build must have the JAZZY_ELIGIBLE environment variable
+# defined, and this should be defined on only one macOS build, to ensure that only
+# one build (per commit) produces a documentation commit.
+#
+if [ "$(uname)" == "Darwin" -a "${TRAVIS_PULL_REQUEST}" != "false" -a -n "${JAZZY_ELIGIBLE}" ]; then
+  if [ "${TRAVIS_PULL_REQUEST_SLUG}" == "${TRAVIS_REPO_SLUG}" ]; then
     if  [ -n "${GITHUB_USERNAME}" -a -n "${GITHUB_PASSWORD}" ]; then
         echo "Checking PR for docs generation tag"
         # Obtain the label information for this PR from the GitHub. This is a JSON document describing each label
         jsonResponse=`curl -s -X GET https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@api.github.com/repos/${TRAVIS_REPO_SLUG}/issues/${TRAVIS_PULL_REQUEST}/labels`
         echo "Label data retrieved: $jsonResponse"
         # We require only the text of the label - filter on the "name" attribute
-        labelNames=`echo "$jsonResponse" | grep '"name"'`
+        labelNames=`echo "$jsonResponse" | grep '"name"' || true`
         # Extract the label name from the "name": "value" pair. This assumes each pair is on a separate line
         candidateTags=`echo "$labelNames" | sed -e's#.*"name" *: *"\([^"]*\)".*#\1#'`
         echo "Labels: " $candidateTags
         # Check if any of the labels contain the text 'jazzy-doc'
         if [[ $candidateTags == *"jazzy-doc"* ]]; then
             echo "Documentation tag jazzy-doc exists for this repo"
-            sourceScript "${projectFolder}/Package-Builder/jazzy.sh"
+            sourceScript "${SCRIPT_DIR}/jazzy.sh" "jazzy-doc generation"
         else
-            echo "No jazzy-doc tag found"
+            echo "Note: No jazzy-doc tag found."
         fi
 
     else
-        echo "Expected: GITHUB_USER && GITHUB_PASSWORD Env variables."
+        echo "Error: Expected GITHUB_USERNAME && GITHUB_PASSWORD Env variables."
     fi
+  else
+      echo "Error: jazzy-doc generation cannot be performed from a fork."
+  fi
 else
-    echo "Expected this to be a pull request. Skipping Jazzy docs generation."
+    echo "Note: Build not eligible for jazzy doc generation."
 fi
 
 # Clean up build artifacts
