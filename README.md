@@ -84,9 +84,18 @@ Please note that Codecov is only leveraged when executing builds on the macOS pl
 ### Auto Jazzy Docs Build
 [Jazzy](https://github.com/realm/jazzy) provides automatic documentation construction. To simplify the process of updating public facing api/documentation, package builder can automate the creation and pushing of updated docs for a Pull Request.
 
-To indicate that documentation should be generated, add the `jazzy-doc` label to the Pull Request. Credentials must be provided through the environment variables GITHUB_USERNAME and GITHUB_PASSWORD, which should be defined in the Travis configuration for the repository.
+To indicate that documentation should be generated, add the `jazzy-doc` label to the Pull Request.
 
-Once the regular build has executed, Jazzy will be run for MacOS builds and the resulting documentation pushed to the PR branch in a new `[ci skip]` commit.
+In order for a PR to receive automatic documentation generation, the following must be configured:
+- The Travis configuration for the repository must define the following environment variables, specifying the credentials of a user that has sufficient permissions to push to PR branches:
+  - `GITHUB_USERNAME`
+  - `GITHUB_PASSWORD`
+  - `GITHUB_EMAIL`
+- The repository must have a `jazzy-doc` label defined
+- The `.travis.yaml` for the project must contain one macOS build with `env: JAZZY_ELIGIBLE=true`
+- The PR must have the `jazzy-doc` label applied
+
+Once the regular build has executed, Jazzy will be run for MacOS builds and the resulting documentation pushed to the PR branch in a new `[jazzy-doc]` commit. Docs will be generated for each new commit to the PR branch whose commit message does not contain the text `[jazzy-doc]`.
 
 ### Custom Xcode project generation
 If for Codecov, you need a custom command to generate the Xcode project for your Swift package, you should include a `.swift-xcodeproj` file that contains your custom `swift package generate-xcodeproj` command.
