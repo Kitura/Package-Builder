@@ -33,8 +33,6 @@ echo ">> Running ${BASH_SOURCE[0]}"
 brew update > /dev/null
 #brew install curl
 brew install wget > /dev/null || brew outdated wget > /dev/null || brew upgrade wget > /dev/null
-#swift-nio-ssl requires installing libressl
-brew install libressl > /dev/null
 
 #Download and install Swift
 echo "Swift installed $SWIFT_PREINSTALL does not match snapshot $SWIFT_SNAPSHOT."
