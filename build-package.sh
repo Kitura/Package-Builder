@@ -84,6 +84,14 @@ export projectFolder=`pwd`
 projectName="$(basename $projectFolder)"
 echo ">> projectName: $projectName"
 
+# Install libressl on osx
+if [ "${osName}" == "osx" ]; then
+  echo ">> Installing libressl..."
+  brew update
+  brew install libressl
+  echo ">> Finished installing libressl."
+fi
+
 # Install swift binaries based on OS
 source ${SCRIPT_DIR}/install-swift.sh
 

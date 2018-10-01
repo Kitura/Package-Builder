@@ -1,9 +1,5 @@
 # Travis CI build file for Package-Builder.
 # Package-Builder runs on OS X and Linux (Ubuntu).
-# See the following URLs for further details on Travis CI
-# https://docs.travis-ci.com/user/customizing-the-build/
-# https://docs.travis-ci.com/user/docker/
-# https://docs.travis-ci.com/user/multi-os/
 
 # whitelist (branches that should be built)
 branches:
@@ -12,58 +8,36 @@ branches:
     - develop
     - /^issue.*$/
 
-notifications:
-  slack:
-    secure: "VFUQIBCL8Kiubw7ojN3oJOs2TgobYaAZTCQePDATOMSRKRo/rDgsloGDc3kqGkLb0lAwky1lwKQjnRUsG1mEES6+W2K3QWsmzpTR1owPzZprrHrL/h1vkWdysx7ed0dBnbs8uhtD4iPe46vWZqLc1ZyfV8QxefTD9mrS4VeH7rd4qOwMgkjphaoVc0/cOkt0u8p54961HLVt4euSZf0766hfYH+1EwvoShaiK/2aKTF/hmFavB2iASHRXJnOm9S4iDWyFW2D7XEwoo9o9jOAqtYbVefGglCjUymmuNCmj1bE3NSWXJB/5KC8xFNYs7b5jZ19diu5PQK2K1HCtJvLhW2wv7cBfBFrluvz52zeHB8izYIiSV+sr6mJgnPuwaoYUObJWkLlKpTo3oPgAU/62l0KMgdn1EoBrCSDVCz5IBjLmty25nFl1oDGZITQjNIkIMUjh4dojjr+JSRDumHxje39bu8nvxsA5pxDulnWQNorvaHeWf8t2ZAqYW/ojpAlmvBr7E+U9P6DHw40FDStcI8bJGfWv8yybjMocYtTTl6FaQdfqNm3Afp5wlUxNAkAG2neRGnuitHTQ4CBHquA9NG4c7tlyafUf9UMuce3ikQiUeecNnrW2tLkKEnkO6KXwgvOCAyQrFMHncPWXfQVY/+c/2ejelCOUW8BL2pBLBY="
-
 matrix:
   include:
     - os: linux
       dist: trusty
       sudo: required
-    - os: osx
-      osx_image: xcode9
+      env: SWIFT_SNAPSHOT=4.0.3
+    - os: linux
+      dist: trusty
       sudo: required
+    - os: linux
+      dist: trusty
+      sudo: required
+      services: docker
+      env: DOCKER_IMAGE=ubuntu:16.04
+    - os: linux
+      dist: trusty
+      sudo: required
+      env: SWIFT_SNAPSHOT=swift-4.2-DEVELOPMENT-SNAPSHOT-2018-06-19-a
     - os: osx
       osx_image: xcode9.2
       sudo: required
-    - os: linux
-      dist: trusty
-      sudo: required
-      env: SWIFT_SNAPSHOT=3.1.1
+      env: SWIFT_SNAPSHOT=4.0.3
     - os: osx
-      osx_image: xcode8.3
+      osx_image: xcode9.4
       sudo: required
-      env: SWIFT_SNAPSHOT=3.1.1
-    - os: linux
-      dist: trusty
-      sudo: required
-      env: SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2017-08-15-a
-    - os: osx
-      osx_image: xcode9
-      sudo: required
-      env: SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2017-08-15-a
       env: JAZZY_ELIGIBLE=true
     - os: osx
-      osx_image: xcode9.2
+      osx_image: xcode10
       sudo: required
-      env: SWIFT_SNAPSHOT=swift-4.1-DEVELOPMENT-SNAPSHOT-2018-02-06-a
-    - os: linux
-      dist: trusty
-      sudo: required
-      env: SWIFT_SNAPSHOT=swift-3.1-DEVELOPMENT-SNAPSHOT-2017-06-14-a
-    - os: osx
-      osx_image: xcode8.3
-      sudo: required
-      env: SWIFT_SNAPSHOT=swift-3.1-DEVELOPMENT-SNAPSHOT-2017-06-14-a
-    - os: linux
-      dist: trusty
-      sudo: required
-      env: SWIFT_SNAPSHOT=swift-4.1-DEVELOPMENT-SNAPSHOT-2018-02-06-a
-    - os: linux
-      dist: trusty
-      sudo: required
-      env: SWIFT_SNAPSHOT=swift-DEVELOPMENT-SNAPSHOT-2018-02-06-a
+      env: SWIFT_SNAPSHOT=4.2
 
 script:
   # Set up build structure for test projects
