@@ -39,7 +39,7 @@ export UBUNTU_VERSION_NO_DOTS=`echo $version | awk -F. '{print $1$2}'`
 echo ">> Installing '${SWIFT_SNAPSHOT}'..."
 # Install Swift compiler
 cd $projectFolder
-wget https://swift.org/builds/$SNAPSHOT_TYPE/$UBUNTU_VERSION_NO_DOTS/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
+wget --no-verbose https://swift.org/builds/$SNAPSHOT_TYPE/$UBUNTU_VERSION_NO_DOTS/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
 tar xzf $SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
 export PATH=$projectFolder/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin:$PATH
 rm $SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
