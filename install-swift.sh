@@ -36,53 +36,59 @@ if [ -z $SWIFT_SNAPSHOT ]; then
   fi
 fi
 
-# reconcile version with naming conventions by prepending "swift-" if nesseccary
-if [[ $SWIFT_SNAPSHOT == *"swift-"* ]]; then
-  export SWIFT_SNAPSHOT
+#If SWIFT_SNAPSHOT is a URL then we call the alternative download function
+if [[ $SWIFT_SNAPSHOT == https* ]]; then
+  # Starts script to install Swift.
+    source ${projectFolder}/Package-Builder/${osName}/install_swift_from_url.sh
 else
-  echo ">> Normalizing SWIFT_VERSION from .swift-version file."
-  prefix="swift-"
-  export SWIFT_SNAPSHOT=$prefix$SWIFT_SNAPSHOT
-fi
-
-echo ">> SWIFT_SNAPSHOT: $SWIFT_SNAPSHOT"
-
-if [[ ${SWIFT_SNAPSHOT} =~ ^.*RELEASE.*$ ]]; then
-	SNAPSHOT_TYPE=$(echo "$SWIFT_SNAPSHOT" | tr '[:upper:]' '[:lower:]')
-elif [[ ${SWIFT_SNAPSHOT} =~ ^swift-.*-DEVELOPMENT.*$ ]]; then
-  SNAPSHOT_TYPE=${SWIFT_SNAPSHOT%-DEVELOPMENT*}-branch
-elif [[ ${SWIFT_SNAPSHOT} =~ ^.*DEVELOPMENT.*$ ]]; then
-	SNAPSHOT_TYPE=development
-else
-	SNAPSHOT_TYPE="$(echo "$SWIFT_SNAPSHOT" | tr '[:upper:]' '[:lower:]')-release"
-  SWIFT_SNAPSHOT="${SWIFT_SNAPSHOT}-RELEASE"
-fi
-
-# Swift has to be installed to run commands, if Swift isn't installed, skip checks.
-if [[ $(swift --version) ]]; then
-  # Get the version already installed, if any. OS dependant.
-  if [[ "$OSTYPE" == "darwin"* ]]; then
-    SWIFT_PREINSTALL="swift-$(swift --version | awk '{print $4}')"
-  elif [[ "$OSTYPE" == "linux-gnu" ]]; then
-    SWIFT_PREINSTALL="swift-$(swift --version | awk '{print $3}')"
+  # reconcile version with naming conventions by prepending "swift-" if nesseccary
+  if [[ $SWIFT_SNAPSHOT == *"swift-"* ]]; then
+    export SWIFT_SNAPSHOT
   else
-    echo "Unsupported OS. Exiting..."
-    exit 1
+    echo ">> Normalizing SWIFT_VERSION from .swift-version file."
+    prefix="swift-"
+    export SWIFT_SNAPSHOT=$prefix$SWIFT_SNAPSHOT
   fi
-fi
 
-# Checks for if the needed version of swift matches the one already on the system.
-if [[ $SWIFT_PREINSTALL == "" ]]; then
-  echo "Swift is not installed."
-  source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries.sh
-else
-  if [[ ${SWIFT_SNAPSHOT} == ${SWIFT_PREINSTALL} ]]; then
-    echo "Required Swift version is already installed, skipping download..."
-  elif [[ ${SWIFT_SNAPSHOT} == "${SWIFT_PREINSTALL}-RELEASE" ]]; then
-    echo "Required Swift version is already installed, skipping download..."
+  echo ">> SWIFT_SNAPSHOT: $SWIFT_SNAPSHOT"
+
+  if [[ ${SWIFT_SNAPSHOT} =~ ^.*RELEASE.*$ ]]; then
+  	SNAPSHOT_TYPE=$(echo "$SWIFT_SNAPSHOT" | tr '[:upper:]' '[:lower:]')
+  elif [[ ${SWIFT_SNAPSHOT} =~ ^swift-.*-DEVELOPMENT.*$ ]]; then
+        SNAPSHOT_TYPE=${SWIFT_SNAPSHOT%-DEVELOPMENT*}-branch
+  elif [[ ${SWIFT_SNAPSHOT} =~ ^.*DEVELOPMENT.*$ ]]; then
+	SNAPSHOT_TYPE=development
   else
-    # Starts script to install Swift.
+	SNAPSHOT_TYPE="$(echo "$SWIFT_SNAPSHOT" | tr '[:upper:]' '[:lower:]')-release"
+        SWIFT_SNAPSHOT="${SWIFT_SNAPSHOT}-RELEASE"
+  fi
+
+  # Swift has to be installed to run commands, if Swift isn't installed, skip checks.
+  if [[ $(swift --version) ]]; then
+    # Get the version already installed, if any. OS dependant.
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+      SWIFT_PREINSTALL="swift-$(swift --version | awk '{print $4}')"
+    elif [[ "$OSTYPE" == "linux-gnu" ]]; then
+      SWIFT_PREINSTALL="swift-$(swift --version | awk '{print $3}')"
+    else
+      echo "Unsupported OS. Exiting..."
+      exit 1
+    fi
+  fi
+
+  # Checks for if the needed version of swift matches the one already on the system.
+  if [[ $SWIFT_PREINSTALL == "" ]]; then
+    echo "Swift is not installed."
     source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries.sh
+  else
+    if [[ ${SWIFT_SNAPSHOT} == ${SWIFT_PREINSTALL} ]]; then
+      echo "Required Swift version is already installed, skipping download..."
+    elif [[ ${SWIFT_SNAPSHOT} == "${SWIFT_PREINSTALL}-RELEASE" ]]; then
+      echo "Required Swift version is already installed, skipping download..."
+    else
+      # Starts script to install Swift.
+      source ${projectFolder}/Package-Builder/${osName}/install_swift_binaries.sh
+    fi
   fi
 fi
 

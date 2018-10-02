@@ -36,7 +36,7 @@ brew install wget > /dev/null || brew outdated wget > /dev/null || brew upgrade 
 
 #Download and install Swift
 echo "Swift installed $SWIFT_PREINSTALL does not match snapshot $SWIFT_SNAPSHOT."
-wget -nv https://swift.org/builds/$SNAPSHOT_TYPE/xcode/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-osx.pkg
+wget --no-verbose https://swift.org/builds/$SNAPSHOT_TYPE/xcode/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-osx.pkg
 sudo installer -pkg $SWIFT_SNAPSHOT-osx.pkg -target /
 export PATH=/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin:"${PATH}"
 rm $SWIFT_SNAPSHOT-osx.pkg
