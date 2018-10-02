@@ -104,7 +104,7 @@ echo ">> Building Swift package..."
 
 cd ${projectFolder}
 
-if [ -v $CUSTOM_BUILD_SCRIPT ] && [ -e ${projectFolder}/$CUSTOM_BUILD_SCRIPT ]; then
+if [ -v CUSTOM_BUILD_SCRIPT ] && [ -e ${projectFolder}/$CUSTOM_BUILD_SCRIPT ]; then
   echo Running custom build command: `cat ${projectFolder}/$CUSTOM_BUILD_SCRIPT`
   source ${projectFolder}/$CUSTOM_BUILD_SCRIPT
 elif [ -e ${projectFolder}/.swift-build-macOS ] && [ "${osName}" == "osx" ]; then
