@@ -31,15 +31,12 @@ echo ">> Running ${BASH_SOURCE[0]}"
 sudo apt-get -qq update > /dev/null
 sudo apt-get -y -qq install clang lldb-3.8 libicu-dev libtool libcurl4-openssl-dev libbsd-dev build-essential libssl-dev uuid-dev tzdata libz-dev > /dev/null
 
-# Environment vars
-version=`lsb_release -d | awk '{print tolower($2) $3}'`
-export UBUNTU_VERSION=`echo $version | awk -F. '{print $1"."$2}'`
-export UBUNTU_VERSION_NO_DOTS=`echo $version | awk -F. '{print $1$2}'`
-
 echo ">> Installing '${SWIFT_SNAPSHOT}'..."
 # Install Swift compiler
 cd $projectFolder
-wget --no-verbose https://swift.org/builds/$SNAPSHOT_TYPE/$UBUNTU_VERSION_NO_DOTS/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
-tar xzf $SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
-export PATH=$projectFolder/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin:$PATH
-rm $SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
+wget --no-verbose $SWIFT_SNAPSHOT
+FILENAME=$(echo $SWIFT_SNAPSHOT | rev | cut -d/ -f1 | rev)
+tar xzf $FILENAME
+SWIFT_FOLDER=$(basename -s .tar.gz $FILENAME)
+export PATH=$projectFolder/$SWIFT_FOLDER/usr/bin:$PATH
+rm $FILENAME
