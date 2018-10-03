@@ -28,8 +28,8 @@ set -e
 
 echo ">> Running ${BASH_SOURCE[0]}"
 
-sudo apt-get -qq update > /dev/null
-sudo apt-get -y -qq install clang lldb-3.8 libicu-dev libtool libcurl4-openssl-dev libbsd-dev build-essential libssl-dev uuid-dev tzdata libz-dev > /dev/null
+sudo apt-get -q update
+sudo apt-get -y -q install clang lldb-3.8 libicu-dev libtool libcurl4-openssl-dev libbsd-dev build-essential libssl-dev uuid-dev tzdata libz-dev
 
 echo ">> Installing '${SWIFT_SNAPSHOT}'..."
 # Install Swift compiler
