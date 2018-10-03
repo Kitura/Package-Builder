@@ -79,7 +79,7 @@ For example, see the [current test coverage](https://codecov.io/gh/IBM-Swift/Swi
 
 ![Codecov Report](/img/codecov-swift-cfenv-1024x768.png?raw=true "Code Coverage Report")
 
-Please note that Codecov is only leveraged when executing builds on the macOS platform. 
+Please note that Codecov is only leveraged when executing builds on the macOS platform.
 
 ### Auto Jazzy Docs Build
 [Jazzy](https://github.com/realm/jazzy) provides automatic documentation construction. To simplify the process of updating public facing api/documentation, package builder can automate the creation and pushing of updated docs for a Pull Request.
@@ -155,6 +155,26 @@ If you need a custom command for **testing** your Swift package, you should incl
 $ cat .swift-test-linux
 
 swift test -Xcc -I/usr/include/postgresql
+```
+
+If you require more granularity than the platform files above provide you can also set the CUSTOM_BUILD_SCRIPT and CUSTOM_TEST_SCRIPT environment variables in your travis configuration. The scripts these environment variables point to will be executed in place of the platform custom scripts or default commands.
+
+```
+$ cat .build-ubuntu1404
+swift build -Xlinker -L/usr/lib -Xcc -I/usr/include/ -Xcc -I/usr/include/mysql/
+
+$ cat .test-ubuntu1404
+swift test -Xlinker -L/usr/lib -Xcc -I/usr/include/ -Xcc -I/usr/include/mysql/
+
+$ cat .travis.yml
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      services: docker
+      env:
+        - DOCKER_IMAGE=ubuntu:14.04 CUSTOM_BUILD_SCRIPT=.build-ubuntu1404 CUSTOM_TEST_SCRIPT=.test-ubuntu1404
+      sudo: required
 ```
 
 ### Custom configuration for executing tests
