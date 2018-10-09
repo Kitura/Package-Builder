@@ -18,7 +18,7 @@
 
 set +e                   # do not exit immediately temporarily so we can generate a backtrace for any crash
 ulimit -c unlimited      # enable core file generation
-if [ -v CUSTOM_TEST_SCRIPT ] && [ -e ${projectFolder}/$CUSTOM_TEST_SCRIPT ]; then
+if [ -n "${CUSTOM_TEST_SCRIPT}" ] && [ -e ${projectFolder}/$CUSTOM_TEST_SCRIPT ]; then
   echo ">> Running custom test command: $(cat ${projectFolder}/$CUSTOM_TEST_SCRIPT)"
   source ${projectFolder}/$CUSTOM_TEST_SCRIPT
 elif [ -e ${projectFolder}/.swift-test-macOS ] && [ "$osName" == "osx" ]; then
