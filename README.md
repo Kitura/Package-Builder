@@ -75,11 +75,39 @@ script:
 ### Codecov
 [Codecov](https://codecov.io/) is used in Package-Builder to determine how much test coverage exists in your code. Codecov allows us to determine which methods and statements in our code are not currently covered by the automated test cases included in the project. Codecov performs its analysis by generating an Xcode project.
 
+To turn on Codecov, you need to add the following to your `.travis.yml` file:
+
+```yaml
+env:
+  global:
+    - CODECOV_ELIGIBLE=true
+```
+
 For example, see the [current test coverage](https://codecov.io/gh/IBM-Swift/Swift-cfenv) for the [Swift-cfenv](https://github.com/IBM-Swift/Swift-cfenv) package.
 
 ![Codecov Report](/img/codecov-swift-cfenv-1024x768.png?raw=true "Code Coverage Report")
 
 Please note that Codecov is only leveraged when executing builds on the macOS platform.
+
+### SonarCloud
+In parallel to Codecov, you can also use [SonarCloud](https://sonarcloud.io). SonarCloud will provide you both with code coverage and code analysis tools.
+
+Just as Codecov, SonarCloud is only leveraged when executing builds on the macOS platform.
+
+A little customization to your `.travis.yml` file is needed:
+
+```yaml
+env:
+  global:
+    - SONARCLOUD_ELIGIBLE=true
+    - SONAR_LOGIN_TOKEN={your login token -- better add this in Travis directly}
+```
+
+Feel free to read the source for more info: [sonarcloud.sh](https://github.com/IBM-Swift/Package-Builder/blob/master/sonarcloud.sh#L69)
+
+It is recommended to use a `sonar-project.properties` at the root of your project. Here's a good example: [sonar-project.properties](https://github.com/ladislas/Swift-Travis-Sonarcloud-CI/blob/master/sonar-project.properties). The whole [Swift-Travis-Sonarcloud-CI repo](https://github.com/ladislas/Swift-Travis-Sonarcloud-CI) is a good starting point for both Travis-CI & Sonarcloud.
+
+You can also provide a `.swift-sonarcloud` file with your custom `sonar-scanner` command.
 
 ### Auto Jazzy Docs Build
 [Jazzy](https://github.com/realm/jazzy) provides automatic documentation construction. To simplify the process of updating public facing api/documentation, package builder can automate the creation and pushing of updated docs for a Pull Request.

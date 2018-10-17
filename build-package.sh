@@ -90,6 +90,12 @@ if [ "${osName}" == "osx" ]; then
   brew update
   brew install libressl
   echo ">> Finished installing libressl."
+
+  if [ -n "${SONARCLOUD_ELIGIBLE}" ]; then
+    echo ">> Installing sonar-scanner..."
+    brew install sonar-scanner
+    echo ">> Finished installing sonar-scanner."
+  fi
 fi
 
 # Install swift binaries based on OS
@@ -174,6 +180,7 @@ if [ "$(uname)" == "Darwin" ]; then
   fi
 fi
 
+# Codecov.io
 # Generate test code coverage report (macOS). The Travis build must have the
 # CODECOV_ELIGIBLE environment variable defined.
 if [ "$(uname)" == "Darwin" -a -n "${CODECOV_ELIGIBLE}" ]; then
@@ -181,6 +188,17 @@ if [ "$(uname)" == "Darwin" -a -n "${CODECOV_ELIGIBLE}" ]; then
       source ${projectFolder}/.swift-codecov
   else
       sourceScript "${SCRIPT_DIR}/codecov.sh" "codecov generation"
+  fi
+fi
+
+# SonarCloud
+# Generate test code coverage report (macOS). The Travis build must have the
+# SONARCLOUD_ELIGIBLE environment variable defined.
+if [ "$(uname)" == "Darwin" -a -n "${SONARCLOUD_ELIGIBLE}" ]; then
+  if [ -e ${projectFolder}/.swift-sonarcloud ]; then
+      source ${projectFolder}/.swift-sonarcloud
+  else
+      sourceScript "${SCRIPT_DIR}/sonarcloud.sh" "sonarcloud generation"
   fi
 fi
 
