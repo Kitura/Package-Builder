@@ -213,6 +213,46 @@ else
     echo "Note: Build not eligible for jazzy doc generation."
 fi
 
+# Generate pods for Pull Requests that have the 'pod-gen' label.
+# The docs will be generated and pushed as a new [ci skip] commit to the PR branch.
+#
+# Suitable credentials are required for this purpose. These should be defined in
+# the repo's Travis configuration as GITHUB_USERNAME and GITHUB_PASSWORD.
+#
+# Additionally, the Travis build must have the POD_ELIGIBLE environment variable
+# defined, and this should be defined on only one macOS build, to ensure that only
+# one build (per commit) produces a documentation commit.
+#
+if [ "$(uname)" == "Darwin" -a "${TRAVIS_PULL_REQUEST}" != "false" -a -n "${POD_ELIGIBLE}" ]; then
+    if [ "${TRAVIS_PULL_REQUEST_SLUG}" == "${TRAVIS_REPO_SLUG}" ]; then
+        if  [ -n "${GITHUB_USERNAME}" -a -n "${GITHUB_PASSWORD}" ]; then
+            echo "Checking PR for pod generation tag"
+            # Obtain the label information for this PR from the GitHub. This is a JSON document describing each label
+            jsonResponse=`curl -s -X GET https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@api.github.com/repos/${TRAVIS_REPO_SLUG}/issues/${TRAVIS_PULL_REQUEST}/labels`
+            echo "Label data retrieved: $jsonResponse"
+            # We require only the text of the label - filter on the "name" attribute
+            labelNames=`echo "$jsonResponse" | grep '"name"' || true`
+            # Extract the label name from the "name": "value" pair. This assumes each pair is on a separate line
+            candidateTags=`echo "$labelNames" | sed -e's#.*"name" *: *"\([^"]*\)".*#\1#'`
+            echo "Labels: " $candidateTags
+            # Check if any of the labels contain the text 'pod-gen'
+            if [[ $candidateTags == *"pod-gen"* ]]; then
+                echo "Documentation tag pod-gen exists for this repo"
+                sourceScript "${SCRIPT_DIR}/generate-podspec.sh" "pod generation"
+            else
+                echo "Note: No pod-gen tag found."
+            fi
+
+        else
+            echo "Error: Expected GITHUB_USERNAME && GITHUB_PASSWORD Env variables."
+        fi
+    else
+        echo "Error: pod-gen generation cannot be performed from a fork."
+    fi
+else
+    echo "Note: Build not eligible for pod generation."
+fi
+
 # Clean up build artifacts
 # If at some point we integrate this script in a toolchain/pipeline,
 # we will need to resurrect the code below
