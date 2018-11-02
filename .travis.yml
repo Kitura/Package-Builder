@@ -49,10 +49,10 @@ script:
   - rm ../executable-no-swift-version/.swift-version
   # This tests Package-Builder with a library
   - cd ../library
-  - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR/library
+  - ./Package-Builder/build-package.sh -projectDir $PWD
   # This tests Package-Builder with an executable
   - cd ../executable
-  - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR/executable
+  - ./Package-Builder/build-package.sh -projectDir $PWD
   # Test building a package that does not have a .swift-version file
   - cd ../executable-no-swift-version
-  - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR/executable-no-swift-version
+  - ./Package-Builder/build-package.sh -projectDir $PWD
