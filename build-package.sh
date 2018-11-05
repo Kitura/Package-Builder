@@ -33,6 +33,10 @@ function usage {
   exit 1
 }
 
+# Capture full command line in case we need to re-execute inside Docker
+PACKAGE_BUILDER_ARGS="$*"
+
+# Consume command line options
 while [ $# -ne 0 ]
 do
   case "$1" in
@@ -66,6 +70,28 @@ function sourceScript () {
     echo ">> Completed ${2}."
   fi
 }
+
+# If we have been asked to run within a Docker image, pull the image, then execute
+# this script within the container.
+#
+# Note: environment variables must be explicitly propagated to the container. The
+# ones we currently recognize are:
+#
+# - SWIFT_SNAPSHOT: the Swift toolchain to be used,
+# - KITURA_NIO: an optional compilation mode switch for Kitura,
+# - GCD_ASYNCH: an optional compilation mode switch for Kitura-net,
+# - TESTDB_NAME: the name of a database to be accessed during the build.
+#
+if [ -n "${DOCKER_IMAGE}" ]; then
+  echo ">> Executing build in Docker container: ${DOCKER_IMAGE}"
+  set -x
+  docker pull ${DOCKER_IMAGE}
+  docker run --env SWIFT_SNAPSHOT --env KITURA_NIO --env GCD_ASYNCH --env TESTDB_NAME -v ${projectBuildDir}:${projectBuildDir} ${DOCKER_IMAGE} /bin/bash -c "apt-get update && apt-get install -y git sudo lsb-release wget libxml2 pkg-config libpq-dev && cd $projectBuildDir && ./Package-Builder/build-package.sh ${PACKAGE_BUILDER_ARGS}"
+  set +x
+  DOCKER_RC=$?
+  echo ">> Docker execution complete, RC=${DOCKER_RC}"
+  exit ${DOCKER_RC}
+fi
 
 # Determine platform/OS and project name
 echo ">> uname: $(uname)"
