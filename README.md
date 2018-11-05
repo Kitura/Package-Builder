@@ -168,6 +168,33 @@ script:
 
 In this example above, the first build uses the version specified in the `.swift-version` of the project, or the default version supported by Package-Builder.  The second one declares a `SWIFT_SNAPSHOT` environment variable, which overrides the default and `.swift-version` versions for that build.
 
+### Testing under Docker
+To test your package using a different version of Linux, add the `DOCKER_IMAGE` environment variable to your `.travis.yml` file in each one of the entries under the matrix section as shown below:
+```
+$ cat .travis.yml
+
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      sudo: required
+      env: SWIFT_SNAPSHOT=4.1.3
+    - os: linux
+      dist: trusty
+      sudo: required
+      env: DOCKER_IMAGE=ubuntu:16.04 SWIFT_SNAPSHOT=4.1.3
+
+before_install:
+  - git clone https://github.com/IBM-Swift/Package-Builder.git
+
+script:
+  - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR
+```
+
+In the above example, the first build uses Ubuntu 14.04 (Trusty) which is supported natively by Travis. The second build uses Trusty to download a 16.04 (Xenial) Docker container, and will then re-execute the Package-Builder command within that container.
+
+Selected environment variables are passed through to the container. These are currently: `SWIFT_SNAPSHOT`, `KITURA_NIO`, `GCD_ASYNCH` and `TESTDB_NAME`.
+
 ### Custom build and test commands
 If you need a custom command for **compiling** your Swift package, you should include a `.swift-build-linux` or `.swift-build-macOS` file in the root level of your repository and specify in it the exact compilation command for the corresponding platform.
 
