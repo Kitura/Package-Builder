@@ -193,7 +193,19 @@ script:
 
 In the above example, the first build uses Ubuntu 14.04 (Trusty) which is supported natively by Travis. The second build uses Trusty to download a 16.04 (Xenial) Docker container, and will then re-execute the Package-Builder command within that container.
 
-Selected environment variables are passed through to the container. These are currently: `SWIFT_SNAPSHOT`, `KITURA_NIO`, `GCD_ASYNCH` and `TESTDB_NAME`.
+#### Additional environment variables
+
+Selected environment variables are passed through to the container. These are currently: `SWIFT_SNAPSHOT`, `KITURA_NIO`, `GCD_ASYNCH` and `TESTDB_NAME`. Additional environment variables can be passed through by setting the `DOCKER_ENVIRONMENT` variable as follows:
+```
+      env: DOCKER_IMAGE=ubuntu:16.04 DOCKER_ENVIRONMENT="CUSTOMENV1 CUSTOMENV2"
+```
+
+#### Additional system packages
+
+A number of system packages are installed within the Docker container by default (this includes `git`, `wget` and `libxml2`). Additional system package dependencies can be specified by setting the `DOCKER_PACKAGES` variable as follows:
+```
+      env: DOCKER_IMAGE=ubuntu:16.04 DOCKER_PACKAGES="libSomePackage someOtherPackage"
+```
 
 ### Custom build and test commands
 If you need a custom command for **compiling** your Swift package, you should include a `.swift-build-linux` or `.swift-build-macOS` file in the root level of your repository and specify in it the exact compilation command for the corresponding platform.
