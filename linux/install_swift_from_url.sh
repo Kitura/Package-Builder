@@ -32,7 +32,7 @@ echo ">> Running ${BASH_SOURCE[0]}"
 export DEBIAN_FRONTEND="noninteractive"
 
 sudo -E apt-get -q update
-sudo -E apt-get -y -q install clang lldb-3.8 libicu-dev libtool libcurl4-openssl-dev libbsd-dev build-essential libssl-dev uuid-dev tzdata libz-dev
+sudo -E apt-get -y -q install clang lldb-3.8 libicu-dev libtool libcurl4-openssl-dev libbsd-dev build-essential libssl-dev uuid-dev tzdata libz-dev libblocksruntime-dev
 
 echo ">> Installing '${SWIFT_SNAPSHOT}'..."
 # Install Swift compiler
