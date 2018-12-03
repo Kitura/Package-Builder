@@ -44,5 +44,4 @@ Swift-Kuery-SQLite
 Swift-SMTP
 SwiftyRequest
 TypeDecoder
-KituraKit
 Package-Builder
