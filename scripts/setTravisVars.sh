@@ -28,7 +28,7 @@ FAIL=""    # List of failed updates
 # Builds a list of repositories that failed to update (if any)
 function fail {
   FAIL="$FAIL $REPO" && echo "$REPO: FAILED"
-  return -1
+  return 1
 }
 
 # Check that current user is logged in to Travis
@@ -39,7 +39,7 @@ if ! travis accounts; then
     echo "Error: either log in, or define GITHUB_TOKEN for Travis login"
     exit 1
   fi
-  travis login --org --github-token ${GITHUB_TOKEN} || exit 1
+  travis login --org --github-token "${GITHUB_TOKEN}" || exit 1
 fi
 
 # Confirm actions before proceeding
@@ -53,7 +53,7 @@ fi
 # Set environment for each repo
 for REPO in $REPOS; do
     echo "Setting ${TRAVIS_ENV_VAR}=${TRAVIS_ENV_VALUE} on ${REPO}"
-    travis env set ${TRAVIS_ENV_VAR} ${TRAVIS_ENV_VALUE} --repo IBM-Swift/${REPO} --${TRAVIS_ENV_TYPE} || fail || continue
+    travis env set "${TRAVIS_ENV_VAR}" "${TRAVIS_ENV_VALUE}" --repo IBM-Swift/${REPO} --${TRAVIS_ENV_TYPE} || fail || continue
     SUCCESS="$SUCCESS $REPO"
 done
 
