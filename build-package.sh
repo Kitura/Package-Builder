@@ -84,6 +84,10 @@ function sourceScript () {
 #
 if [ -n "${DOCKER_IMAGE}" ]; then
   echo ">> Executing build in Docker container: ${DOCKER_IMAGE}"
+  # Check if privileged mode has been requested for
+  if [ -n "${DOCKER_PRIVILEGED}" ]; then
+    docker_run_privileged="--privileged"
+  fi
   # Define default env vars to be passed to docker
   docker_env_vars="--env SWIFT_SNAPSHOT --env KITURA_NIO --env GCD_ASYNCH --env TESTDB_NAME"
   # Pass additional vars listed by DOCKER_ENVIRONMENT
@@ -95,7 +99,7 @@ if [ -n "${DOCKER_IMAGE}" ]; then
   docker_pkg_list="git sudo lsb-release wget libxml2 pkg-config libpq-dev $DOCKER_PACKAGES"
   set -x
   docker pull ${DOCKER_IMAGE}
-  docker run ${docker_env_vars} -v ${projectBuildDir}:${projectBuildDir} ${DOCKER_IMAGE} /bin/bash -c "apt-get update && apt-get install -y ${docker_pkg_list} && cd $projectBuildDir && ./Package-Builder/build-package.sh ${PACKAGE_BUILDER_ARGS}"
+  docker run ${docker_run_privileged} ${docker_env_vars} -v ${projectBuildDir}:${projectBuildDir} ${DOCKER_IMAGE} /bin/bash -c "apt-get update && apt-get install -y ${docker_pkg_list} && cd $projectBuildDir && ./Package-Builder/build-package.sh ${PACKAGE_BUILDER_ARGS}"
   set +x
   DOCKER_RC=$?
   echo ">> Docker execution complete, RC=${DOCKER_RC}"
