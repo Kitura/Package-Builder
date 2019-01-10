@@ -243,6 +243,11 @@ matrix:
         - DOCKER_IMAGE=ubuntu:14.04 CUSTOM_BUILD_SCRIPT=.build-ubuntu1404 CUSTOM_TEST_SCRIPT=.test-ubuntu1404
       sudo: required
 ```
+#### Custom `swift test` arguments
+If you only need to provide arguments to the `swift test` command, rather than providing a customized test script, you can define the `SWIFT_TEST_ARGS` environment variable. For example:
+```
+SWIFT_TEST_ARGS="--parallel --num-workers=16"
+```
 
 ### Custom configuration for executing tests
 Sometimes, a dependency must be set up before the testing process can begin. You may also have the need to execute certain actions after your tests have completed (e.g. shutting down a server). Package-Builder provides an extension point to do this; you can include a `before_tests.sh` and/or a `after_tests.sh` file containing the commands to be executed before and after the tests.

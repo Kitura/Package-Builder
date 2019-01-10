@@ -94,7 +94,7 @@ if [ -n "${DOCKER_IMAGE}" ]; then
     docker_run_privileged="--privileged"
   fi
   # Define list of env vars to be passed to docker.
-  docker_env_vars="--env SWIFT_SNAPSHOT --env KITURA_NIO"
+  docker_env_vars="--env SWIFT_SNAPSHOT --env KITURA_NIO --env CUSTOM_BUILD_SCRIPT --env CUSTOM_TEST_SCRIPT --env SWIFT_TEST_ARGS"
   # Pass additional vars listed by DOCKER_ENVIRONMENT
   for DOCKER_ENV_VAR in $DOCKER_ENVIRONMENT; do
     docker_env_vars="$docker_env_vars --env $DOCKER_ENV_VAR"
