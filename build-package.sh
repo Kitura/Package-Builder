@@ -76,26 +76,35 @@ function sourceScript () {
 #
 # Note: environment variables must be explicitly propagated to the container. The
 # ones we currently recognize are:
-#
 # - SWIFT_SNAPSHOT: the Swift toolchain to be used,
-# - KITURA_NIO: an optional compilation mode switch for Kitura,
-# - GCD_ASYNCH: an optional compilation mode switch for Kitura-net,
-# - TESTDB_NAME: the name of a database to be accessed during the build.
+# - KITURA_NIO: an optional compilation mode switch for Kitura.
+#
+# Additional env vars can be passed by listing them in DOCKER_ENVIRONMENT.
+#
+# Within the Docker image, we will install some default system packages:
+# - git, sudo, lsb-release and wget are required by Package-Builder itself.
+# - pkg-config is required by SwiftPM to locate .pc files (see https://github.com/apple/swift-package-manager/pull/338).
+#
+# Additional packages can be installed by listing them in DOCKER_PACKAGES.
 #
 if [ -n "${DOCKER_IMAGE}" ]; then
   echo ">> Executing build in Docker container: ${DOCKER_IMAGE}"
-  # Define default env vars to be passed to docker
-  docker_env_vars="--env SWIFT_SNAPSHOT --env KITURA_NIO --env GCD_ASYNCH --env TESTDB_NAME"
+  # Check if privileged mode has been requested for
+  if [ -n "${DOCKER_PRIVILEGED}" ]; then
+    docker_run_privileged="--privileged"
+  fi
+  # Define list of env vars to be passed to docker.
+  docker_env_vars="--env SWIFT_SNAPSHOT --env KITURA_NIO"
   # Pass additional vars listed by DOCKER_ENVIRONMENT
   for DOCKER_ENV_VAR in $DOCKER_ENVIRONMENT; do
     docker_env_vars="$docker_env_vars --env $DOCKER_ENV_VAR"
   done
-  # Define default packages to install within docker image.
-  # Install additional packages listed by DOCKER_PACKAGES
-  docker_pkg_list="git sudo lsb-release wget libxml2 pkg-config libpq-dev $DOCKER_PACKAGES"
+  # Define list of packages to install within docker image.
+  docker_pkg_list="git sudo lsb-release wget pkg-config $DOCKER_PACKAGES"
   set -x
   docker pull ${DOCKER_IMAGE}
-  docker run ${docker_env_vars} -v ${projectBuildDir}:${projectBuildDir} ${DOCKER_IMAGE} /bin/bash -c "apt-get update && apt-get install -y ${docker_pkg_list} && cd $projectBuildDir && ./Package-Builder/build-package.sh ${PACKAGE_BUILDER_ARGS}"
+  # Invoke Package-Builder within the Docker image.
+  docker run ${docker_run_privileged} ${docker_env_vars} -v ${projectBuildDir}:${projectBuildDir} ${DOCKER_IMAGE} /bin/bash -c "apt-get update && apt-get install -y ${docker_pkg_list} && cd $projectBuildDir && ./Package-Builder/build-package.sh ${PACKAGE_BUILDER_ARGS}"
   set +x
   DOCKER_RC=$?
   echo ">> Docker execution complete, RC=${DOCKER_RC}"
