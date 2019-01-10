@@ -195,14 +195,14 @@ In the above example, the first build uses Ubuntu 14.04 (Trusty) which is suppor
 
 #### Additional environment variables
 
-Selected environment variables are passed through to the container. These are currently: `SWIFT_SNAPSHOT`, `KITURA_NIO`, `GCD_ASYNCH` and `TESTDB_NAME`. Additional environment variables can be passed through by setting the `DOCKER_ENVIRONMENT` variable as follows:
+Selected environment variables are passed through to the container. These are currently: `SWIFT_SNAPSHOT` and `KITURA_NIO`. Additional environment variables can be passed through by setting the `DOCKER_ENVIRONMENT` variable as follows:
 ```
       env: DOCKER_IMAGE=ubuntu:16.04 DOCKER_ENVIRONMENT="CUSTOMENV1 CUSTOMENV2"
 ```
 
 #### Additional system packages
 
-A number of system packages are installed within the Docker container by default (this includes `git`, `wget` and `libxml2`). Additional system package dependencies can be specified by setting the `DOCKER_PACKAGES` variable as follows:
+A number of system packages are installed within the Docker container by default (this includes `pkg-config` for SwiftPM, and packages required by Package-Builder itself). Additional system package dependencies can be specified by setting the `DOCKER_PACKAGES` variable as follows:
 ```
       env: DOCKER_IMAGE=ubuntu:16.04 DOCKER_PACKAGES="libSomePackage someOtherPackage"
 ```
