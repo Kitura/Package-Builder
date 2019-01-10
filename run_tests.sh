@@ -27,10 +27,9 @@ elif [ -e ${projectFolder}/.swift-test-macOS ] && [ "$osName" == "osx" ]; then
 elif [ -e ${projectFolder}/.swift-test-linux ] && [ "$osName" == "linux" ]; then
   echo ">> Running custom Linux test command: $(cat ${projectFolder}/.swift-test-linux)"
   source ${projectFolder}/.swift-test-linux
-elif [ -n "${RUN_TESTS_PARALLEL}"]; then
-  swift test --parallel
 else
-  swift test
+  echo ">> Running test command: swift test ${SWIFT_TEST_ARGS}"
+  swift test ${SWIFT_TEST_ARGS}
 fi
 TEST_EXIT_CODE=$?
 
