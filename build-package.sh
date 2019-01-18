@@ -128,13 +128,7 @@ export projectFolder=`pwd`
 projectName="$(basename $projectFolder)"
 echo ">> projectName: $projectName"
 
-# Install libressl on osx
 if [ "${osName}" == "osx" ]; then
-  echo ">> Installing libressl..."
-  brew update
-  brew install libressl
-  echo ">> Finished installing libressl."
-
   if [ -n "${SONARCLOUD_ELIGIBLE}" ]; then
     echo ">> Installing sonar-scanner..."
     brew install sonar-scanner
