@@ -129,6 +129,16 @@ projectName="$(basename $projectFolder)"
 echo ">> projectName: $projectName"
 
 if [ "${osName}" == "osx" ]; then
+  # BREW_INSTALL_PACKAGES is expected to have a whitespace-separated list of all packages that need to be installed
+  if [ -n "${BREW_INSTALL_PACKAGES}" ]; then
+    brew update
+    for PACKAGE in ${BREW_INSTALL_PACKAGES}; do
+      echo ">> Installing ${PACKAGE}..."
+      brew install ${PACKAGE}
+      echo ">> Finished installing ${PACKAGE}."
+    done
+  fi
+
   if [ -n "${SONARCLOUD_ELIGIBLE}" ]; then
     echo ">> Installing sonar-scanner..."
     brew install sonar-scanner
