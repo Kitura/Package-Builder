@@ -54,4 +54,33 @@ if [[ $TEST_EXIT_CODE != 0 ]]; then
     exit $TEST_EXIT_CODE
 fi
 
+# Run Kitura tests with the current Kitura-net or Kitura-NIO branch, if asked for
+if [ -n "${RUN_KITURA_TESTS}" ]; then
+    PROJECT_DIR=`pwd`
+
+    # If we are to test Kitura with Kitura-NIO, we'd need to set the KITURA_NIO env var
+    NET_PACKAGE=$(pwd | rev | cut -d'/' -f1 | rev)
+    if [ "${NET_PACKAGE}" == "Kitura-NIO" ]; then
+        echo ">> Setting KITURA_NIO=1"
+        export KITURA_NIO=1
+    fi
+    echo ">> cd ../ && git clone https://github.com/IBM-Swift/Kitura && cd Kitura"
+    cd ../ && git clone https://github.com/IBM-Swift/Kitura && cd Kitura
+    echo ">> swift build"
+    swift build
+    echo ">> swift package edit $NET_PACKAGE --path $PROJECT_DIR"
+    swift package edit $NET_PACKAGE --path $PROJECT_DIR
+    echo ">> swift package edit returned $?"
+    echo ">> swift test"
+    swift test
+    TEST_EXIT_CODE=$?
+
+    if [[ $TEST_EXIT_CODE != 0 ]]; then
+        exit $TEST_EXIT_CODE
+    fi
+
+    # On macOS, swiftlint will run after this script. We make sure we exit this script from the right location
+    cd $PROJECT_DIR 
+fi
+
 set -e
