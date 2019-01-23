@@ -29,10 +29,12 @@ echo ">> Running ${BASH_SOURCE[0]}"
 # Install Swift binaries
 # See http://apple.stackexchange.com/questions/72226/installing-pkg-with-terminal
 
-# Install macOS system level dependencies
-brew update > /dev/null
-#brew install curl
-brew install wget > /dev/null || brew outdated wget > /dev/null || brew upgrade wget > /dev/null
+# Install macOS system level dependencies if required
+if [ ! -x "`which wget`" ]; then
+  brew update > /dev/null
+  #brew install curl
+  brew install wget > /dev/null || brew outdated wget > /dev/null || brew upgrade wget > /dev/null
+fi
 
 #Download and install Swift
 echo "Swift installed $SWIFT_PREINSTALL does not match snapshot $SWIFT_SNAPSHOT."
