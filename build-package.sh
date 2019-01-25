@@ -167,6 +167,7 @@ echo
 
 # Build swift package
 travis_fold start "swift_build"
+travis_time_start
 echo ">> Building Swift package..."
 
 cd ${projectFolder}
@@ -185,6 +186,7 @@ else
 fi
 
 echo ">> Finished building Swift package."
+travis_time_finish
 travis_fold end "swift_build"
 
 # Copy test credentials for project if available
@@ -201,6 +203,7 @@ fi
 # Execute test cases
 if [ -e "${projectFolder}/Tests" ]; then
     travis_fold start "swift_test"
+    travis_time_start
     echo ">> Testing Swift package..."
     # Execute OS specific pre-test steps
     sourceScript "`find ${projectFolder} -path "*/${projectName}/${osName}/before_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" "${osName} pre-tests steps"
@@ -218,6 +221,7 @@ if [ -e "${projectFolder}/Tests" ]; then
 
     echo ">> Finished testing Swift package."
     echo
+    travis_time_finish
     travis_fold end "swift_test"
 else
     echo ">> No test cases found."
@@ -237,9 +241,11 @@ if [ "$(uname)" == "Darwin" ]; then
 
     # Print linter version
     travis_fold start "swift_lint"
+    travis_time_start
     echo "Running linter swiftlint version $(swiftlint version)"
 
     swiftlint lint --quiet --config ${projectFolder}/.swiftlint.yml
+    travis_time_finish
     travis_fold end "swift_lint"
   #else
   #swiftlint lint --quiet --config ${projectFolder}/Package-Builder/.swiftlint.yml
@@ -251,11 +257,13 @@ fi
 # CODECOV_ELIGIBLE environment variable defined.
 if [ "$(uname)" == "Darwin" -a -n "${CODECOV_ELIGIBLE}" ]; then
   travis_fold start "swift_codecov"
+  travis_time_start
   if [ -e ${projectFolder}/.swift-codecov ]; then
       source ${projectFolder}/.swift-codecov
   else
       sourceScript "${SCRIPT_DIR}/codecov.sh" "codecov generation"
   fi
+  travis_time_finish
   travis_fold end "swift_codecov"
 fi
 
@@ -295,8 +303,10 @@ if [ "$(uname)" == "Darwin" -a "${TRAVIS_PULL_REQUEST}" != "false" -a -n "${JAZZ
         # Check if any of the labels contain the text 'jazzy-doc'
         if [[ $candidateTags == *"jazzy-doc"* ]]; then
             travis_fold start "jazzy_doc"
+            travis_time_start
             echo "Documentation tag jazzy-doc exists for this repo"
             sourceScript "${SCRIPT_DIR}/jazzy.sh" "jazzy-doc generation"
+            travis_time_finish
             travis_fold end "jazzy_doc"
         else
             echo "Note: No jazzy-doc tag found."
