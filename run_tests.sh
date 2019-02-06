@@ -33,7 +33,9 @@ else
   travis_start "swift_test"
   echo ">> Running test command: swift test ${SWIFT_TEST_ARGS}"
   swift test ${SWIFT_TEST_ARGS}
+  SWIFT_TEST_STATUS=$?
   travis_end
+  (exit $SWIFT_TEST_STATUS)   # Ensure TEST_EXIT_CODE reflects swift test, not travis_end!
 fi
 TEST_EXIT_CODE=$?
 
