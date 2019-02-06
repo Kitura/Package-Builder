@@ -278,11 +278,13 @@ fi
 # Generate test code coverage report (macOS). The Travis build must have the
 # SONARCLOUD_ELIGIBLE environment variable defined.
 if [ "$(uname)" == "Darwin" -a -n "${SONARCLOUD_ELIGIBLE}" ]; then
+  travis_start "swift_sonarcloud"
   if [ -e ${projectFolder}/.swift-sonarcloud ]; then
       source ${projectFolder}/.swift-sonarcloud
   else
       sourceScript "${SCRIPT_DIR}/sonarcloud.sh" "sonarcloud generation"
   fi
+  travis_end
 fi
 
 # Generate jazzy docs (macOS) for Pull Requests that have the 'jazzy-doc' label.
