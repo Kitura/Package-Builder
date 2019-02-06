@@ -22,19 +22,13 @@ ulimit -c unlimited      # enable core file generation
 # implemented from within the custom script itself.
 if [ -n "${CUSTOM_TEST_SCRIPT}" ] && [ -e ${projectFolder}/$CUSTOM_TEST_SCRIPT ]; then
   echo ">> Running custom test command: $CUSTOM_TEST_SCRIPT"
-  set -x
   source ${projectFolder}/$CUSTOM_TEST_SCRIPT
-  set +x
 elif [ -e ${projectFolder}/.swift-test-macOS ] && [ "$osName" == "osx" ]; then
   echo ">> Running custom macOS test command: ${projectFolder}/.swift-test-macOS"
-  set -x
   source ${projectFolder}/.swift-test-macOS
-  set +x 
 elif [ -e ${projectFolder}/.swift-test-linux ] && [ "$osName" == "linux" ]; then
   echo ">> Running custom Linux test command: ${projectFolder}/.swift-test-linux"
-  set -x
   source ${projectFolder}/.swift-test-linux
-  set +x
 else
   travis_start "swift_test"
   echo ">> Running test command: swift test ${SWIFT_TEST_ARGS}"
