@@ -18,26 +18,33 @@
 
 set +e                   # do not exit immediately temporarily so we can generate a backtrace for any crash
 ulimit -c unlimited      # enable core file generation
+# Custom test scripts are not folded, as folding cannot be nested. Folding should be
+# implemented from within the custom script itself.
 if [ -n "${CUSTOM_TEST_SCRIPT}" ] && [ -e ${projectFolder}/$CUSTOM_TEST_SCRIPT ]; then
-  echo ">> Running custom test command: $(cat ${projectFolder}/$CUSTOM_TEST_SCRIPT)"
+  echo ">> Running custom test command: $CUSTOM_TEST_SCRIPT"
+  set -x
   source ${projectFolder}/$CUSTOM_TEST_SCRIPT
+  set +x
 elif [ -e ${projectFolder}/.swift-test-macOS ] && [ "$osName" == "osx" ]; then
-  echo ">> Running custom macOS test command: $(cat ${projectFolder}/.swift-test-macOS)"
+  echo ">> Running custom macOS test command: ${projectFolder}/.swift-test-macOS"
+  set -x
   source ${projectFolder}/.swift-test-macOS
+  set +x 
 elif [ -e ${projectFolder}/.swift-test-linux ] && [ "$osName" == "linux" ]; then
-  echo ">> Running custom Linux test command: $(cat ${projectFolder}/.swift-test-linux)"
+  echo ">> Running custom Linux test command: ${projectFolder}/.swift-test-linux"
+  set -x
   source ${projectFolder}/.swift-test-linux
+  set +x
 else
-  travis_fold start "swift_test"
-  travis_time_start
+  travis_start "swift_test"
   echo ">> Running test command: swift test ${SWIFT_TEST_ARGS}"
   swift test ${SWIFT_TEST_ARGS}
-  travis_time_finish
-  travis_fold end "swift_test"
+  travis_end
 fi
 TEST_EXIT_CODE=$?
 
 if [[ $TEST_EXIT_CODE != 0 ]]; then
+    travis_start "swift_test_backtrace"
     if [ "$osName" == "osx" ]; then
         executable=`ls .build/debug/*Tests.xctest/Contents/MacOS/*Tests`
         coreFile=`ls -t /cores/* | head -n1`
@@ -54,6 +61,7 @@ if [[ $TEST_EXIT_CODE != 0 ]]; then
     else
         lldb "$executable" -c "$coreFile" --batch -o 'thread backtrace all' -o 'quit'
     fi
+    travis_end
 
     exit $TEST_EXIT_CODE
 fi

@@ -79,6 +79,17 @@ function sourceScript () {
   fi
 }
 
+function travis_start () {
+  export TRAVIS_CURRENT_SECTION=$1
+  travis_fold start ${TRAVIS_CURRENT_SECTION}
+  travis_time_start
+}
+
+function travis_end () {
+  travis_time_finish
+  travis_fold end ${TRAVIS_CURRENT_SECTION}
+}
+
 # If we have been asked to run within a Docker image, pull the image, then execute
 # this script within the container.
 #
@@ -139,20 +150,16 @@ echo ">> projectName: $projectName"
 if [ "${osName}" == "osx" ]; then
   # BREW_INSTALL_PACKAGES is expected to have a whitespace-separated list of all packages that need to be installed
   if [ -n "${BREW_INSTALL_PACKAGES}" ]; then
-    travis_fold start "brew_update"
-    travis_time_start
+    travis_start "brew_update"
     brew update
-    travis_time_finish
-    travis_fold end "brew_update"
-    travis_fold start "brew_install"
-    travis_time_start
+    travis_end
+    travis_start "brew_install"
     for PACKAGE in ${BREW_INSTALL_PACKAGES}; do
       echo ">> Installing ${PACKAGE}..."
       brew install ${PACKAGE}
       echo ">> Finished installing ${PACKAGE}."
     done
-    travis_time_finish
-    travis_fold end "brew_install"
+    travis_end
   fi
 
   if [ -n "${SONARCLOUD_ELIGIBLE}" ]; then
@@ -163,19 +170,16 @@ if [ "${osName}" == "osx" ]; then
 fi
 
 # Install swift binaries based on OS
-travis_fold start "install_swift"
-travis_time_start
+travis_start "install_swift"
 source ${SCRIPT_DIR}/install-swift.sh
-travis_time_finish
-travis_fold end "install_swift"
+travis_end
 
 # Show path
 echo ">> PATH: $PATH"
 echo
 
 # Build swift package
-travis_fold start "swift_build"
-travis_time_start
+travis_start "swift_build"
 echo ">> Building Swift package..."
 
 cd ${projectFolder}
@@ -194,8 +198,7 @@ else
 fi
 
 echo ">> Finished building Swift package."
-travis_time_finish
-travis_fold end "swift_build"
+travis_end
 
 # Copy test credentials for project if available
 if [ -e "${credentialsDir}" ]; then
@@ -210,21 +213,18 @@ fi
 
 # Execute test cases
 if [ -e "${projectFolder}/Tests" ]; then
-    travis_fold start "swift_pre_test"
-    travis_time_start
+    travis_start "swift_pre_test"
     echo ">> Testing Swift package..."
     # Execute OS specific pre-test steps
     sourceScript "`find ${projectFolder} -path "*/${projectName}/${osName}/before_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" "${osName} pre-tests steps"
 
     # Execute common pre-test steps
     sourceScript "`find ${projectFolder} -path "*/${projectName}/common/before_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" "common pre-tests steps"
-    travis_time_finish
-    travis_fold end "swift_pre_test"
+    travis_end
 
     source ${SCRIPT_DIR}/run_tests.sh
 
-    travis_fold start "swift_post_test"
-    travis_time_start
+    travis_start "swift_post_test"
     # Execute common post-test steps
     sourceScript "`find ${projectFolder} -path "*/${projectName}/common/after_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" "common post-tests steps"
 
@@ -233,8 +233,7 @@ if [ -e "${projectFolder}/Tests" ]; then
 
     echo ">> Finished testing Swift package."
     echo
-    travis_time_finish
-    travis_fold end "swift_post_test"
+    travis_end
 else
     echo ">> No test cases found."
 fi
@@ -252,13 +251,11 @@ if [ "$(uname)" == "Darwin" ]; then
   - Package-Builder/g' ${projectFolder}/.swiftlint.yml
 
     # Print linter version
-    travis_fold start "swift_lint"
-    travis_time_start
+    travis_start "swift_lint"
     echo "Running linter swiftlint version $(swiftlint version)"
 
     swiftlint lint --quiet --config ${projectFolder}/.swiftlint.yml
-    travis_time_finish
-    travis_fold end "swift_lint"
+    travis_end
   #else
   #swiftlint lint --quiet --config ${projectFolder}/Package-Builder/.swiftlint.yml
   fi
@@ -268,15 +265,13 @@ fi
 # Generate test code coverage report (macOS). The Travis build must have the
 # CODECOV_ELIGIBLE environment variable defined.
 if [ "$(uname)" == "Darwin" -a -n "${CODECOV_ELIGIBLE}" ]; then
-  travis_fold start "swift_codecov"
-  travis_time_start
+  travis_start "swift_codecov"
   if [ -e ${projectFolder}/.swift-codecov ]; then
       source ${projectFolder}/.swift-codecov
   else
       sourceScript "${SCRIPT_DIR}/codecov.sh" "codecov generation"
   fi
-  travis_time_finish
-  travis_fold end "swift_codecov"
+  travis_end
 fi
 
 # SonarCloud
@@ -314,12 +309,10 @@ if [ "$(uname)" == "Darwin" -a "${TRAVIS_PULL_REQUEST}" != "false" -a -n "${JAZZ
         echo "Labels: " $candidateTags
         # Check if any of the labels contain the text 'jazzy-doc'
         if [[ $candidateTags == *"jazzy-doc"* ]]; then
-            travis_fold start "jazzy_doc"
-            travis_time_start
+            travis_start "jazzy_doc"
             echo "Documentation tag jazzy-doc exists for this repo"
             sourceScript "${SCRIPT_DIR}/jazzy.sh" "jazzy-doc generation"
-            travis_time_finish
-            travis_fold end "jazzy_doc"
+            travis_end
         else
             echo "Note: No jazzy-doc tag found."
         fi
