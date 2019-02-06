@@ -28,8 +28,12 @@ elif [ -e ${projectFolder}/.swift-test-linux ] && [ "$osName" == "linux" ]; then
   echo ">> Running custom Linux test command: $(cat ${projectFolder}/.swift-test-linux)"
   source ${projectFolder}/.swift-test-linux
 else
+  travis_fold start "swift_test"
+  travis_time_start
   echo ">> Running test command: swift test ${SWIFT_TEST_ARGS}"
   swift test ${SWIFT_TEST_ARGS}
+  travis_time_finish
+  travis_fold end "swift_test"
 fi
 TEST_EXIT_CODE=$?
 

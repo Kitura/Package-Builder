@@ -210,7 +210,7 @@ fi
 
 # Execute test cases
 if [ -e "${projectFolder}/Tests" ]; then
-    travis_fold start "swift_test"
+    travis_fold start "swift_pre_test"
     travis_time_start
     echo ">> Testing Swift package..."
     # Execute OS specific pre-test steps
@@ -218,9 +218,13 @@ if [ -e "${projectFolder}/Tests" ]; then
 
     # Execute common pre-test steps
     sourceScript "`find ${projectFolder} -path "*/${projectName}/common/before_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" "common pre-tests steps"
+    travis_time_finish
+    travis_fold end "swift_pre_test"
 
     source ${SCRIPT_DIR}/run_tests.sh
 
+    travis_fold start "swift_post_test"
+    travis_time_start
     # Execute common post-test steps
     sourceScript "`find ${projectFolder} -path "*/${projectName}/common/after_tests.sh" -not -path "*/Package-Builder/*" -not -path "*/Packages/*"`" "common post-tests steps"
 
@@ -230,7 +234,7 @@ if [ -e "${projectFolder}/Tests" ]; then
     echo ">> Finished testing Swift package."
     echo
     travis_time_finish
-    travis_fold end "swift_test"
+    travis_fold end "swift_post_test"
 else
     echo ">> No test cases found."
 fi
