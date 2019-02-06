@@ -63,6 +63,14 @@ fi
 # Ref: https://stackoverflow.com/questions/59895/getting-the-source-directory-of-a-bash-script-from-within
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+# Import local copy of Travis timing / folding functions (this enables us to
+# produce Travis folded output from within a Docker container)
+# Source: https://github.com/travis-ci/travis-build/tree/master/lib/travis/build/bash
+source ${SCRIPT_DIR}/lib/travis_fold.bash
+source ${SCRIPT_DIR}/lib/travis_nanoseconds.bash
+source ${SCRIPT_DIR}/lib/travis_time_start.bash
+source ${SCRIPT_DIR}/lib/travis_time_finish.bash
+
 # Utility functions
 function sourceScript () {
   if [ -e "$1" ]; then
