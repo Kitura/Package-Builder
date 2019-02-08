@@ -101,7 +101,7 @@ function travis_end () {
 # Additional env vars can be passed by listing them in DOCKER_ENVIRONMENT.
 #
 # Within the Docker image, we will install some default system packages:
-# - git, sudo, lsb-release and wget are required by Package-Builder itself.
+# - git, sudo and wget are required by Package-Builder itself.
 # - pkg-config is required by SwiftPM to locate .pc files (see https://github.com/apple/swift-package-manager/pull/338).
 #
 # Additional packages can be installed by listing them in DOCKER_PACKAGES.
@@ -119,7 +119,7 @@ if [ -n "${DOCKER_IMAGE}" ]; then
     docker_env_vars="$docker_env_vars --env $DOCKER_ENV_VAR"
   done
   # Define list of packages to install within docker image.
-  docker_pkg_list="git sudo lsb-release wget pkg-config $DOCKER_PACKAGES"
+  docker_pkg_list="git sudo wget pkg-config $DOCKER_PACKAGES"
   set -x
   docker pull ${DOCKER_IMAGE}
   # Invoke Package-Builder within the Docker image.

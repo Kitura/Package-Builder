@@ -34,10 +34,12 @@ export DEBIAN_FRONTEND="noninteractive"
 sudo -E apt-get -q update
 sudo -E apt-get -y -q install clang lldb-3.8 libicu-dev libtool libcurl4-openssl-dev libbsd-dev build-essential libssl-dev uuid-dev tzdata libz-dev libblocksruntime-dev
 
-# Environment vars
-version=`lsb_release -d | awk '{print tolower($2) $3}'`
-export UBUNTU_VERSION=`echo $version | awk -F. '{print $1"."$2}'`
-export UBUNTU_VERSION_NO_DOTS=`echo $version | awk -F. '{print $1$2}'`
+# Get the ID and VERSION_ID from /etc/os-release, stripping quotes
+distribution=`grep '^ID=' /etc/os-release | sed -e's#.*="\?\([^"]*\)"\?#\1#'`
+version=`grep '^VERSION_ID=' /etc/os-release | sed -e's#.*="\?\([^"]*\)"\?#\1#'`
+version_no_dots=`echo $version | awk -F. '{print $1$2}'`
+export UBUNTU_VERSION="${distribution}${version}"
+export UBUNTU_VERSION_NO_DOTS="${distribution}${version_no_dots}"
 
 echo ">> Installing '${SWIFT_SNAPSHOT}'..."
 # Install Swift compiler
