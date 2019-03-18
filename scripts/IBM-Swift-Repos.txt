@@ -1,4 +1,5 @@
 BlueCryptor
+BlueECC
 BlueRSA
 BlueSignals
 BlueSocket
@@ -35,6 +36,7 @@ Kitura-TemplateEngine
 Kitura-WebSocket
 LoggerAPI
 Swift-cfenv
+swift-html-entities
 Swift-JWT
 Swift-Kuery
 SwiftKueryMySQL
