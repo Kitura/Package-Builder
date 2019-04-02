@@ -123,7 +123,7 @@ if [ -n "${DOCKER_IMAGE}" ]; then
   set -x
   docker pull ${DOCKER_IMAGE}
   # Invoke Package-Builder within the Docker image.
-  docker run ${docker_run_privileged} ${docker_env_vars} -v ${projectBuildDir}:${projectBuildDir} ${DOCKER_IMAGE} /bin/bash -c "apt-get update && apt-get install -y ${docker_pkg_list} && cd $projectBuildDir && ./Package-Builder/build-package.sh ${PACKAGE_BUILDER_ARGS}"
+  docker run ${docker_run_privileged} ${docker_env_vars} -v ${projectBuildDir}:${projectBuildDir} ${DOCKER_IMAGE} /bin/bash -c "cd $projectBuildDir && ./Package-Builder/docker-set-apt-mirror.sh && apt-get update && apt-get install -y ${docker_pkg_list} && ./Package-Builder/build-package.sh ${PACKAGE_BUILDER_ARGS}"
   set +x
   DOCKER_RC=$?
   echo ">> Docker execution complete, RC=${DOCKER_RC}"
