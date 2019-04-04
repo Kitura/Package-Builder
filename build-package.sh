@@ -119,7 +119,7 @@ if [ -n "${DOCKER_IMAGE}" ]; then
     docker_env_vars="$docker_env_vars --env $DOCKER_ENV_VAR"
   done
   # Define list of packages to install within docker image.
-  docker_pkg_list="git sudo wget pkg-config $DOCKER_PACKAGES"
+  docker_pkg_list="git sudo wget pkg-config libcurl4-openssl-dev libssl-dev $DOCKER_PACKAGES"
   set -x
   docker pull ${DOCKER_IMAGE}
   # Invoke Package-Builder within the Docker image.
