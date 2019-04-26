@@ -36,6 +36,24 @@ export DEBIAN_FRONTEND="noninteractive"
 # 4.0.3 -> 4
 swiftMajor=`echo $SWIFT_SNAPSHOT | sed -e's#[^0-9]*\([0-9]\).*#\1#'`
 
+# Get the Ubuntu ID and VERSION_ID from /etc/os-release, stripping quotes
+distribution=`grep '^ID=' /etc/os-release | sed -e's#.*="\?\([^"]*\)"\?#\1#'`
+version=`grep '^VERSION_ID=' /etc/os-release | sed -e's#.*="\?\([^"]*\)"\?#\1#'`
+version_no_dots=`echo $version | awk -F. '{print $1$2}'`
+versionMajor=`echo $version | awk -F. '{print $1}'`
+export UBUNTU_VERSION="${distribution}${version}"
+export UBUNTU_VERSION_NO_DOTS="${distribution}${version_no_dots}"
+
+# Customize package dependencies based on Ubuntu version
+case $versionMajor in
+14|15|16|17)
+  libCurlPackage="libcurl3"
+  ;;
+*)
+  libCurlPackage="libcurl4"
+  ;;
+esac
+
 # Install prerequisites for this version of Swift
 sudo -E apt-get -q update
 case $swiftMajor in
@@ -60,7 +78,7 @@ case $swiftMajor in
     libssl-dev \
     libatomic1 \
     libbsd0 \
-    libcurl4 \
+    ${libCurlPackage} \
     libxml2 \
     libedit2 \
     libsqlite3-0 \
@@ -73,13 +91,6 @@ case $swiftMajor in
     pkg-config
   ;;
 esac
-
-# Get the ID and VERSION_ID from /etc/os-release, stripping quotes
-distribution=`grep '^ID=' /etc/os-release | sed -e's#.*="\?\([^"]*\)"\?#\1#'`
-version=`grep '^VERSION_ID=' /etc/os-release | sed -e's#.*="\?\([^"]*\)"\?#\1#'`
-version_no_dots=`echo $version | awk -F. '{print $1$2}'`
-export UBUNTU_VERSION="${distribution}${version}"
-export UBUNTU_VERSION_NO_DOTS="${distribution}${version_no_dots}"
 
 echo ">> Installing '${SWIFT_SNAPSHOT}'..."
 # Install Swift compiler
