@@ -122,7 +122,7 @@ if [ -n "${DOCKER_IMAGE}" ]; then
   docker_pkg_list="git sudo wget pkg-config libcurl4-openssl-dev libssl-dev $DOCKER_PACKAGES"
   # Temporary fix for Swift 5.0.1 images that ship Python modules in a conflicting directory
   # See: https://bugs.swift.org/browse/SR-10591
-  docker_python_fix="mv /usr/lib/python2.7/site-packages/* /usr/lib/python2.7/dist-packages && rmdir /usr/lib/python2.7/site-packages && ln -s dist-packages /usr/lib/python2.7/site-packages"
+  docker_python_fix="if [ -d "/usr/lib/python2.7/site-packages" ]; then mv /usr/lib/python2.7/site-packages/* /usr/lib/python2.7/dist-packages && rmdir /usr/lib/python2.7/site-packages && ln -s dist-packages /usr/lib/python2.7/site-packages ; fi"
   set -x
   docker pull ${DOCKER_IMAGE}
   # Invoke Package-Builder within the Docker image.
