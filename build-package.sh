@@ -120,10 +120,13 @@ if [ -n "${DOCKER_IMAGE}" ]; then
   done
   # Define list of packages to install within docker image.
   docker_pkg_list="git sudo wget pkg-config libcurl4-openssl-dev libssl-dev $DOCKER_PACKAGES"
+  # Temporary fix for Swift 5.0.1 images that ship Python modules in a conflicting directory
+  # See: https://bugs.swift.org/browse/SR-10591
+  docker_python_fix="if [ -d "/usr/lib/python2.7/site-packages" ]; then mv /usr/lib/python2.7/site-packages/* /usr/lib/python2.7/dist-packages && rmdir /usr/lib/python2.7/site-packages && ln -s dist-packages /usr/lib/python2.7/site-packages ; fi"
   set -x
   docker pull ${DOCKER_IMAGE}
   # Invoke Package-Builder within the Docker image.
-  docker run ${docker_run_privileged} ${docker_env_vars} -v ${projectBuildDir}:${projectBuildDir} ${DOCKER_IMAGE} /bin/bash -c "apt-get update && apt-get install -y ${docker_pkg_list} && cd $projectBuildDir && ./Package-Builder/build-package.sh ${PACKAGE_BUILDER_ARGS}"
+  docker run ${docker_run_privileged} ${docker_env_vars} -v ${projectBuildDir}:${projectBuildDir} ${DOCKER_IMAGE} /bin/bash -c "$docker_python_fix && apt-get update && apt-get install -y ${docker_pkg_list} && cd $projectBuildDir && ./Package-Builder/build-package.sh ${PACKAGE_BUILDER_ARGS}"
   set +x
   DOCKER_RC=$?
   echo ">> Docker execution complete, RC=${DOCKER_RC}"
