@@ -46,11 +46,17 @@ export UBUNTU_VERSION_NO_DOTS="${distribution}${version_no_dots}"
 
 # Customize package dependencies based on Ubuntu version
 case $versionMajor in
-14|15|16|17)
+14)
   libCurlPackage="libcurl3"
+  gccPackageVersion="4.8"
+  ;;
+15|16|17)
+  libCurlPackage="libcurl3"
+  gccPackageVersion="5"
   ;;
 *)
   libCurlPackage="libcurl4"
+  gccPackageVersion="5"
   ;;
 esac
 
@@ -84,8 +90,8 @@ case $swiftMajor in
     libsqlite3-0 \
     libc6-dev \
     binutils \
-    libgcc-5-dev \
-    libstdc++-5-dev \
+    libgcc-${gccPackageVersion}-dev \
+    libstdc++-${gccPackageVersion}-dev \
     libpython2.7 \
     tzdata \
     pkg-config
