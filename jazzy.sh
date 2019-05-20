@@ -63,8 +63,9 @@ if [[ "${LATEST_COMMIT_MESSAGE}" =~ "[jazzy-doc]" ]]; then
     exit 0
 fi
 
-# Install jazzy (version set to 0.9.1 until https://github.com/realm/jazzy/issues/972 is fixed)
-sudo gem install jazzy -v 0.9.1
+# Install a specific version of jazzy (0.9.6 supports Swift 5). Future versions may also be fine,
+# but their output should be checked before upgrading.
+sudo gem install jazzy -v 0.9.6
 # Generate xcode project
 sourceScript "${SCRIPT_DIR}/generate-xcodeproj.sh" "xcodeproj generation"
 # Run jazzy
