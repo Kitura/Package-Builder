@@ -98,10 +98,18 @@ case $swiftMajor in
   ;;
 esac
 
-echo ">> Installing '${SWIFT_SNAPSHOT}'..."
+# Determine Swift installation directory. When running under Docker, install Swift
+# outside of the current package directory
+if [ -n "$DOCKER_IMAGE" ]; then
+  swiftInstallDir="/tmp"
+else
+  swiftInstallDir=$projectFolder
+fi
+
+echo ">> Installing '${SWIFT_SNAPSHOT}' to ${swiftInstallDir}/${SWIFT_SNAPSHOT}-${UBUNTU_VERSION} ..."
 # Install Swift compiler
-cd $projectFolder
+cd $swiftInstallDir
 wget --progress=dot:giga https://swift.org/builds/$SNAPSHOT_TYPE/$UBUNTU_VERSION_NO_DOTS/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
 tar xzf $SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
-export PATH=$projectFolder/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin:$PATH
+export PATH=$swiftInstallDir/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin:$PATH
 rm $SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
