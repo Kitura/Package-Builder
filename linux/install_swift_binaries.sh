@@ -26,6 +26,11 @@ set -e
 # Echo commands before executing them.
 #set -o verbose
 
+# Thanks to https://stackoverflow.com/questions/23513045
+running_in_docker() {
+  grep -q 'docker' /proc/1/cgroup
+}
+
 echo ">> Running ${BASH_SOURCE[0]}"
 
 # Suppress prompts of any kind while executing apt-get
@@ -100,7 +105,7 @@ esac
 
 # Determine Swift installation directory. When running under Docker, install Swift
 # outside of the current package directory
-if [ -n "$DOCKER_IMAGE" ]; then
+if running_in_docker; then
   swiftInstallDir="/tmp"
 else
   swiftInstallDir=$projectFolder
