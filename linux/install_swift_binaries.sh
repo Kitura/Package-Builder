@@ -126,4 +126,6 @@ if running_in_docker; then
     ls -l $swiftInstallDir/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin
     echo "Sanity check: running $swiftInstallDir/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin/swiftc -v"
     $swiftInstallDir/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin/swiftc -v
+    echo "Check libraries for swiftc"
+    ldd $swiftInstallDir/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin/swiftc
 fi
