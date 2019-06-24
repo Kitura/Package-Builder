@@ -112,6 +112,8 @@ if [ -n "${DOCKER_IMAGE}" ]; then
   if [ -n "${DOCKER_PRIVILEGED}" ]; then
     docker_run_privileged="--privileged"
   fi
+  echo -n "Docker version: "
+  docker -v
   # Define list of env vars to be passed to docker.
   docker_env_vars="--env SWIFT_SNAPSHOT --env KITURA_NIO --env CUSTOM_BUILD_SCRIPT --env CUSTOM_TEST_SCRIPT --env SWIFT_TEST_ARGS"
   # Pass additional vars listed by DOCKER_ENVIRONMENT
