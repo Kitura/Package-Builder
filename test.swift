@@ -38,13 +38,23 @@ class FileSystem {
 
     func isFile(_ path: String) -> Bool {
         let path = resolveSymlinks(path)
-        let attrs = try? FileManager.default.attributesOfItem(atPath: path)
-        return attrs?[.type] as? FileAttributeType == .typeRegular
+do {
+        let attrs = try FileManager.default.attributesOfItem(atPath: path)
+        return attrs[.type] as? FileAttributeType == .typeRegular
+} catch {
+print("isFile: Error: \(error) \(error.localizedDescription)")
+return false
+}
     }
 
     func isSymlink(_ path: String) -> Bool {
-        let attrs = try? FileManager.default.attributesOfItem(atPath: path)
-        return attrs?[.type] as? FileAttributeType == .typeSymbolicLink
+do {
+        let attrs = try FileManager.default.attributesOfItem(atPath: path)
+        return attrs[.type] as? FileAttributeType == .typeSymbolicLink
+} catch {
+print("isFile: Error: \(error) \(error.localizedDescription)")
+return false
+}
     }
 
     func getFileInfo(_ path: String) throws -> [FileAttributeKey: Any] {
