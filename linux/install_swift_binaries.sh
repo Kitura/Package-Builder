@@ -129,5 +129,5 @@ if running_in_docker; then
     echo "Building test app"
     swiftc $projectFolder/Package-Builder/test.swift -o /tmp/testApp
     echo "Running test app"
-    /tmp/testApp
+    /tmp/testApp $swiftInstallDir/$SWIFT_SNAPSHOT-$UBUNTU_VERSION
 fi

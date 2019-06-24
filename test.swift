@@ -60,12 +60,14 @@ class FileSystem {
 
 let fs = FileSystem()
 
+let swiftPath = CommandLine.arguments[1]
+
 var path = "/bin/ls"
 print("\(path): isExecutable=\(fs.isExecutableFile(path)), isFile=\(fs.isFile(path)), isSymlink=\(fs.isSymlink(path)), exists=\(fs.exists(path, followSymlink: true))")
 
-path = "/tmp/swift-5.1-DEVELOPMENT-SNAPSHOT-2019-06-16-a-ubuntu18.04/usr/bin/swift"
+path = "\(swiftPath)/usr/bin/swift"
 print("\(path): isExecutable=\(fs.isExecutableFile(path)), isFile=\(fs.isFile(path)), isSymlink=\(fs.isSymlink(path)), exists=\(fs.exists(path, followSymlink: true))")
 
-path = "/tmp/swift-5.1-DEVELOPMENT-SNAPSHOT-2019-06-16-a-ubuntu18.04/usr/bin/swiftc"
+path = "\(swiftPath)/usr/bin/swiftc"
 print("\(path): isExecutable=\(fs.isExecutableFile(path)), isFile=\(fs.isFile(path)), isSymlink=\(fs.isSymlink(path)), exists=\(fs.exists(path, followSymlink: true))")
 
