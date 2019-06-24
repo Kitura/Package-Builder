@@ -128,4 +128,8 @@ if running_in_docker; then
     $swiftInstallDir/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin/swiftc -v
     echo "Check libraries for swiftc"
     ldd $swiftInstallDir/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin/swiftc
+    echo "Building test app"
+    swiftc $projectFolder/Package-Builder/test.swift -o /tmp/testApp
+    echo "Running test app"
+    /tmp/testApp
 fi
