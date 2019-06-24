@@ -124,4 +124,6 @@ if running_in_docker; then
     rm $swiftInstallDir/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin/swiftc
     cp -p $swiftInstallDir/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin/swift $swiftInstallDir/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin/swiftc
     ls -l $swiftInstallDir/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin
+    echo "Sanity check: running $swiftInstallDir/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin/swiftc -v"
+    $swiftInstallDir/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin/swiftc -v
 fi
