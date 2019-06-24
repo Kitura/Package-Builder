@@ -120,8 +120,8 @@ export PATH=$swiftInstallDir/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin:$PATH
 rm $SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
 
 if running_in_docker; then
-    echo "Running in Docker - recreating swiftc symlink"
+    echo "Running in Docker - replacing swiftc symlink with copy"
     rm $swiftInstallDir/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin/swiftc
-    ln -s $swiftInstallDir/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin/swift $swiftInstallDir/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin/swiftc
+    cp -p $swiftInstallDir/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin/swift $swiftInstallDir/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin/swiftc
     ls -l $swiftInstallDir/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin
 fi
