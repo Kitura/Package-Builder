@@ -118,3 +118,10 @@ wget --progress=dot:giga https://swift.org/builds/$SNAPSHOT_TYPE/$UBUNTU_VERSION
 tar xzf $SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
 export PATH=$swiftInstallDir/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin:$PATH
 rm $SWIFT_SNAPSHOT-$UBUNTU_VERSION.tar.gz
+
+if running_in_docker; then
+    echo "Running in Docker - recreating swiftc symlink"
+    rm $swiftInstallDir/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin/swiftc
+    ln -s $swiftInstallDir/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin/swift $swiftInstallDir/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin/swiftc
+    ls -l $swiftInstallDir/$SWIFT_SNAPSHOT-$UBUNTU_VERSION/usr/bin
+fi
