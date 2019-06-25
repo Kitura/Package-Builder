@@ -137,11 +137,14 @@ if [ -n "${DOCKER_IMAGE}" ]; then
   set -x
   docker run ${docker_run_privileged} ${docker_env_vars} -v ${projectBuildDir}:${projectBuildDir} --name packagebuildercontainer ${DOCKER_IMAGE} /bin/bash -c "$docker_python_fix && apt-get update && apt-get install -y ${docker_pkg_list}"
   docker commit packagebuildercontainer packagebuilderimage
+  docker container rm packagebuildercontainer
   set +x
   travis_end
   # Run Package-Builder within the new image.
   set -x
-  docker run -v ${projectBuildDir}:${projectBuildDir} packagebuilderimage /bin/bash -c "cd $projectBuildDir && ./Package-Builder/build-package.sh ${PACKAGE_BUILDER_ARGS}"
+  docker run -v ${projectBuildDir}:${projectBuildDir} --name packagebuilderrun packagebuilderimage /bin/bash -c "cd $projectBuildDir && ./Package-Builder/build-package.sh ${PACKAGE_BUILDER_ARGS}"
+  docker container rm packagebuilderrun
+  docker image rm packagebuilderimage
   set +x
   DOCKER_RC=$?
   echo ">> Docker execution complete, RC=${DOCKER_RC}"
