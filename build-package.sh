@@ -127,10 +127,21 @@ if [ -n "${DOCKER_IMAGE}" ]; then
   travis_start "upgrade_libseccomp2"
   sudo apt-get update && sudo apt-get install -y libseccomp2
   travis_end
-  set -x
+  travis_start "docker_pull"
   docker pull ${DOCKER_IMAGE}
+  travis_end
   # Invoke Package-Builder within the Docker image.
-  docker run ${docker_run_privileged} ${docker_env_vars} -v ${projectBuildDir}:${projectBuildDir} ${DOCKER_IMAGE} /bin/bash -c "$docker_python_fix && apt-get update && apt-get install -y ${docker_pkg_list} && cd $projectBuildDir && ./Package-Builder/build-package.sh ${PACKAGE_BUILDER_ARGS}"
+  # Start by installing dependencies and tag a new image locally. This enables us to travis_fold
+  # all the apt-get noise.
+  travis_start "docker_image_setup"
+  set -x
+  docker run ${docker_run_privileged} ${docker_env_vars} -v ${projectBuildDir}:${projectBuildDir} --name packagebuildercontainer ${DOCKER_IMAGE} /bin/bash -c "$docker_python_fix && apt-get update && apt-get install -y ${docker_pkg_list}"
+  docker commit packagebuildercontainer packagebuilderimage
+  set +x
+  travis_end
+  # Run Package-Builder within the new image.
+  set -x
+  docker run -v ${projectBuildDir}:${projectBuildDir} packagebuilderimage /bin/bash -c "cd $projectBuildDir && ./Package-Builder/build-package.sh ${PACKAGE_BUILDER_ARGS}"
   set +x
   DOCKER_RC=$?
   echo ">> Docker execution complete, RC=${DOCKER_RC}"
