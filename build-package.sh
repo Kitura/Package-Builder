@@ -127,7 +127,8 @@ if [ -n "${DOCKER_IMAGE}" ]; then
   docker_python_fix="if [ -d "/usr/lib/python2.7/site-packages" ]; then mv /usr/lib/python2.7/site-packages/* /usr/lib/python2.7/dist-packages && rmdir /usr/lib/python2.7/site-packages && ln -s dist-packages /usr/lib/python2.7/site-packages ; fi"
   # Use most up-to-date seccomp policy to ensure statx is whitelisted.
   # See: https://stackoverflow.com/questions/48995826/which-capabilities-are-needed-for-statx-to-stop-giving-eperm
-  docker_security="--security-opt seccomp=${projectBuildDir}/Package-Builder/docker_seccomp.json"
+  #docker_security="--security-opt seccomp=${projectBuildDir}/Package-Builder/docker_seccomp.json"
+  sudo apt-get update && sudo apt-get install -y libseccomp2
   set -x
   docker pull ${DOCKER_IMAGE}
   # Invoke Package-Builder within the Docker image.
