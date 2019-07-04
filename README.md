@@ -207,6 +207,13 @@ A number of system packages are installed within the Docker container by default
       env: DOCKER_IMAGE=ubuntu:16.04 DOCKER_PACKAGES="libSomePackage someOtherPackage"
 ```
 
+#### Additional Docker options
+
+If you need to further customize the `docker run` invocation, such as adding network options, then you can define a list of additional options using the `DOCKER_OPTIONS` environment variable. For example:
+```
+      env: DOCKER_IMAGE=ubuntu:16.04 DOCKER_OPTIONS="--network myNetwork"
+```
+
 ### Custom build and test commands
 If you need a custom command for **compiling** your Swift package, you should include a `.swift-build-linux` or `.swift-build-macOS` file in the root level of your repository and specify in it the exact compilation command for the corresponding platform.
 
