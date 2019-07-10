@@ -55,10 +55,11 @@ matrix:
       osx_image: xcode10.2
       sudo: required
       env: SWIFT_SNAPSHOT=5.0.1
-    - os: osx
-      osx_image: xcode10.2
-      sudo: required
-      env: SWIFT_SNAPSHOT=$SWIFT_DEVELOPMENT_SNAPSHOT
+# Pending Travis Xcode 11 image
+#    - os: osx
+#      osx_image: xcode11
+#      sudo: required
+#      env: SWIFT_SNAPSHOT=$SWIFT_DEVELOPMENT_SNAPSHOT
 
 script:
   # Set up build structure for test projects
