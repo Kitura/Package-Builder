@@ -124,9 +124,9 @@ if [ -n "${DOCKER_IMAGE}" ]; then
   # See: https://bugs.swift.org/browse/SR-10591
   docker_python_fix="if [ -d "/usr/lib/python2.7/site-packages" ]; then mv /usr/lib/python2.7/site-packages/* /usr/lib/python2.7/dist-packages && rmdir /usr/lib/python2.7/site-packages && ln -s dist-packages /usr/lib/python2.7/site-packages ; fi"
   # Update libseccomp2 to ensure statx is whitelisted.
-  travis_start "upgrade_libseccomp2"
-  sudo apt-get update && sudo apt-get install -y libseccomp2
-  travis_end
+  #travis_start "upgrade_libseccomp2"
+  #sudo apt-get update && sudo apt-get install -y libseccomp2
+  #travis_end
   travis_start "docker_pull"
   docker pull ${DOCKER_IMAGE}
   travis_end
