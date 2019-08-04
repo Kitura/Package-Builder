@@ -23,7 +23,7 @@
 # If any commands fail, we want the shell script to exit immediately.
 set -e
 
-DEFAULT_SWIFT=swift-4.0.3-RELEASE
+DEFAULT_SWIFT=swift-5.0.2-RELEASE
 docs=false
 
 function usage {
