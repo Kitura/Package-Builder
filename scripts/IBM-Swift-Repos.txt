@@ -34,6 +34,7 @@ Kitura-Session-Redis
 Kitura-StencilTemplateEngine
 Kitura-TemplateEngine
 Kitura-WebSocket
+Kitura-WebSocket-NIO
 LoggerAPI
 Swift-cfenv
 swift-html-entities
