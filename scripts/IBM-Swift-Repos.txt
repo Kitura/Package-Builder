@@ -21,6 +21,7 @@ Kitura-CredentialsFacebook
 Kitura-CredentialsGitHub
 Kitura-CredentialsGoogle
 Kitura-CredentialsHTTP
+Kitura-CredentialsJWT
 KituraKit
 Kitura-Markdown
 Kitura-MustacheTemplateEngine
