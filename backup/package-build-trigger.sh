@@ -18,7 +18,7 @@
 
 ## References for triggering builds using Travis CI API
 # https://docs.travis-ci.com/user/triggering-builds
-# https://api.travis-ci.org/repos/IBM-Swift/Kitura.json
+# https://api.travis-ci.org/repos/KituraKommunity/Kitura.json
 
 # If any commands fail, we want the shell script to exit immediately.
 set -e
