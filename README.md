@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/IBM-Swift/Package-Builder.svg?branch=develop)](https://travis-ci.org/IBM-Swift/Package-Builder)
+[![Build Status](https://travis-ci.org/Kitura/Package-Builder.svg?branch=develop)](https://travis-ci.org/Kitura/Package-Builder)
 
 # Package-Builder
 
@@ -21,7 +21,7 @@ matrix:
       sudo: required
 
 before_install:
-  - git clone https://github.com/IBM-Swift/Package-Builder.git
+  - git clone https://github.com/Kitura/Package-Builder.git
 
 script:
   - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR
@@ -83,7 +83,7 @@ env:
     - CODECOV_ELIGIBLE=true
 ```
 
-For example, see the [current test coverage](https://codecov.io/gh/IBM-Swift/Swift-cfenv) for the [Swift-cfenv](https://github.com/IBM-Swift/Swift-cfenv) package.
+For example, see the [current test coverage](https://codecov.io/gh/Kitura/Swift-cfenv) for the [Swift-cfenv](https://github.com/Kitura/Swift-cfenv) package.
 
 ![Codecov Report](/img/codecov-swift-cfenv-1024x768.png?raw=true "Code Coverage Report")
 
@@ -103,7 +103,7 @@ env:
     - SONAR_LOGIN_TOKEN={your login token -- better add this in Travis directly}
 ```
 
-Feel free to read the source for more info: [sonarcloud.sh](https://github.com/IBM-Swift/Package-Builder/blob/master/sonarcloud.sh#L69)
+Feel free to read the source for more info: [sonarcloud.sh](https://github.com/Kitura/Package-Builder/blob/master/sonarcloud.sh#L69)
 
 It is recommended to use a `sonar-project.properties` at the root of your project. Here's a good example: [sonar-project.properties](https://github.com/ladislas/Swift-Travis-Sonarcloud-CI/blob/master/sonar-project.properties). The whole [Swift-Travis-Sonarcloud-CI repo](https://github.com/ladislas/Swift-Travis-Sonarcloud-CI) is a good starting point for both Travis-CI & Sonarcloud.
 
@@ -160,7 +160,7 @@ matrix:
       env: SWIFT_SNAPSHOT=3.1.1
 
 before_install:
-  - git clone https://github.com/IBM-Swift/Package-Builder.git
+  - git clone https://github.com/Kitura/Package-Builder.git
 
 script:
   - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR
@@ -185,7 +185,7 @@ matrix:
       env: DOCKER_IMAGE=ubuntu:16.04 SWIFT_SNAPSHOT=4.1.3
 
 before_install:
-  - git clone https://github.com/IBM-Swift/Package-Builder.git
+  - git clone https://github.com/Kitura/Package-Builder.git
 
 script:
   - ./Package-Builder/build-package.sh -projectDir $TRAVIS_BUILD_DIR
