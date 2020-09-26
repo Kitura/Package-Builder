@@ -10,7 +10,7 @@
 #
 
 # The list of repositories to act on.
-REPOS=`cat IBM-Swift-Repos.txt`
+REPOS=`cat Kitura-Repos.txt`
 REPO_COUNT=`echo $REPOS | wc -w`
 
 # The Travis environment variable to set (or updated)
@@ -53,7 +53,7 @@ fi
 # Set environment for each repo
 for REPO in $REPOS; do
     echo "Setting ${TRAVIS_ENV_VAR}=${TRAVIS_ENV_VALUE} on ${REPO}"
-    travis env set "${TRAVIS_ENV_VAR}" "${TRAVIS_ENV_VALUE}" --repo IBM-Swift/${REPO} --${TRAVIS_ENV_TYPE} || fail || continue
+    travis env set "${TRAVIS_ENV_VAR}" "${TRAVIS_ENV_VALUE}" --repo Kitura/${REPO} --${TRAVIS_ENV_TYPE} || fail || continue
     SUCCESS="$SUCCESS $REPO"
 done
 
