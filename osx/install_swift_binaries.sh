@@ -38,7 +38,11 @@ fi
 
 #Download and install Swift
 echo "Swift installed $SWIFT_PREINSTALL does not match snapshot $SWIFT_SNAPSHOT."
-wget --progress=dot:giga https://swift.org/builds/$SNAPSHOT_TYPE/xcode/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-osx.pkg
+
+file_path="builds/$SNAPSHOT_TYPE/xcode/$SWIFT_SNAPSHOT/$SWIFT_SNAPSHOT-osx.pkg"
+wget --progress=dot:giga "https://files.kitura.net/swift.org/${file_path}" || \
+    wget --progress=dot:giga "https://swift.org/${file_path}"
+
 sudo installer -pkg $SWIFT_SNAPSHOT-osx.pkg -target /
 export PATH=/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin:"${PATH}"
 rm $SWIFT_SNAPSHOT-osx.pkg
