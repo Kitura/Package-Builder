@@ -108,7 +108,8 @@ function travis_end () {
 #
 if [ -n "${DOCKER_IMAGE}" ]; then
   if [ ! -z "${KITURA_DOCKER_USER}" -a ! -z "${KITURA_DOCKER_PASSWORD}" -a $(echo "${DOCKER_IMAGE}" | egrep -c "^docker.kitura.net") -ne 0 ]; then
-    echo "${KITURA_DOCKER_PASSWORD}" | docker login docker.kitura.net -u "${KITURA_DOCKER_USER}"
+    echo ">> Docker login to private registry"
+    echo "${KITURA_DOCKER_PASSWORD}" | docker login docker.kitura.net -u "${KITURA_DOCKER_USER}" --password-stdin
   fi
 
   echo ">> Executing build in Docker container: ${DOCKER_IMAGE}"
