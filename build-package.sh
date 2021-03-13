@@ -107,9 +107,13 @@ function travis_end () {
 # Additional packages can be installed by listing them in DOCKER_PACKAGES.
 #
 if [ -n "${DOCKER_IMAGE}" ]; then
-  if [ ! -z "${KITURA_DOCKER_USER}" -a ! -z "${KITURA_DOCKER_PASSWORD}" -a $(echo "${DOCKER_IMAGE}" | egrep -c "^docker.kitura.net") -ne 0 ]; then
-    echo ">> Docker login to private registry"
-    echo "${KITURA_DOCKER_PASSWORD}" | docker login docker.kitura.net -u "${KITURA_DOCKER_USER}" --password-stdin
+  if [ $(echo "${DOCKER_IMAGE}" | egrep -c "^docker.kitura.net") -ne 0 ]; then
+    if [ ! -z "${KITURA_DOCKER_USER}" -a ! -z "${KITURA_DOCKER_PASSWORD}" -a  ]; then
+      echo ">> Docker login to private registry"
+      echo "${KITURA_DOCKER_PASSWORD}" | docker login docker.kitura.net -u "${KITURA_DOCKER_USER}" --password-stdin
+    else
+      echo "Error: Expected KITURA_DOCKER_USER && KITURA_DOCKER_PASSWORD environment variables."
+    fi
   fi
 
   echo ">> Executing build in Docker container: ${DOCKER_IMAGE}"
