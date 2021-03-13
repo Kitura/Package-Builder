@@ -107,6 +107,11 @@ function travis_end () {
 # Additional packages can be installed by listing them in DOCKER_PACKAGES.
 #
 if [ -n "${DOCKER_IMAGE}" ]; then
+  echo "${DOCKER_IMAGE}" | egrep -q "^docker.kitura.net"
+  if [ ! -z "${KITURA_DOCKER_USER}" -a ! -z "${KITURA_DOCKER_PASSWORD}" -a $? -eq 0 ]; then
+    echo "${KITURA_DOCKER_PASSWORD}" | docker login docker.kitura.net -u "${KITURA_DOCKER_USER}"
+  fi
+
   echo ">> Executing build in Docker container: ${DOCKER_IMAGE}"
   # Check if privileged mode has been requested for
   if [ -n "${DOCKER_PRIVILEGED}" ]; then
@@ -123,9 +128,11 @@ if [ -n "${DOCKER_IMAGE}" ]; then
   # Temporary fix for Swift 5.0.1 images that ship Python modules in a conflicting directory
   # See: https://bugs.swift.org/browse/SR-10591
   docker_python_fix="if [ -d "/usr/lib/python2.7/site-packages" ]; then mv /usr/lib/python2.7/site-packages/* /usr/lib/python2.7/dist-packages && rmdir /usr/lib/python2.7/site-packages && ln -s dist-packages /usr/lib/python2.7/site-packages ; fi"
+
   travis_start "docker_pull"
   docker pull ${DOCKER_IMAGE}
   travis_end
+
   # Invoke Package-Builder within the Docker image.
   # Start by installing dependencies and tag a new image locally. This enables us to travis_fold
   # all the apt-get noise.
