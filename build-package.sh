@@ -107,8 +107,7 @@ function travis_end () {
 # Additional packages can be installed by listing them in DOCKER_PACKAGES.
 #
 if [ -n "${DOCKER_IMAGE}" ]; then
-  echo "${DOCKER_IMAGE}" | egrep -q "^docker.kitura.net"
-  if [ ! -z "${KITURA_DOCKER_USER}" -a ! -z "${KITURA_DOCKER_PASSWORD}" -a $? -eq 0 ]; then
+  if [ ! -z "${KITURA_DOCKER_USER}" -a ! -z "${KITURA_DOCKER_PASSWORD}" -a $(echo "${DOCKER_IMAGE}" | egrep -c "^docker.kitura.net") -ne 0 ]; then
     echo "${KITURA_DOCKER_PASSWORD}" | docker login docker.kitura.net -u "${KITURA_DOCKER_USER}"
   fi
 
