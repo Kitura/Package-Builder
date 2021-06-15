@@ -25,14 +25,20 @@ set -e
 
 # Determine SWIFT_SNAPSHOT for build
 if [ -z $SWIFT_SNAPSHOT ]; then
-  echo ">> No 'SWIFT_SNAPSHOT' set, checking for .swift-version file..."
-  if [ -f "$projectFolder/.swift-version" ]; then
-    echo ">> Found .swift-version file."
-    SWIFT_SNAPSHOT="$(cat $projectFolder/.swift-version)";
-  # Else use default
+  echo ">> No 'SWIFT_SNAPSHOT' set, checking for existing Swift install..."
+  if which -s swift; then
+    SWIFT_SNAPSHOT=$(swift --version 2>/dev/null | grep 'Swift version' | sed 's/^.*Swift version \([0-9][0-9\.]*\) .*$/\1/; ')
+    echo ">> Use existing swift version: ${SWIFT_SNAPSHOT}"
   else
-    echo ">> No swift-version file found, using default value: $DEFAULT_SWIFT"
-    SWIFT_SNAPSHOT=$DEFAULT_SWIFT
+    echo ">> No 'SWIFT_SNAPSHOT' set and no existing install, checking for .swift-version file..."
+    if [ -f "$projectFolder/.swift-version" ]; then
+      echo ">> Found .swift-version file."
+      SWIFT_SNAPSHOT="$(cat $projectFolder/.swift-version)";
+    # Else use default
+    else
+      echo ">> No swift-version file found, using default value: $DEFAULT_SWIFT"
+      SWIFT_SNAPSHOT=$DEFAULT_SWIFT
+    fi
   fi
 fi
 
