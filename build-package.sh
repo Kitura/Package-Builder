@@ -24,6 +24,9 @@
 set -e
 
 DEFAULT_SWIFT=swift-4.0.3-RELEASE
+
+# Travis command should have USE_SWIFT_DEVELOPMENT_SNAPSHOT=1 to enable the use of this snapshot
+DEVELOPMENT_SWIFT=swift-5.5-DEVELOPMENT-SNAPSHOT-2021-06-02-a
 docs=false
 
 function usage {
@@ -58,6 +61,12 @@ done
 if [ -z "$projectBuildDir" ]; then
   usage
 fi
+
+# Use the default SWIFT_DEVELOPMENT_SNAPSHOT
+if [ "${USE_SWIFT_DEVELOPMENT_SNAPSHOT}" = 1 ]; then
+    SWIFT_SNAPSHOT="${DEVELOPMENT_SWIFT}"
+fi
+
 
 # Determine location of this script
 # Ref: https://stackoverflow.com/questions/59895/getting-the-source-directory-of-a-bash-script-from-within
