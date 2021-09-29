@@ -26,7 +26,7 @@ set -e
 # Determine SWIFT_SNAPSHOT for build
 if [ -z $SWIFT_SNAPSHOT ]; then
   echo ">> No 'SWIFT_SNAPSHOT' set, checking for existing Swift install..."
-  if which -s swift; then
+  if which swift > /dev/null; then
     SWIFT_SNAPSHOT=$(swift --version 2>/dev/null | grep 'Swift version' | sed 's/^.*Swift version \([0-9][0-9\.]*\) .*$/\1/; ')
     echo ">> Use existing swift version: ${SWIFT_SNAPSHOT}"
   else
