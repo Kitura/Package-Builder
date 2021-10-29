@@ -26,7 +26,7 @@ set -e
 DEFAULT_SWIFT=swift-4.0.3-RELEASE
 
 # Travis command should have USE_SWIFT_DEVELOPMENT_SNAPSHOT=1 to enable the use of this snapshot
-DEVELOPMENT_SWIFT=swift-5.5-DEVELOPMENT-SNAPSHOT-2021-06-02-a
+DEVELOPMENT_SWIFT=swift-5.5-DEVELOPMENT-SNAPSHOT-2021-10-24-a
 docs=false
 
 function usage {
