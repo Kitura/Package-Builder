@@ -100,6 +100,8 @@ function travis_end () {
   travis_fold end ${TRAVIS_CURRENT_SECTION}
 }
 
+echo " ** TEST TRACE: ${EMAIL}"
+
 # If we have been asked to run within a Docker image, pull the image, then execute
 # this script within the container.
 #
