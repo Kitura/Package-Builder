@@ -154,7 +154,7 @@ if [ -n "${DOCKER_IMAGE}" ]; then
   travis_end
   # Run Package-Builder within the new image.
   set -x
-  docker run -v ${projectBuildDir}:${projectBuildDir} --name packagebuilderrun packagebuilderimage /bin/bash -c "cd $projectBuildDir && ./Package-Builder/build-package.sh ${PACKAGE_BUILDER_ARGS}"
+  docker run ${docker_env_vars} -v ${projectBuildDir}:${projectBuildDir} --name packagebuilderrun packagebuilderimage /bin/bash -c "cd $projectBuildDir && ./Package-Builder/build-package.sh ${PACKAGE_BUILDER_ARGS}"
   docker container rm packagebuilderrun
   docker image rm packagebuilderimage
   set +x
