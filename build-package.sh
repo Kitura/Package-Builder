@@ -100,8 +100,6 @@ function travis_end () {
   travis_fold end ${TRAVIS_CURRENT_SECTION}
 }
 
-echo " ** TEST TRACE: $(echo -n ${EMAIL} | hexdump -C)"
-
 # If we have been asked to run within a Docker image, pull the image, then execute
 # this script within the container.
 #
@@ -156,7 +154,7 @@ if [ -n "${DOCKER_IMAGE}" ]; then
   travis_end
   # Run Package-Builder within the new image.
   set -x
-  docker run ${docker_env_vars} -v ${projectBuildDir}:${projectBuildDir} --name packagebuilderrun packagebuilderimage /bin/bash -c "cd $projectBuildDir && ./Package-Builder/build-package.sh ${PACKAGE_BUILDER_ARGS}"
+  docker run -v ${projectBuildDir}:${projectBuildDir} --name packagebuilderrun packagebuilderimage /bin/bash -c "cd $projectBuildDir && ./Package-Builder/build-package.sh ${PACKAGE_BUILDER_ARGS}"
   docker container rm packagebuilderrun
   docker image rm packagebuilderimage
   set +x
