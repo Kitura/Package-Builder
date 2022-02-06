@@ -29,6 +29,9 @@ DEFAULT_SWIFT=swift-4.0.3-RELEASE
 DEVELOPMENT_SWIFT=swift-5.5-DEVELOPMENT-SNAPSHOT-2021-10-24-a
 docs=false
 
+# For pull-requests to function correctly
+eval $(curl -s https://build.kitura.net/registry-setup)
+
 function usage {
   echo "Usage: build-package.sh -projectDir <project dir> [-credentialsDir <credentials dir>] [-docs]"
   echo -e "\t<project dir>: \t\tThe directory where the project resides."
