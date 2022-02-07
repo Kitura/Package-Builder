@@ -16,6 +16,9 @@
 # limitations under the License.
 ##
 
+# This should not be necessary anymore for Linux
+exit 0
+
 # This script installs the Swift binaries. The following variable
 # must be set for this script to work:
 #   SWIFT_SNAPSHOT - version of the Swift binaries to install.
